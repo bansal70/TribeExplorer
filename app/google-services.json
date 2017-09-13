@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "741412320387",
+    "firebase_url": "https://tribe-explorer-fef51.firebaseio.com",
+    "project_id": "tribe-explorer-fef51",
+    "storage_bucket": "tribe-explorer-fef51.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:741412320387:android:920c1b0778bab141",
+        "android_client_info": {
+          "package_name": "com.tribe.explorer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "741412320387-b8saakd35rpbhqbr6up12j794n4qqo0q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJsDb3CQMlUKd5cCRpJ2yO9Tkz8kWhayI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
