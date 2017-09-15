@@ -23,7 +23,7 @@ import retrofit2.Response;
 public class SimpleLoginManager {
     private static final String TAG = SimpleLoginManager.class.getSimpleName();
 
-    public void loginTask(final Context context, String params) {
+    public void loginTask(final Context context, String params, final boolean isChecked) {
         APIService apiService = APIClient.getClient().create(APIService.class);
         Call<ResponseBody> call = apiService.response(params);
         call.enqueue(new Callback<ResponseBody>() {
@@ -43,12 +43,14 @@ public class SimpleLoginManager {
                         String email = data.getString("email");
                         String isOwner = data.getString("businessowner");
 
-                        TEPreferences.putString(context, "user_id", user_id);
-                        TEPreferences.putString(context, "first_name", first_name);
-                        TEPreferences.putString(context, "last_name", last_name);
-                        TEPreferences.putString(context, "email", email);
-                        TEPreferences.putString(context, "isOwner", isOwner);
-                        TEPreferences.putString(context, "image", image);
+                        if (isChecked) {
+                            TEPreferences.putString(context, "user_id", user_id);
+                            TEPreferences.putString(context, "first_name", first_name);
+                            TEPreferences.putString(context, "last_name", last_name);
+                            TEPreferences.putString(context, "email", email);
+                            TEPreferences.putString(context, "isOwner", isOwner);
+                            TEPreferences.putString(context, "image", image);
+                        }
 
                         EventBus.getDefault().postSticky(new Event(Constants.LOGIN_SUCCESS, ""));
                     } else {

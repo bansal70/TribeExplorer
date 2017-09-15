@@ -5,6 +5,10 @@ package com.tribe.explorer.view.adapters;
  */
 
 import android.content.Context;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +19,11 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.tribe.explorer.R;
 import com.tribe.explorer.model.beans.CategoriesData;
+import com.tribe.explorer.view.MainActivity;
+import com.tribe.explorer.view.fragments.ListingFragment;
 
 import java.util.List;
+
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     private Context context;
@@ -44,6 +51,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
         Glide.with(context)
                 .load(image)
+                .placeholder(R.mipmap.placeholder)
+                .error(R.mipmap.placeholder)
                 .crossFade()
                 .fitCenter()
                 .centerCrop()
@@ -55,7 +64,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         return categoriesList.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private ImageView imgCategory;
         private TextView tvCategories;
 
@@ -64,6 +73,23 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
             imgCategory = itemView.findViewById(R.id.imgCategories);
             tvCategories = itemView.findViewById(R.id.tvCategories);
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            CategoriesData.Data data = categoriesList.get(getAdapterPosition());
+
+            Fragment fragment = new ListingFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt("cat_id", data.termId);
+            fragment.setArguments(bundle);
+            FragmentManager fragmentManager = ((MainActivity)context).getSupportFragmentManager();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.frame_layout, fragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
         }
     }
 }

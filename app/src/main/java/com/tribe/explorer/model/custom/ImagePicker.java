@@ -64,6 +64,31 @@ public class ImagePicker {
          return chooserIntent;
     }
 
+    public static Intent getMultiImageIntent(Context context) {
+        Intent chooserIntent = null;
+
+        List<Intent> intentList = new ArrayList<>();
+
+        Intent pickIntent = new Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        takePhotoIntent.putExtra("return-data", true);
+        Uri photoURI = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID
+                + ".provider", getTempFile(context));
+        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+        intentList = addIntentsToList(context, intentList, pickIntent);
+        intentList = addIntentsToList(context, intentList, takePhotoIntent);
+
+        if (intentList.size() > 0) {
+            chooserIntent = Intent.createChooser(intentList.remove(intentList.size() - 1),
+                    context.getString(R.string.pick_image_intent_text));
+            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toArray(new Parcelable[]{}));
+        }
+
+        return chooserIntent;
+    }
+
     private static List<Intent> addIntentsToList(Context context, List<Intent> list, Intent intent) {
         List<ResolveInfo> resInfo = context.getPackageManager().queryIntentActivities(intent, 0);
         for (ResolveInfo resolveInfo : resInfo) {
@@ -101,6 +126,17 @@ public class ImagePicker {
         return bm;
     }
 
+    public static Bitmap getMultiImageResult(Context context, Uri uri, boolean isCamera) {
+        Bitmap bm = null;
+        File imageFile = getTempFile(context);
+            Log.d(TAG, "selectedImage: " + uri);
+
+            bm = getImageResized(context, uri);
+            int rotation = getRotation(context, uri, isCamera);
+            bm = rotate(bm, rotation);
+        return bm;
+    }
+
     public static Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
@@ -115,7 +151,7 @@ public class ImagePicker {
         return cursor.getString(idx);
     }
 
-    private static File getTempFile(Context context) {
+    public static File getTempFile(Context context) {
         File imageFile = new File(context.getExternalCacheDir(), TEMP_IMAGE_NAME);
         imageFile.getParentFile().mkdirs();
         return imageFile;

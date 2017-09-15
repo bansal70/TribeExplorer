@@ -10,7 +10,7 @@
 
     <style name="TextAppearance.FontPath" parent="android:TextAppearance">
         <!-- Custom Attr-->
-        <item name="fontPath">fonts/Futura Condensed Medium.otf</item>
+        <item name="fontPath">fonts/HelveticaNeue Medium.ttf</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

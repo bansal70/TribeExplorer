@@ -109,4 +109,22 @@
     <string name="cancel">Cancel</string>
     <string name="add">Add</string>
     <string name="line">--</string>
+    <string name="categories">Categories</string>
+    <string name="add_language">Add Language</string>
+    <string name="owner">Owner</string>
+    <string name="delete">Delete</string>
+    <string name="no_listing">There is no listing.</string>
+    <string name="fav_added"> has been added to your favorite list</string>
+    <string name="fav_removed"> has been removed from your favorite list</string>
+    <string name="error_fav_removing">Error while removing the listing from your favourite</string>
+    <string name="failed_to_load_data">Failed to load data!</string>
+    <string name="no_data">No data found!</string>
+    <string name="logged_out">You have been logged out of the app.</string>
+    <string name="submit_email_address">Submit your registered email password and get the instructions to reset your password.</string>
+    <string name="enter_registered_email">Please enter the registered email address!</string>
+    <string name="password_sent">Password has been sent to your email address.</string>
+    <string name="invalid_email_address">Please enter the valid email address.</string>
+    <string name="invalid_user">User doesn\'t exist anymore.</string>
+    <string name="failed_profile_update">Failed to update profile. Please try again</string>
+    <string name="profile_updated">Your profile has been updated successfully</string>
 </resources>

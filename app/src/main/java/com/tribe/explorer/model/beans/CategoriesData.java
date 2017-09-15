@@ -10,6 +10,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class CategoriesData {
+
     @SerializedName("status")
     @Expose
     public String status;
@@ -27,5 +28,15 @@ public class CategoriesData {
         @SerializedName("img")
         @Expose
         public String img;
+        private boolean isSelected;
+        public boolean isSelected() {
+            return isSelected;
+        }
+
+        public void setSelected(boolean isSelected) {
+            this.isSelected = isSelected;
+        }
+
     }
+
 }

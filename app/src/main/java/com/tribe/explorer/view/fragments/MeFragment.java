@@ -13,10 +13,11 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.tribe.explorer.R;
 import com.tribe.explorer.model.TEPreferences;
+import com.tribe.explorer.model.Utils;
 
 public class MeFragment extends Fragment implements View.OnClickListener{
 
-    TextView tvUser, tvAccount, tvAddListing;
+    TextView tvUser, tvAccount, tvAddListing, tvMyListing, tvBlog, tvAbout, tvLogout;
     ImageView imgUser;
 
     @Override
@@ -33,13 +34,22 @@ public class MeFragment extends Fragment implements View.OnClickListener{
     }
 
     public void initViews(View view) {
-        tvAccount = view.findViewById(R.id.tvAccount);
-        tvAddListing = view.findViewById(R.id.tvAddListing);
         tvUser = view.findViewById(R.id.tvUser);
         imgUser = view.findViewById(R.id.imgUser);
 
+        tvAccount = view.findViewById(R.id.tvAccount);
+        tvAddListing = view.findViewById(R.id.tvAddListing);
+        tvMyListing = view.findViewById(R.id.tvMyListing);
+        tvBlog = view.findViewById(R.id.tvBlog);
+        tvAbout = view.findViewById(R.id.tvAbout);
+        tvLogout = view.findViewById(R.id.tvLogout);
+
         tvAccount.setOnClickListener(this);
         tvAddListing.setOnClickListener(this);
+        tvMyListing.setOnClickListener(this);
+        tvBlog.setOnClickListener(this);
+        tvAbout.setOnClickListener(this);
+        tvLogout.setOnClickListener(this);
 
         setAccount();
     }
@@ -71,6 +81,25 @@ public class MeFragment extends Fragment implements View.OnClickListener{
             case R.id.tvAddListing:
                 fragment = new AddListingFragment();
                 selectFragment(fragment);
+                break;
+
+            case R.id.tvMyListing:
+                fragment = new MyListingFragment();
+                selectFragment(fragment);
+                break;
+
+            case R.id.tvBlog:
+                fragment = new BlogFragment();
+                selectFragment(fragment);
+                break;
+
+            case R.id.tvAbout:
+                fragment = new HowItWorksFragment();
+                selectFragment(fragment);
+                break;
+
+            case R.id.tvLogout:
+                Utils.logoutAlert(getActivity());
                 break;
         }
     }

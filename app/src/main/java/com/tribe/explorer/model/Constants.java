@@ -19,4 +19,25 @@ public class Constants {
 
     public static final int CATEGORIES_SUCCESS = 1005;
     public static final int CATEGORIES_ERROR = 1006;
+
+    public static final int LANGUAGE_SUCCESS = 1007;
+    public static final int LANGUAGE_EMPTY = 1008;
+
+    public static final int LISTING_SUCCESS = 1009;
+    public static final int LISTING_EMPTY = 1010;
+
+    public static final int FAVOURITE_SUCCESS = 1011;
+    public static final int FAVOURITE_ERROR = 1012;
+
+    public static final int ABOUT_SUCCESS = 1013;
+    public static final int ABOUT_EMPTY = 1014;
+
+    public static final int FORGOT_PASSWORD_SUCCESS = 1015;
+    public static final int FORGOT_PASSWORD_FAILED = 1016;
+
+    public static final int PROFILE_SUCCESS = 1017;
+    public static final int PROFILE_EMPTY = 1018;
+
+    public static final int EDIT_PROFILE_SUCCESS = 1019;
+    public static final int EDIT_PROFILE_EMPTY = 1020;
 }

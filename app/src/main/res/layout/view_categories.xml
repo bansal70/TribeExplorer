@@ -12,12 +12,14 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/_130sdp"
-        style="?selectableItemBackground">
+        style="?attr/selectableItemBackground">
 
         <ImageView
             android:id="@+id/imgCategories"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:foreground="@drawable/ripple"
             android:contentDescription="@string/menu_home"/>
 
         <TextView
@@ -26,7 +28,8 @@
             android:layout_height="wrap_content"
             android:text=""
             android:textColor="#fff"
-            android:textSize="@dimen/_18ssp"
+            android:textSize="@dimen/_15ssp"
+            android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.FontPath"
             android:shadowColor="#fff"
             android:shadowRadius="5"

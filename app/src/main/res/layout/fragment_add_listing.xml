@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -15,6 +17,7 @@
             android:layout_width="@dimen/_200sdp"
             android:layout_height="@dimen/_40sdp"
             android:src="@mipmap/hdr"
+            android:foreground="@drawable/ripple"
             android:layout_gravity="start"
             android:contentDescription="@null"/>
 
@@ -35,60 +38,60 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/email"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:textSize="@dimen/_15ssp"
+                android:text="@string/email"
                 android:textAppearance="@style/TextAppearance.FontPath"
-                android:textColor="@color/colorPrimary"/>
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_15ssp" />
 
             <EditText
                 android:id="@+id/editEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/email.com"
                 android:enabled="false"
-                android:inputType="textEmailAddress"/>
+                android:hint="@string/email.com"
+                android:inputType="textEmailAddress" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/business_name"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:textSize="@dimen/_15ssp"
+                android:text="@string/business_name"
                 android:textAppearance="@style/TextAppearance.FontPath"
-                android:textColor="@color/colorPrimary"/>
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_15ssp" />
 
             <EditText
                 android:id="@+id/editBusinessName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/your_business_name"
-                android:inputType="text"/>
+                android:inputType="text" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/location"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:textSize="@dimen/_15ssp"
+                android:text="@string/location"
                 android:textAppearance="@style/TextAppearance.FontPath"
-                android:textColor="@color/colorPrimary"/>
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_15ssp" />
 
             <EditText
                 android:id="@+id/editLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/e_g_london"
-                android:inputType="text"/>
+                android:inputType="text" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/contact_email_url"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:textSize="@dimen/_15ssp"
+                android:text="@string/contact_email_url"
                 android:textAppearance="@style/TextAppearance.FontPath"
-                android:textColor="@color/colorPrimary"/>
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_15ssp" />
 
             <EditText
                 android:id="@+id/editContact"
@@ -101,91 +104,92 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/business_region"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:textSize="@dimen/_15ssp"
+                android:text="@string/business_region"
                 android:textAppearance="@style/TextAppearance.FontPath"
-                android:textColor="@color/colorPrimary"/>
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_15ssp" />
 
             <EditText
                 android:id="@+id/editRegion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/select_region"
-                android:inputType="text"/>
+                android:inputType="text" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/business_category"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:textSize="@dimen/_15ssp"
+                android:text="@string/business_category"
                 android:textAppearance="@style/TextAppearance.FontPath"
-                android:textColor="@color/colorPrimary"/>
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_15ssp" />
 
             <EditText
                 android:id="@+id/editCategory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/select_categories"
-                android:inputType="textEmailAddress"/>
+                android:focusableInTouchMode="false"
+                android:inputType="textEmailAddress" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/business_labels_optional"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:textSize="@dimen/_15ssp"
+                android:text="@string/business_labels_optional"
                 android:textAppearance="@style/TextAppearance.FontPath"
-                android:textColor="@color/colorPrimary"/>
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_15ssp" />
 
             <EditText
                 android:id="@+id/editBusinessLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/comma_separated_labels"
-                android:inputType="text"/>
+                android:inputType="text" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/website_optional"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:textSize="@dimen/_15ssp"
+                android:text="@string/website_optional"
                 android:textAppearance="@style/TextAppearance.FontPath"
-                android:textColor="@color/colorPrimary"/>
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_15ssp" />
 
             <EditText
                 android:id="@+id/editWeb"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/www_google_com"
-                android:inputType="textUri"/>
+                android:inputType="textUri" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/phone_number_optional"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:textSize="@dimen/_15ssp"
+                android:text="@string/phone_number_optional"
                 android:textAppearance="@style/TextAppearance.FontPath"
-                android:textColor="@color/colorPrimary"/>
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_15ssp" />
 
             <EditText
                 android:id="@+id/editPhone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/phone_number"
-                android:inputType="phone"/>
+                android:inputType="phone" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/video_optional"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:textSize="@dimen/_15ssp"
+                android:text="@string/video_optional"
                 android:textAppearance="@style/TextAppearance.FontPath"
-                android:textColor="@color/colorPrimary"/>
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_15ssp" />
 
             <EditText
                 android:id="@+id/editVideoURL"
@@ -197,107 +201,109 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/description"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:textSize="@dimen/_15ssp"
+                android:text="@string/description"
                 android:textAppearance="@style/TextAppearance.FontPath"
-                android:textColor="@color/colorPrimary"/>
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_15ssp" />
 
             <EditText
                 android:id="@+id/editDescription"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_100sdp"
-                android:inputType="text"/>
+                android:inputType="text" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:text="@string/cover_image_optional"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:textSize="@dimen/_15ssp"
                 android:textAppearance="@style/TextAppearance.FontPath"
-                android:textColor="@color/colorPrimary"/>
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_15ssp" />
+
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:orientation="horizontal"
+                tools:ignore="RelativeOverlap">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/tvCover"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:orientation="horizontal">
+                    android:background="@drawable/round_shape_edittext"
+                    android:padding="@dimen/_5sdp"
+                    android:foreground="@drawable/ripple"
+                    android:text="@string/choose_image" />
 
-                    <TextView
-                        android:id="@+id/tvCover"
+                <RelativeLayout
+                    android:id="@+id/rlCover"
+                    android:layout_width="@dimen/_150sdp"
+                    android:layout_height="@dimen/_80sdp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/imgCover"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="@string/menu_home"
+                        android:scaleType="fitXY" />
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/cardCancel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/choose_image"
-                        android:padding="@dimen/_5sdp"
-                        android:background="@drawable/round_shape_edittext"/>
+                        android:layout_alignEnd="@+id/imgCover"
+                        app:cardUseCompatPadding="true"
+                        android:layout_alignRight="@+id/imgCover">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_10sdp"
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:text="@string/no_image"/>
+                        <ImageView
+                            android:id="@+id/imgDelete"
+                            android:layout_width="@dimen/_15sdp"
+                            android:layout_height="@dimen/_15sdp"
+                            android:foreground="@drawable/ripple"
+                            android:layout_alignParentTop="true"
+                            android:contentDescription="@string/cancel"
+                            android:src="@mipmap/ic_delete" />
 
-                </LinearLayout>
+                    </android.support.v7.widget.CardView>
 
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:enabled="false"
-                    android:inputType="text"/>
+                </RelativeLayout>
 
             </RelativeLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/gallery_image_optional"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:textSize="@dimen/_15ssp"
+                android:text="@string/gallery_image_optional"
                 android:textAppearance="@style/TextAppearance.FontPath"
-                android:textColor="@color/colorPrimary"/>
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_15ssp" />
 
-            <RelativeLayout
+
+            <TextView
+                android:id="@+id/tvGallery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@drawable/round_shape_edittext"
+                android:padding="@dimen/_5sdp"
+                android:foreground="@drawable/ripple"
+                android:text="@string/choose_image" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerGallery"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tvGallery"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/choose_image"
-                        android:padding="@dimen/_5sdp"
-                        android:background="@drawable/round_shape_edittext"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_10sdp"
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:text="@string/no_image"/>
-
-                </LinearLayout>
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:enabled="false"
-                    android:inputType="text"/>
-
-            </RelativeLayout>
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -306,27 +312,27 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/hours_of_operation_optional"
+                    android:layout_centerVertical="true"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:layout_toLeftOf="@+id/tvAddHours"
                     android:layout_toStartOf="@+id/tvAddHours"
-                    android:textSize="@dimen/_15ssp"
-                    android:layout_centerVertical="true"
+                    android:text="@string/hours_of_operation_optional"
                     android:textAppearance="@style/TextAppearance.FontPath"
-                    android:textColor="@color/colorPrimary"/>
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/_15ssp" />
 
                 <TextView
                     android:id="@+id/tvAddHours"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:foreground="@drawable/ripple"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:padding="@dimen/_5sdp"
                     android:text="@string/plus"
                     android:textColor="@color/colorPrimary"
-                    android:padding="@dimen/_5sdp"
-                    android:layout_centerVertical="true"
-                    android:textSize="@dimen/_18ssp"
-                    android:focusableInTouchMode="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"/>
+                    android:textSize="@dimen/_18ssp" />
 
             </RelativeLayout>
 
@@ -334,7 +340,7 @@
                 android:id="@+id/recyclerHours"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -343,33 +349,34 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/add_title_of_language_section"                    android:layout_marginTop="@dimen/_10sdp"
-                    android:textSize="@dimen/_15ssp"
                     android:layout_centerVertical="true"
+                    android:layout_marginTop="@dimen/_10sdp"
                     android:layout_toLeftOf="@+id/tvAddLanguage"
                     android:layout_toStartOf="@+id/tvAddLanguage"
+                    android:text="@string/add_title_of_language_section"
                     android:textAppearance="@style/TextAppearance.FontPath"
-                    android:textColor="@color/colorPrimary"/>
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/_15ssp" />
 
                 <TextView
                     android:id="@+id/tvAddLanguage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:foreground="@drawable/ripple"
+                    android:padding="@dimen/_5sdp"
                     android:text="@string/plus"
                     android:textColor="@color/colorPrimary"
-                    android:padding="@dimen/_5sdp"
-                    android:layout_centerVertical="true"
-                    android:textSize="@dimen/_18ssp"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"/>
+                    android:textSize="@dimen/_18ssp" />
 
             </RelativeLayout>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerLanguage"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"/>
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/tvDone"
@@ -379,10 +386,10 @@
                 android:background="#2B52A7"
                 android:padding="@dimen/_5sdp"
                 android:text="@string/done"
-                android:textAllCaps="true"
                 android:textAlignment="center"
-                android:textSize="@dimen/_12ssp"
-                android:textColor="#fff" />
+                android:textAllCaps="true"
+                android:textColor="#fff"
+                android:textSize="@dimen/_12ssp" />
 
         </LinearLayout>
 

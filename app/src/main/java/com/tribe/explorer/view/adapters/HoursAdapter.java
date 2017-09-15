@@ -118,7 +118,7 @@ public class HoursAdapter extends RecyclerView.Adapter<HoursAdapter.ViewHolder> 
         tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                hoursDialog.dismiss();
             }
         });
 

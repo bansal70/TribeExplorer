@@ -39,8 +39,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_5sdp"
-                android:textSize="@dimen/_12ssp"
-                android:text="@string/faster_login" />
+                android:text="@string/faster_login"
+                android:textSize="@dimen/_12ssp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -48,21 +48,24 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:background="#2B52A7"
                 android:padding="@dimen/_5sdp"
-                android:textSize="@dimen/_12ssp"
+                android:foreground="?selectableItemBackground"
                 android:text="@string/login_with_facebook"
                 android:textAlignment="center"
-                android:textColor="#fff" />
+                android:textColor="#fff"
+                android:textSize="@dimen/_12ssp" />
 
             <TextView
+                android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:background="#55ACED"
                 android:padding="@dimen/_5sdp"
+                android:foreground="?selectableItemBackground"
                 android:text="@string/login_with_twitter"
                 android:textAlignment="center"
-                android:textSize="@dimen/_12ssp"
-                android:textColor="#fff" />
+                android:textColor="#fff"
+                android:textSize="@dimen/_12ssp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -81,7 +84,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/or"
-                    android:textSize="@dimen/_15ssp"/>
+                    android:textSize="@dimen/_15ssp" />
 
                 <View
                     android:layout_width="0dp"
@@ -111,7 +114,7 @@
                 android:inputType="textPassword"
                 android:padding="@dimen/_5sdp" />
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
@@ -122,22 +125,28 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/remember_me"
-                    android:textSize="@dimen/_12ssp"/>
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_toLeftOf="@+id/tvForgotPassword"
+                    android:layout_toStartOf="@+id/tvForgotPassword"
+                    android:layout_centerVertical="true"
+                    android:textSize="@dimen/_12ssp" />
 
                 <TextView
                     android:id="@+id/tvForgotPassword"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:gravity="end"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:shadowColor="#55ACED"
+                    android:foreground="?selectableItemBackground"
+                    android:layout_centerVertical="true"
                     android:shadowRadius="5"
                     android:text="@string/forgot_password"
                     android:textColor="#55ACED"
-                    android:textSize="@dimen/_12ssp"/>
+                    android:textSize="@dimen/_12ssp" />
 
-            </LinearLayout>
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/tvLogin"
@@ -146,10 +155,11 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:background="#2B52A7"
                 android:padding="@dimen/_5sdp"
+                android:foreground="?selectableItemBackground"
                 android:text="@string/login"
                 android:textAlignment="center"
-                android:textSize="@dimen/_12ssp"
-                android:textColor="#fff" />
+                android:textColor="#fff"
+                android:textSize="@dimen/_12ssp" />
 
             <TextView
                 android:id="@+id/tvGuest"
@@ -158,10 +168,11 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:background="#2B52A7"
                 android:padding="@dimen/_5sdp"
+                android:foreground="?selectableItemBackground"
                 android:text="@string/guest"
                 android:textAlignment="center"
-                android:textSize="@dimen/_12ssp"
-                android:textColor="#fff" />
+                android:textColor="#fff"
+                android:textSize="@dimen/_12ssp" />
 
         </LinearLayout>
 
@@ -193,6 +204,7 @@
             android:padding="@dimen/_5sdp"
             android:shadowColor="#55ACED"
             android:shadowRadius="5"
+            android:foreground="?selectableItemBackground"
             android:text="@string/sign_up"
             android:textColor="#55ACED"
             android:textSize="@dimen/_15ssp"

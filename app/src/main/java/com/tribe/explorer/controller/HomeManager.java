@@ -4,8 +4,6 @@ package com.tribe.explorer.controller;
  * Created by rishav on 9/12/2017.
  */
 
-import android.util.Log;
-
 import com.tribe.explorer.model.Constants;
 import com.tribe.explorer.model.Event;
 import com.tribe.explorer.model.beans.CategoriesData;
@@ -22,7 +20,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class HomeManager {
-    private static final String TAG = RegistrationManager.class.getSimpleName();
+    private static final String TAG = HomeManager.class.getSimpleName();
     public static List<CategoriesData.Data> categoriesList = new ArrayList<>();
 
     public void categoriesTask(String params) {
@@ -32,7 +30,6 @@ public class HomeManager {
             @Override
             public void onResponse(Call<CategoriesData> call, Response<CategoriesData> response) {
                 CategoriesData categoriesData = response.body();
-                Log.e(TAG, "categories response-- "+categoriesData.data);
                 String status = categoriesData.status;
                 if (status.equalsIgnoreCase("success")) {
                     categoriesList = categoriesData.data;

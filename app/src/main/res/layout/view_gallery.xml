@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/_2sdp">
+
+    <ImageView
+        android:id="@+id/imgGallery"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_60sdp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:scaleType="fitXY"
+        android:contentDescription="@string/choose_image"
+        android:src="@color/colorAccent" />
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/imgGallery"
+        android:layout_alignEnd="@+id/imgGallery">
+
+        <ImageView
+            android:layout_width="@dimen/_15sdp"
+            android:layout_height="@dimen/_15sdp"
+            android:layout_alignParentTop="true"
+            android:foreground="@drawable/ripple"
+            android:src="@mipmap/ic_delete"
+            android:contentDescription="@string/cancel"/>
+
+    </android.support.v7.widget.CardView>
+
+
+</RelativeLayout>

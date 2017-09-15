@@ -8,7 +8,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public final class Application extends android.app.Application {
 
-    public static String Font_Text = "fonts/OpenSans-CondLight.ttf";
+    public static String Font_Text = "fonts/HelveticaNeue Light.ttf";
 
     @Override
     public void onCreate() {

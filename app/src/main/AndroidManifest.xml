@@ -55,7 +55,8 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".view.fragments.AddListingFragment"></activity>
+        <activity android:name=".view.fragments.AddListingFragment" />
+        <activity android:name=".view.ForgotPasswordActivity"></activity>
     </application>
 
 </manifest>

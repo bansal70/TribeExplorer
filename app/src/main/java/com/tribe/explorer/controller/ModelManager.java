@@ -10,6 +10,12 @@ public class ModelManager {
     private SimpleLoginManager loginManager;
     private RegistrationManager registrationManager;
     private HomeManager homeManager;
+    private LanguageManager languageManager;
+    private ListingManager listingManager;
+    private FavouriteManager favouriteManager;
+    private AboutManager aboutManager;
+    private ForgotPasswordManager forgotPasswordManager;
+    private ProfileManager profileManager;
 
     public static ModelManager getInstance() {
         if (modelManager == null)
@@ -22,6 +28,12 @@ public class ModelManager {
         loginManager = new SimpleLoginManager();
         registrationManager = new RegistrationManager();
         homeManager = new HomeManager();
+        languageManager = new LanguageManager();
+        listingManager = new ListingManager();
+        favouriteManager = new FavouriteManager();
+        aboutManager = new AboutManager();
+        forgotPasswordManager = new ForgotPasswordManager();
+        profileManager = new ProfileManager();
     }
 
     public SimpleLoginManager getLoginManager() {
@@ -34,5 +46,29 @@ public class ModelManager {
 
     public HomeManager getHomeManager() {
         return homeManager;
+    }
+
+    public LanguageManager getLanguageManager() {
+        return languageManager;
+    }
+
+    public ListingManager getListingManager() {
+        return listingManager;
+    }
+
+    public FavouriteManager getFavouriteManager() {
+        return favouriteManager;
+    }
+
+    public AboutManager getAboutManager() {
+        return aboutManager;
+    }
+
+    public ForgotPasswordManager getForgotPasswordManager() {
+        return forgotPasswordManager;
+    }
+
+    public ProfileManager getProfileManager() {
+        return profileManager;
     }
 }

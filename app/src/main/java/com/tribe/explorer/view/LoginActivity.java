@@ -28,6 +28,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     CheckBox cbRemember;
     String deviceToken, lang;
     private Dialog pd;
+    boolean isChecked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,11 +72,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 break;
 
             case R.id.tvForgotPassword:
+                startActivity(new Intent(this, ForgotPasswordActivity.class));
                 break;
         }
     }
 
     public void loginUser() {
+        isChecked = cbRemember.isChecked();
         String email = editEmail.getText().toString().trim();
         String password = editPassword.getText().toString().trim();
         if (email.isEmpty() || password.isEmpty()) {
@@ -84,7 +87,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         }
         pd.show();
         ModelManager.getInstance().getLoginManager().loginTask(this, Operations
-                .getLoginParams(email, password, deviceToken, "android", lang));
+                .getLoginParams(email, password, deviceToken, "android", lang), isChecked);
     }
 
     @Override
@@ -108,6 +111,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         switch (event.getKey()) {
             case Constants.LOGIN_SUCCESS:
                 startActivity(new Intent(this, MainActivity.class));
+                finish();
                 break;
 
             case Constants.LOGIN_ERROR:
