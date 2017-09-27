@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="@dimen/_5sdp"
+    android:orientation="horizontal"
+    tools:ignore="RelativeOverlap"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/tvCompanyLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_shape_edittext"
+        android:padding="@dimen/_5sdp"
+        android:foreground="@drawable/ripple"
+        android:text="@string/choose_image" />
+
+    <RelativeLayout
+        android:id="@+id/rlCompany"
+        android:layout_width="@dimen/_150sdp"
+        android:layout_height="@dimen/_80sdp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/imgLogo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/menu_home"
+            android:scaleType="fitXY" />
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardCompanyCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/imgLogo"
+            app:cardUseCompatPadding="true"
+            android:layout_alignRight="@+id/imgLogo">
+
+            <ImageView
+                android:id="@+id/imgLogoDelete"
+                android:layout_width="@dimen/_15sdp"
+                android:layout_height="@dimen/_15sdp"
+                android:foreground="@drawable/ripple"
+                android:layout_alignParentTop="true"
+                android:contentDescription="@string/cancel"
+                android:src="@mipmap/ic_remove" />
+
+        </android.support.v7.widget.CardView>
+
+    </RelativeLayout>
+
+</RelativeLayout>

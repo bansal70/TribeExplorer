@@ -16,8 +16,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.tribe.explorer.R;
+import com.tribe.explorer.model.Utils;
 import com.tribe.explorer.model.beans.CategoriesData;
 import com.tribe.explorer.view.MainActivity;
 import com.tribe.explorer.view.fragments.ListingFragment;
@@ -49,14 +49,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
         holder.tvCategories.setText(name);
 
-        Glide.with(context)
-                .load(image)
-                .placeholder(R.mipmap.placeholder)
-                .error(R.mipmap.placeholder)
-                .crossFade()
-                .fitCenter()
-                .centerCrop()
-                .into(holder.imgCategory);
+        Utils.setImage(context, image, holder.imgCategory);
     }
 
     @Override
@@ -88,7 +81,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             FragmentManager fragmentManager = ((MainActivity)context).getSupportFragmentManager();
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction.replace(R.id.frame_layout, fragment);
-            transaction.addToBackStack(null);
+            transaction.addToBackStack("A");
             transaction.commit();
         }
     }

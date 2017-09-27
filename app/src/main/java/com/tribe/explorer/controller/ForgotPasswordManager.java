@@ -39,7 +39,7 @@ public class ForgotPasswordManager {
                         EventBus.getDefault().postSticky(new Event(Constants.FORGOT_PASSWORD_SUCCESS, ""));
                     else
                         EventBus.getDefault().postSticky(new Event(Constants.FORGOT_PASSWORD_FAILED, ""));
-                }catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     EventBus.getDefault().postSticky(new Event(Constants.NO_RESPONSE, ""));
                 }

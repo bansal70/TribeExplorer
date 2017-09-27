@@ -40,7 +40,7 @@ public class FavouriteManager {
                         EventBus.getDefault().postSticky(new Event(Constants.FAVOURITE_SUCCESS, ""));
                     else
                         EventBus.getDefault().postSticky(new Event(Constants.FAVOURITE_ERROR, ""));
-                }catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     EventBus.getDefault().postSticky(new Event(Constants.NO_RESPONSE, ""));
                 }

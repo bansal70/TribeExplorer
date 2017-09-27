@@ -11,6 +11,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clickable="true"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -23,18 +24,19 @@
                 android:id="@+id/imgCover"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@mipmap/placeholder"
+                android:contentDescription="@string/cover_image_optional"
                 android:scaleType="fitXY"
-                android:contentDescription="@string/cover_image_optional"/>
+                android:foreground="@drawable/ripple"
+                android:src="@mipmap/placeholder" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="@dimen/_15sdp"
-                android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true">
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:orientation="vertical"
+                android:padding="@dimen/_15sdp">
 
                 <ImageView
                     android:id="@+id/imgFavourite"
@@ -42,55 +44,57 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:contentDescription="@string/menu_favourites"
-                    android:src="@mipmap/ic_unfavourite"/>
+                    android:src="@mipmap/ic_unfavourite" />
 
-                <TextView
+                <Button
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Featured"
+                    android:layout_height="@dimen/_25sdp"
+                    android:background="@color/colorPrimary"
+                    android:paddingLeft="@dimen/_20sdp"
+                    android:paddingRight="@dimen/_20sdp"
+                    android:text="@string/featured"
                     android:textAllCaps="true"
                     android:textAppearance="@style/TextAppearance.FontPath"
-                    android:background="@color/colorPrimary"
-                    android:padding="@dimen/_5sdp"
-                    android:textColor="#fff"/>
+                    android:textColor="#fff"
+                    android:textSize="@dimen/_12ssp" />
 
                 <TextView
                     android:id="@+id/tvTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:shadowColor="#fff"
+                    android:shadowDx="1"
+                    android:shadowDy="1"
+                    android:shadowRadius="5"
                     android:text=""
                     android:textAppearance="@style/TextAppearance.FontPath"
                     android:textColor="#fff"
-                    android:textSize="@dimen/_15ssp"
-                    android:shadowColor="#fff"
-                    android:shadowRadius="5"
-                    android:shadowDx="1"
-                    android:shadowDy="1"
-                    android:layout_marginTop="@dimen/_10sdp"/>
+                    android:textSize="@dimen/_15ssp" />
 
                 <TextView
                     android:id="@+id/tvLocation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
-                    android:textColor="#fff"
+                    android:layout_marginTop="@dimen/_10sdp"
                     android:shadowColor="#fff"
-                    android:shadowRadius="5"
                     android:shadowDx="1"
                     android:shadowDy="1"
-                    android:layout_marginTop="@dimen/_10sdp"/>
+                    android:shadowRadius="5"
+                    android:text=""
+                    android:textColor="#fff" />
 
                 <TextView
                     android:id="@+id/tvPhone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
-                    android:textColor="#fff"
+                    android:layout_marginTop="@dimen/_10sdp"
                     android:shadowColor="#fff"
-                    android:shadowRadius="5"
                     android:shadowDx="1"
                     android:shadowDy="1"
-                    android:layout_marginTop="@dimen/_10sdp"/>
+                    android:shadowRadius="5"
+                    android:text=""
+                    android:textColor="#fff" />
 
             </LinearLayout>
         </RelativeLayout>
@@ -98,32 +102,36 @@
         <RelativeLayout
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:layout_marginRight="@dimen/_15sdp"
-            android:layout_marginEnd="@dimen/_15sdp"
-            android:layout_marginTop="@dimen/_115sdp"
-            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_centerHorizontal="true">
+            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginEnd="@dimen/_15sdp"
+            android:layout_marginRight="@dimen/_15sdp"
+            android:layout_marginTop="@dimen/_120sdp">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@mipmap/placeholder"/>
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:src="@mipmap/placeholder" />
 
         </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/_10sdp"
             android:layout_below="@+id/linearLayout"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="@dimen/_10sdp">
 
             <RatingBar
                 android:id="@+id/rbRatings"
+                style="?ratingBarStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="?ratingBarStyleSmall"/>
+                android:theme="@style/RatingBar" />
 
         </LinearLayout>
 

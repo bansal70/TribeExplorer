@@ -48,7 +48,7 @@ public class RegistrationManager {
                         EventBus.getDefault().postSticky(new Event(Constants.REGISTRATION_SUCCESS, ""));
                     else
                         EventBus.getDefault().postSticky(new Event(Constants.REGISTRATION_ERROR, ""));
-                }catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     EventBus.getDefault().postSticky(new Event(Constants.NO_RESPONSE, ""));
                 }

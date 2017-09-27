@@ -9,13 +9,20 @@ public class ModelManager {
     private static ModelManager modelManager;
     private SimpleLoginManager loginManager;
     private RegistrationManager registrationManager;
+    private FacebookLoginManager facebookLoginManager;
+    private TwitterLoginManager twitterLoginManager;
     private HomeManager homeManager;
     private LanguageManager languageManager;
     private ListingManager listingManager;
+    private ListingDetailsManager listingDetailsManager;
     private FavouriteManager favouriteManager;
     private AboutManager aboutManager;
     private ForgotPasswordManager forgotPasswordManager;
     private ProfileManager profileManager;
+    private LocationManager locationManager;
+    private LabelsManager labelsManager;
+    private AddReviewManager addReviewManager;
+    private ReviewsManager reviewsManager;
 
     public static ModelManager getInstance() {
         if (modelManager == null)
@@ -26,6 +33,8 @@ public class ModelManager {
 
     private ModelManager() {
         loginManager = new SimpleLoginManager();
+        facebookLoginManager = new FacebookLoginManager();
+        twitterLoginManager = new TwitterLoginManager();
         registrationManager = new RegistrationManager();
         homeManager = new HomeManager();
         languageManager = new LanguageManager();
@@ -34,6 +43,11 @@ public class ModelManager {
         aboutManager = new AboutManager();
         forgotPasswordManager = new ForgotPasswordManager();
         profileManager = new ProfileManager();
+        listingDetailsManager = new ListingDetailsManager();
+        locationManager = new LocationManager();
+        labelsManager = new LabelsManager();
+        addReviewManager = new AddReviewManager();
+        reviewsManager = new ReviewsManager();
     }
 
     public SimpleLoginManager getLoginManager() {
@@ -70,5 +84,33 @@ public class ModelManager {
 
     public ProfileManager getProfileManager() {
         return profileManager;
+    }
+
+    public ListingDetailsManager getListingDetailsManager() {
+        return listingDetailsManager;
+    }
+
+    public LocationManager getLocationManager() {
+        return locationManager;
+    }
+
+    public FacebookLoginManager getFacebookLoginManager() {
+        return facebookLoginManager;
+    }
+
+    public TwitterLoginManager getTwitterLoginManager() {
+        return twitterLoginManager;
+    }
+
+    public LabelsManager getLabelsManager() {
+        return labelsManager;
+    }
+
+    public AddReviewManager getAddReviewManager() {
+        return addReviewManager;
+    }
+
+    public ReviewsManager getReviewsManager() {
+        return reviewsManager;
     }
 }

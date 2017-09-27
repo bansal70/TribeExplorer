@@ -41,7 +41,7 @@ import static android.os.Build.VERSION_CODES.M;
 public class RegistrationActivity extends BaseActivity implements View.OnClickListener{
 
     Dialog dialog;
-    ImageView imgCaptcha, imgProfilePic;
+    ImageView imgCaptcha, imgProfilePic, imgBack;
     boolean isCaptcha;
     TextView tvReload, tvSubmit;
     EditText editFirstName, editLastName, editEmail, editPassword, editConfirmPassword,
@@ -78,11 +78,13 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
 
         imgProfilePic = (ImageView)findViewById(R.id.imgProfilePic);
         imgCaptcha = (ImageView)findViewById(R.id.imgCaptcha);
+        imgBack = (ImageView)findViewById(R.id.imgBack);
         tvReload = (TextView) findViewById(R.id.tvReload);
         tvSubmit = (TextView) findViewById(R.id.tvSubmit);
 
         tvReload.setOnClickListener(this);
         tvSubmit.setOnClickListener(this);
+        imgBack.setOnClickListener(this);
         imgProfilePic.setOnClickListener(this);
 
         setImageCaptcha();
@@ -122,6 +124,10 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
 
             case R.id.tvSubmit:
                 registerUser();
+                break;
+
+            case R.id.imgBack:
+                finish();
                 break;
         }
     }

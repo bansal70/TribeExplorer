@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
+    app:cardElevation="@dimen/_2sdp"
     app:cardCornerRadius="@dimen/_10sdp"
     android:layout_margin="@dimen/_20sdp">
 
@@ -24,29 +25,41 @@
             android:padding="@dimen/_10sdp"
             android:background="@color/colorPrimary"/>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="@dimen/_5sdp">
+            android:padding="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_5sdp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Language"/>
+                android:layout_centerVertical="true"
+                android:text="@string/language"/>
 
             <Spinner
                 android:id="@+id/spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#fff"
-                android:padding="@dimen/_15sdp"
+                android:layout_marginLeft="@dimen/_60sdp"
+                android:layout_marginStart="@dimen/_60sdp"
                 android:prompt="@string/select_language"/>
 
-        </LinearLayout>
+        </RelativeLayout>
 
-        <LinearLayout
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:background="#666666"
+            android:layout_marginRight="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:layout_marginLeft="@dimen/_60sdp"
+            android:layout_marginStart="@dimen/_60sdp"/>
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -56,6 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_centerVertical="true"
                 android:text="@string/owner"/>
 
             <EditText
@@ -63,21 +77,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
-                android:padding="@dimen/_15sdp"/>
+                android:layout_marginLeft="@dimen/_50sdp"
+                android:layout_marginStart="@dimen/_50sdp" />
 
-        </LinearLayout>
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="@dimen/_10sdp">
+            android:layout_marginTop="@dimen/_5sdp">
 
             <TextView
                 android:id="@+id/tvLangCancel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@color/colorAccent"
+                android:background="@color/colorPrimary"
+                android:foreground="@drawable/ripple"
                 android:textColor="@color/colorWhite"
                 android:layout_weight="1"
                 android:text="@string/cancel"
@@ -96,7 +112,8 @@
                 android:id="@+id/tvLangAdd"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@color/colorAccent"
+                android:background="@color/colorPrimary"
+                android:foreground="@drawable/ripple"
                 android:textColor="@color/colorWhite"
                 android:layout_weight="1"
                 android:layout_gravity="center"

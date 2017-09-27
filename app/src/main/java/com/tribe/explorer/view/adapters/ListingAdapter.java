@@ -8,6 +8,10 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,13 +21,15 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.tribe.explorer.R;
 import com.tribe.explorer.controller.ModelManager;
 import com.tribe.explorer.model.Config;
 import com.tribe.explorer.model.Operations;
 import com.tribe.explorer.model.TEPreferences;
+import com.tribe.explorer.model.Utils;
 import com.tribe.explorer.model.beans.ListingData;
+import com.tribe.explorer.view.MainActivity;
+import com.tribe.explorer.view.fragments.ListingDetailsFragment;
 
 import java.util.List;
 
@@ -54,7 +60,10 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.ViewHold
         holder.tvTitle.setText(data.title);
         holder.tvLocation.setText(data.loc);
         holder.tvPhone.setText(data.phone);
-        float ratings = Float.parseFloat(data.rating);
+        float ratings = 0.0f;
+        if (!data.rating.isEmpty())
+            ratings = Float.parseFloat(data.rating);
+
         holder.rbRatings.setRating(ratings);
 
         if (data.fav.equals("yes"))
@@ -62,12 +71,7 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.ViewHold
         else
             holder.imgFavourite.setImageResource(R.mipmap.ic_unfavourite);
 
-        Glide.with(context)
-                .load(data.featured)
-                .centerCrop()
-                .fitCenter()
-                .crossFade()
-                .into(holder.imgFeature);
+        Utils.setImage(context, data.featured, holder.imgFeature);
     }
 
     @Override
@@ -93,12 +97,22 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.ViewHold
             imgFavourite = itemView.findViewById(R.id.imgFavourite);
 
             imgFavourite.setOnClickListener(this);
+            imgFeature.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
+                case R.id.imgCover:
+                    replaceFragment(getAdapterPosition());
+                    break;
+
                 case R.id.imgFavourite:
+                    if (user_id.isEmpty()) {
+                        Toast.makeText(context, R.string.login_to_fav, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     ListingData.Data data = listData.get(getAdapterPosition());
                     String listing_name = data.title;
 
@@ -117,18 +131,31 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.ViewHold
                                 .getFavouriteParams(Config.REMOVE_FAV_URL, user_id, data.iD, lang));
                         imgFavourite.setImageResource(R.mipmap.ic_unfavourite);
                         Toast.makeText(context, listing_name + context.getString(R.string.fav_removed),
-                                Toast.LENGTH_SHORT).show();
+                                Toast.LENGTH_LONG).show();
                     }
                     else {
                         ModelManager.getInstance().getFavouriteManager().favouriteTask(Operations
                                 .getFavouriteParams(Config.ADD_FAV_URL, user_id, data.iD, lang));
                         imgFavourite.setImageResource(R.mipmap.ic_favourite);
                         Toast.makeText(context, listing_name + context.getString(R.string.fav_added),
-                                Toast.LENGTH_SHORT).show();
+                                Toast.LENGTH_LONG).show();
                     }
                     break;
             }
         }
+    }
+
+    private void replaceFragment(int position) {
+        ListingData.Data data = listData.get(position);
+        Fragment fragment = new ListingDetailsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("cat_id", data.iD);
+        fragment.setArguments(bundle);
+        FragmentManager fragmentManager = ((MainActivity)context).getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.frame_layout, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
 }

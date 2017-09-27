@@ -13,10 +13,6 @@ import com.tribe.explorer.model.beans.Language;
 
 import java.util.List;
 
-/*
- * Created by rishav on 9/14/2017.
- */
-
 public class LanguageAdapter extends RecyclerView.Adapter<LanguageAdapter.ViewHolder> {
     private Context context;
     private List<Language> languagesList;

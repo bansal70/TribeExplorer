@@ -43,6 +43,10 @@ public class FavouritesFragment extends Fragment{
         listData = new ArrayList<>();
         user_id = TEPreferences.readString(getActivity(), "user_id");
         lang = TEPreferences.readString(getActivity(), "lang");
+        if (user_id.isEmpty()) {
+            Toast.makeText(getActivity(), R.string.login_to_check_fav, Toast.LENGTH_SHORT).show();
+            return;
+        }
         dialog = Utils.showDialog(getActivity());
         dialog.show();
         ModelManager.getInstance().getListingManager()

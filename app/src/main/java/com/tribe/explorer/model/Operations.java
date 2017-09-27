@@ -6,8 +6,19 @@ package com.tribe.explorer.model;
 
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 public class Operations {
     private static final String TAG = Operations.class.getSimpleName();
+    public static JSONObject jsonObject = new JSONObject();
+    public static ArrayList<String> langList = new ArrayList<>();
+    public static ArrayList<String> categoriesList = new ArrayList<>();
+    public static ArrayList<String> galleriesList = new ArrayList<>();
+    public static ArrayList<String> labelsList = new ArrayList<>();
 
     public static String getLoginParams(String email, String password, String deviceToken,
                                         String deviceType, String lang) {
@@ -18,6 +29,23 @@ public class Operations {
                 +"&lang="+lang;
 
         Log.e(TAG, "Login params-- "+params);
+
+        return params;
+    }
+
+    public static String getSocialLoginParams(String firstName, String lastName, String email, String id,
+                                              String deviceToken, String deviceType,
+                                              String social_type, String lang) {
+        String params = Config.SOCIAL_LOGIN_URL+"?firstname=" + firstName
+                +"&lastname=" + lastName
+                +"&useremail=" + email
+                +"&social_id=" + id
+                +"&deviceToken=" + deviceToken
+                +"&deviceType=" + deviceType
+                +"&social_type="+social_type
+                +"&lang="+lang;
+
+        Log.i(TAG, "social_login params-- "+params);
 
         return params;
     }
@@ -59,13 +87,15 @@ public class Operations {
         return params;
     }
 
-    public static String getUpdateProfileParams(String firstName, String lastName, String email,
-                                                String role, String gender, String dob, String lang) {
-        String params = Config.UPDATE_PROFILE_URL + "?firstname=" + firstName
+    public static String getUpdateProfileParams(String user_id, String firstName, String lastName,
+                                                String email, String role, String gender,
+                                                String dob, String lang) {
+        String params = Config.UPDATE_PROFILE_URL + "?user_id=" + user_id
+                +"&firstname=" + firstName
                 +"&lastname="+lastName
-                +"&useremail="+email
-                +"&role="+role
-                +"&gender="+gender
+                +"&email="+email
+                +"&isbusinessowner="+role
+                +"&Gender="+gender
                 +"&dob="+dob
                 +"&lang="+lang;
 
@@ -97,11 +127,57 @@ public class Operations {
         return params;
     }
 
-    public static String getListingParams(int category_id, String lang) {
+    public static JSONObject jsonHours(String day, String openTime, String closeTime) {
+        try {
+            JSONArray jsonArray = new JSONArray();
+            JSONObject obj = new JSONObject();
+            obj.put("open", openTime);
+            obj.put("close", closeTime);
+            jsonArray.put(obj);
+            jsonObject.put(day, jsonArray);
+            Log.e(TAG, "hours: " + jsonObject.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return jsonObject;
+    }
+
+    public static ArrayList<String> addLanguages(String owner, String language) {
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", owner);
+            jsonObject.put("language", language);
+            JSONArray jsonArray = new JSONArray();
+            jsonArray.put(jsonObject);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                langList.add(jsonArray.get(i).toString());
+            }
+
+            Log.e(TAG, "languages: " + jsonObject.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return langList;
+    }
+
+    public static String getListingParams(int category_id, String lang, String user_id) {
         String params = Config.LISTING_URL + "?cat_id="+category_id
-                +"&lang="+lang;
+                +"&lang="+lang
+                +"&user_id="+user_id;
 
         Log.e(TAG, "listing params-- "+params);
+
+        return params;
+    }
+
+    public static String getListingDetailsParams(int category_id, String lang, String user_id) {
+        String params = Config.LISTING_DETAILS_URL + "?listing_id="+category_id
+                +"&lang="+lang
+                +"&user_id="+user_id;
+
+        Log.e(TAG, "listing_details params-- "+params);
 
         return params;
     }
@@ -129,6 +205,44 @@ public class Operations {
                 +"&lang="+lang;
 
         Log.e(TAG, "my_list params-- "+params);
+
+        return params;
+    }
+
+    public static String getSearchParams(String query, String lat, String lng,
+                                         String radius, String lang, String user_id) {
+        String params = Config.SEARCH_URL + "?listing_title="+query
+                +"&lat="+lat
+                +"&lng="+lng
+                +"&radius="+radius
+                +"&lang="+lang
+                +"&user_id="+user_id;
+
+        Log.e(TAG, "search_listing params-- "+params);
+
+        return params;
+    }
+
+    public static String getAddReviewsParams(String user_id, String listing_id, String comment,
+                                             float speed, float qualtiy, float price, String lang) {
+        String params = Config.ADD_REVIEW_URL + "?user_id="+user_id
+                +"&listing_id="+listing_id
+                +"&comment="+comment
+                +"&speed="+speed
+                +"&quality="+qualtiy
+                +"&price="+price
+                +"&lang="+lang;
+
+        Log.e(TAG, "add_review params-- "+params);
+
+        return params;
+    }
+
+    public static String getReviewsParams(String listing_id, String lang) {
+        String params = Config.REVIEWS_URL+"?listing_id="+listing_id
+                +"&lang="+lang;
+
+        Log.e(TAG, "reviews params-- "+params);
 
         return params;
     }

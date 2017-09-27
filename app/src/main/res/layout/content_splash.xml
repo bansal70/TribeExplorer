@@ -31,7 +31,6 @@
 
     </LinearLayout>
 
-
     <ProgressBar
         style="?android:attr/progressBarStyle"
         android:layout_width="@dimen/_40sdp"
@@ -67,7 +66,6 @@
             android:background="#fff"
             android:layout_marginTop="@dimen/_10sdp"
             android:paddingTop="@dimen/_5sdp"
-
             android:paddingBottom="@dimen/_5sdp"
             android:prompt="@string/spinner_title"/>
 

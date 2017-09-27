@@ -13,6 +13,7 @@
         android:background="#fff">
 
         <ImageView
+            android:id="@+id/imgBack"
             android:layout_width="@dimen/_200sdp"
             android:layout_height="@dimen/_40sdp"
             android:src="@mipmap/hdr"

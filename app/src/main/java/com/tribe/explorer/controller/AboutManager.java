@@ -28,13 +28,18 @@ public class AboutManager {
         call.enqueue(new Callback<AboutData>() {
             @Override
             public void onResponse(Call<AboutData> call, Response<AboutData> response) {
-                AboutData aboutData = response.body();
-                String status = aboutData.status;
-                if (status.equalsIgnoreCase("success")) {
-                    dataList = aboutData.data;
-                    EventBus.getDefault().postSticky(new Event(Constants.ABOUT_SUCCESS, ""));
-                } else {
-                    EventBus.getDefault().postSticky(new Event(Constants.ABOUT_EMPTY, ""));
+                try {
+                    AboutData aboutData = response.body();
+                    String status = aboutData.status;
+                    if (status.equalsIgnoreCase("success")) {
+                        dataList = aboutData.data;
+                        EventBus.getDefault().postSticky(new Event(Constants.ABOUT_SUCCESS, ""));
+                    } else {
+                        EventBus.getDefault().postSticky(new Event(Constants.ABOUT_EMPTY, ""));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    EventBus.getDefault().postSticky(new Event(Constants.NO_RESPONSE, ""));
                 }
 
             }

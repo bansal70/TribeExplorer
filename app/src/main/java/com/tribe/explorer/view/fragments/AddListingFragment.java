@@ -10,12 +10,14 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,11 +37,15 @@ import com.tribe.explorer.controller.ModelManager;
 import com.tribe.explorer.model.Config;
 import com.tribe.explorer.model.Constants;
 import com.tribe.explorer.model.Event;
+import com.tribe.explorer.model.Operations;
+import com.tribe.explorer.model.TEPreferences;
 import com.tribe.explorer.model.Utils;
 import com.tribe.explorer.model.beans.CategoriesData;
 import com.tribe.explorer.model.beans.Language;
 import com.tribe.explorer.model.beans.LanguageData;
+import com.tribe.explorer.model.beans.RegionData;
 import com.tribe.explorer.model.custom.ImagePicker;
+import com.tribe.explorer.view.LocationActivity;
 import com.tribe.explorer.view.adapters.CategoriesAdapter;
 import com.tribe.explorer.view.adapters.GalleryAdapter;
 import com.tribe.explorer.view.adapters.HoursAdapter;
@@ -57,35 +63,44 @@ import static android.os.Build.VERSION_CODES.M;
 
 public class AddListingFragment extends Fragment implements View.OnClickListener,
         AdapterView.OnItemSelectedListener {
+    private final String TAG = AddListingFragment.class.getSimpleName();
 
-    EditText editEmail, editBusinessName, editLocation, editContact, editRegion, editCategory,
+    EditText editEmail, editBusinessName, editLocation, editContact, editCategory,
             editBusinessLabel, editWeb, editPhone, editVideoURL, editDescription;
-
-    TextView tvCover, tvGallery, tvAddHours, tvAddLanguage, tvDone;
-    ImageView imgCover, imgDelete;
+    Spinner spinnerRegion, spinnerTimezone;
+    TextView tvCompanyLogo, tvCover, tvGallery, tvAddHours, tvAddLanguage, tvDone;
+    ImageView imgCover, imgDelete, imgLogo, imgLogoDelete;
     RecyclerView recyclerHours, recyclerLanguage, recyclerGallery;
     HoursAdapter hoursAdapter;
     GalleryAdapter galleryAdapter;
-    boolean isHours = false, isGallery = false;
-    RelativeLayout rlCover;
+    boolean isHours = false, isGallery = false, isCover = false;
+    RelativeLayout rlCover, rlCompany;
 
     private static final int PERMISSION_REQUEST_CODE = 1001;
     static final int REQUEST_IMAGE_GALLERY = 1;
     static final int REQUEST_IMAGE_COVER = 2;
+    static final int REQUEST_IMAGE_LOGO = 3;
     private ArrayList<Uri> uriList;
-    Uri uriCover;
+    Uri uriCover, uriLogo;
 
     Dialog dialog, dialogCategories, dialogLanguage;
     TextView tvCancel, tvConfirm, tvLangCancel, tvLangAdd;
     EditText editOwner;
-    String str_language, id;
+    String str_language = "", id = "", timezone = "", region = "", email = "";
     private List<CategoriesData.Data> categoriesList;
-    private List<String> languagesList;
+    private List<String> languagesList, timezoneList, regionsList, categories;
     List<LanguageData.Data> dataList;
     private List<Language> list;
     private LanguageAdapter languageAdapter;
-    private ArrayAdapter<String> listAdapter;
+    private ArrayAdapter<String> listAdapter, regionAdapter, timezoneAdapter;
     ImageView imgBack;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Utils.location = "";
+        email = TEPreferences.readString(getActivity(), "email");
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -97,35 +112,44 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
 
     public void initViews(View view) {
         languagesList = new ArrayList<>();
+        regionsList = new ArrayList<>();
+        regionsList.add(getString(R.string.select_region));
+        timezoneList = new ArrayList<>();
+        timezoneList.add(getString(R.string.select_timezone));
         dataList = new ArrayList<>();
         list = new ArrayList<>();
-        dialog = Utils.showDialog(getActivity());
-        dialog.show();
-        ModelManager.getInstance().getLanguageManager().languageTask(Config.LANGUAGE_URL);
-
         uriList = new ArrayList<>();
         categoriesList = new ArrayList<>();
+        dialog = Utils.showDialog(getActivity());
+        dialog.show();
+        ModelManager.getInstance().getLanguageManager().languageTask(getActivity(), Config.LANGUAGE_URL);
+
         editEmail = view.findViewById(R.id.editEmail);
         editBusinessName = view.findViewById(R.id.editBusinessName);
         editLocation = view.findViewById(R.id.editLocation);
         editContact = view.findViewById(R.id.editContact);
-        editRegion = view.findViewById(R.id.editRegion);
         editCategory = view.findViewById(R.id.editCategory);
         editBusinessLabel = view.findViewById(R.id.editBusinessLabel);
         editWeb = view.findViewById(R.id.editWeb);
         editPhone = view.findViewById(R.id.editPhone);
         editVideoURL = view.findViewById(R.id.editVideoURL);
         editDescription = view.findViewById(R.id.editDescription);
+        spinnerRegion = view.findViewById(R.id.spinnerRegion);
+        spinnerTimezone = view.findViewById(R.id.spinnerTimezone);
 
         tvCover = view.findViewById(R.id.tvCover);
+        tvCompanyLogo = view.findViewById(R.id.tvCompanyLogo);
         tvGallery = view.findViewById(R.id.tvGallery);
         tvAddHours = view.findViewById(R.id.tvAddHours);
         tvAddLanguage = view.findViewById(R.id.tvAddLanguage);
         tvDone = view.findViewById(R.id.tvDone);
 
         rlCover = view.findViewById(R.id.rlCover);
+        rlCompany = view.findViewById(R.id.rlCompany);
         imgCover = view.findViewById(R.id.imgCover);
         imgDelete = view.findViewById(R.id.imgDelete);
+        imgLogo = view.findViewById(R.id.imgLogo);
+        imgLogoDelete = view.findViewById(R.id.imgLogoDelete);
         imgBack = view.findViewById(R.id.imgBack);
 
         recyclerHours = view.findViewById(R.id.recyclerHours);
@@ -148,17 +172,35 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
         galleryAdapter = new GalleryAdapter(getActivity(), uriList);
         recyclerGallery.setAdapter(galleryAdapter);
 
+        editLocation.setOnClickListener(this);
         tvAddHours.setOnClickListener(this);
         tvAddLanguage.setOnClickListener(this);
         tvGallery.setOnClickListener(this);
         tvCover.setOnClickListener(this);
+        tvCompanyLogo.setOnClickListener(this);
         editCategory.setOnClickListener(this);
         imgDelete.setOnClickListener(this);
+        imgLogoDelete.setOnClickListener(this);
         imgBack.setOnClickListener(this);
+        spinnerRegion.setOnItemSelectedListener(this);
+        spinnerTimezone.setOnItemSelectedListener(this);
+        tvDone.setOnClickListener(this);
 
         categoriesList.addAll(HomeManager.categoriesList);
         initDialog();
         initLanguageDialog();
+        setRegions();
+    }
+
+    public void setRegions() {
+        editEmail.setText(email);
+        regionAdapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_item, regionsList);
+        regionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerRegion.setAdapter(regionAdapter);
+
+        timezoneAdapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_item, timezoneList);
+        timezoneAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerTimezone.setAdapter(timezoneAdapter);
     }
 
     public void initDialog() {
@@ -198,9 +240,27 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-        LanguageData.Data data = dataList.get(position);
-        str_language = data.language;
-        id = data.id;
+        switch (adapterView.getId()) {
+            case R.id.spinner:
+                LanguageData.Data data = dataList.get(position);
+                str_language = data.language;
+                id = data.id;
+                break;
+
+            case R.id.spinnerRegion:
+                if (position > 0)
+                    region = regionsList.get(position);
+                else
+                    region = "";
+                break;
+
+            case R.id.spinnerTimezone:
+                if (position > 0)
+                    timezone = timezoneList.get(position);
+                else
+                    timezone = "";
+                break;
+        }
     }
 
     @Override
@@ -211,6 +271,10 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.editLocation:
+                getActivity().startActivity(new Intent(getActivity(), LocationActivity.class));
+                break;
+
             case R.id.tvAddHours:
                 addHours();
                 break;
@@ -221,17 +285,30 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
 
             case R.id.tvGallery:
                 isGallery = true;
+                isCover = false;
                 dispatchTakePictureIntent();
                 break;
 
             case R.id.tvCover:
                 isGallery = false;
+                isCover = true;
                 dispatchTakePictureIntent();
                 break;
 
             case R.id.imgDelete:
                 imgCover.setImageBitmap(null);
                 rlCover.setVisibility(View.GONE);
+                break;
+
+            case R.id.tvCompanyLogo:
+                isGallery = false;
+                isCover = false;
+                dispatchTakePictureIntent();
+                break;
+
+            case R.id.imgLogoDelete:
+                imgLogo.setImageBitmap(null);
+                rlCompany.setVisibility(View.GONE);
                 break;
 
             case R.id.editCategory:
@@ -257,10 +334,21 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
             case R.id.imgBack:
                 backScreen();
                 break;
+
+            case R.id.tvDone:
+                Log.e(TAG, "hours: "+ Operations.jsonObject.toString());
+                Log.e(TAG, "languages: "+list);
+                Log.e(TAG, "categories: "+categories);
+                Log.e(TAG, "galleries: "+uriList);
+                break;
         }
     }
 
     public void addLanguages() {
+        if (editOwner.getText().toString().trim().isEmpty()) {
+            Toast.makeText(getActivity(), R.string.fill_required_fields, Toast.LENGTH_SHORT).show();
+            return;
+        }
         for (Language language : list) {
             if (id.equals(language.getId())) {
                 Toast.makeText(getActivity(), "Language already added", Toast.LENGTH_SHORT).show();
@@ -275,7 +363,7 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
 
     public void setCategories() {
         dialogCategories.dismiss();
-        ArrayList<String> categories = new ArrayList<>();
+        categories = new ArrayList<>();
         for (CategoriesData.Data data : categoriesList) {
             if (data.isSelected()) {
                 categories.add(data.name);
@@ -300,7 +388,8 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
     @Override
     public void onStart() {
         super.onStart();
-
+        if (!Utils.location.isEmpty())
+            editLocation.setText(Utils.location);
         EventBus.getDefault().register(this);
     }
 
@@ -316,15 +405,33 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
         dialog.dismiss();
         EventBus.getDefault().removeAllStickyEvents();
         switch (event.getKey()) {
-            case Constants.LANGUAGE_SUCCESS:
+            case Constants.DETAILS_SUCCESS:
                 dataList.addAll(LanguageManager.languagesList);
                 for (LanguageData.Data data: dataList) {
                     languagesList.add(data.language);
                 }
                 listAdapter.notifyDataSetChanged();
+                for (RegionData.Data data : LanguageManager.regionsList) {
+                    regionsList.add(data.name);
+                }
+                regionAdapter.notifyDataSetChanged();
+                timezoneList.addAll(LanguageManager.timezoneList);
+                timezoneAdapter.notifyDataSetChanged();
                 break;
 
             case Constants.LANGUAGE_EMPTY:
+                backScreen();
+                Toast.makeText(getActivity(), R.string.error_processing_request, Toast.LENGTH_SHORT).show();
+                break;
+
+            case Constants.REGION_EMPTY:
+                Toast.makeText(getActivity(), R.string.error_processing_request, Toast.LENGTH_SHORT).show();
+                backScreen();
+                break;
+
+            case Constants.TIMEZONE_EMPTY:
+                Toast.makeText(getActivity(), R.string.error_processing_request, Toast.LENGTH_SHORT).show();
+                backScreen();
                 break;
 
             case Constants.NO_RESPONSE:
@@ -369,9 +476,12 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
         if (isGallery) {
             chooseImageIntent = ImagePicker.getMultiImageIntent(getActivity());
             startActivityForResult(chooseImageIntent, REQUEST_IMAGE_GALLERY);
-        } else {
+        } else if (isCover){
             chooseImageIntent = ImagePicker.getPickImageIntent(getActivity());
             startActivityForResult(chooseImageIntent, REQUEST_IMAGE_COVER);
+        } else {
+            chooseImageIntent = ImagePicker.getPickImageIntent(getActivity());
+            startActivityForResult(chooseImageIntent, REQUEST_IMAGE_LOGO);
         }
     }
 
@@ -382,7 +492,7 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
             recyclerGallery.setVisibility(View.VISIBLE);
 
             File imageFile = ImagePicker.getTempFile(getActivity());
-            boolean isCamera = (data == null || data.getData() == null  ||
+            boolean isCamera = (data == null || data.getData() == null ||
                     data.getData().toString().contains(imageFile.toString()));
 
             if (isCamera) {
@@ -393,25 +503,40 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
                 return;
             }
 
-            for (int i=0; i<data.getClipData().getItemCount(); i++) {
+            for (int i = 0; i < data.getClipData().getItemCount(); i++) {
                 Uri selectedImage = data.getClipData().getItemAt(i).getUri();
                 uriList.add(selectedImage);
                 galleryAdapter.notifyDataSetChanged();
             }
         } else if (requestCode == REQUEST_IMAGE_COVER && resultCode == RESULT_OK) {
             Bitmap photo = ImagePicker.getImageFromResult(getActivity(), resultCode, data);
-
             uriCover = ImagePicker.getImageUri(getActivity(), photo);
             //File finalFile = new File(ImagePicker.getRealPathFromURI(getActivity(), tempUri));
-           // filePath = finalFile.getAbsolutePath();
+            // filePath = finalFile.getAbsolutePath();
             rlCover.setVisibility(View.VISIBLE);
             imgCover.setImageBitmap(photo);
+        } else if (requestCode == REQUEST_IMAGE_LOGO && resultCode == RESULT_OK) {
+            Bitmap photo = ImagePicker.getImageFromResult(getActivity(), resultCode, data);
+            uriLogo = ImagePicker.getImageUri(getActivity(), photo);
+            //File finalFile = new File(ImagePicker.getRealPathFromURI(getActivity(), tempUri));
+            // filePath = finalFile.getAbsolutePath();
+            rlCompany.setVisibility(View.VISIBLE);
+            imgLogo.setImageBitmap(photo);
         }
     }
 
     public void backScreen() {
         if (getActivity().getSupportFragmentManager().getBackStackEntryCount() > 0) {
             getActivity().getSupportFragmentManager().popBackStack();
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        for (CategoriesData.Data data : categoriesList) {
+            data.setSelected(false);
         }
     }
 

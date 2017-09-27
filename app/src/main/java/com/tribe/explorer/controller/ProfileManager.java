@@ -47,7 +47,7 @@ public class ProfileManager {
                     else {
                         EventBus.getDefault().postSticky(new Event(Constants.PROFILE_EMPTY, ""));
                     }
-                }catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     EventBus.getDefault().postSticky(new Event(Constants.NO_RESPONSE, ""));
                 }

@@ -16,17 +16,17 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Edit Profile"
+            android:text="@string/edit_profile"
             android:padding="@dimen/_10sdp"
             android:textSize="@dimen/_15ssp"
             android:textColor="#fff"
-            android:background="@color/colorAccent"/>
+            android:background="@color/colorPrimary"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#000"
-            android:text="Are you sure you want to edit your profile ?"
+            android:text="@string/confirm_edit_profile"
             android:textSize="@dimen/_14ssp"
             android:padding="@dimen/_15ssp"/>
 
@@ -39,11 +39,11 @@
                 android:id="@+id/tvCancel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@color/colorAccent"
+                android:background="@color/colorPrimary"
                 android:foreground="@drawable/ripple"
                 android:textColor="@color/colorWhite"
                 android:layout_weight="1"
-                android:text="Cancel"
+                android:text="@string/cancel"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:padding="@dimen/_10sdp"
@@ -61,11 +61,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:background="@color/colorAccent"
+                android:background="@color/colorPrimary"
                 android:foreground="@drawable/ripple"
                 android:gravity="center"
                 android:padding="@dimen/_10sdp"
-                android:text="Confirm"
+                android:text="@string/confirm"
                 android:textAllCaps="false"
                 android:textColor="@color/colorWhite"
                 android:textSize="@dimen/_15ssp" />

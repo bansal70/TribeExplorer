@@ -42,7 +42,7 @@
                 android:text="@string/email"
                 android:textAppearance="@style/TextAppearance.FontPath"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/_15ssp" />
+                android:textSize="@dimen/_12ssp" />
 
             <EditText
                 android:id="@+id/editEmail"
@@ -59,7 +59,7 @@
                 android:text="@string/business_name"
                 android:textAppearance="@style/TextAppearance.FontPath"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/_15ssp" />
+                android:textSize="@dimen/_12ssp" />
 
             <EditText
                 android:id="@+id/editBusinessName"
@@ -75,13 +75,15 @@
                 android:text="@string/location"
                 android:textAppearance="@style/TextAppearance.FontPath"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/_15ssp" />
+                android:textSize="@dimen/_12ssp" />
 
             <EditText
                 android:id="@+id/editLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:focusableInTouchMode="false"
                 android:hint="@string/e_g_london"
+                android:longClickable="false"
                 android:inputType="text" />
 
             <TextView
@@ -91,7 +93,7 @@
                 android:text="@string/contact_email_url"
                 android:textAppearance="@style/TextAppearance.FontPath"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/_15ssp" />
+                android:textSize="@dimen/_12ssp" />
 
             <EditText
                 android:id="@+id/editContact"
@@ -108,23 +110,29 @@
                 android:text="@string/business_region"
                 android:textAppearance="@style/TextAppearance.FontPath"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/_15ssp" />
+                android:textSize="@dimen/_12ssp" />
 
-            <EditText
-                android:id="@+id/editRegion"
+            <Spinner
+                android:id="@+id/spinnerRegion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/select_region"
-                android:inputType="text" />
+                android:prompt="@string/select_region"
+                android:paddingTop="@dimen/_5sdp"
+                android:background="@android:color/transparent" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                android:background="#666666"/>
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:text="@string/business_category"
                 android:textAppearance="@style/TextAppearance.FontPath"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/_15ssp" />
+                android:textSize="@dimen/_12ssp" />
 
             <EditText
                 android:id="@+id/editCategory"
@@ -132,7 +140,8 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/select_categories"
                 android:focusableInTouchMode="false"
-                android:inputType="textEmailAddress" />
+                android:longClickable="false"
+                android:inputType="text" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -141,7 +150,7 @@
                 android:text="@string/business_labels_optional"
                 android:textAppearance="@style/TextAppearance.FontPath"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/_15ssp" />
+                android:textSize="@dimen/_12ssp" />
 
             <EditText
                 android:id="@+id/editBusinessLabel"
@@ -157,7 +166,7 @@
                 android:text="@string/website_optional"
                 android:textAppearance="@style/TextAppearance.FontPath"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/_15ssp" />
+                android:textSize="@dimen/_12ssp" />
 
             <EditText
                 android:id="@+id/editWeb"
@@ -173,7 +182,7 @@
                 android:text="@string/phone_number_optional"
                 android:textAppearance="@style/TextAppearance.FontPath"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/_15ssp" />
+                android:textSize="@dimen/_12ssp" />
 
             <EditText
                 android:id="@+id/editPhone"
@@ -189,7 +198,7 @@
                 android:text="@string/video_optional"
                 android:textAppearance="@style/TextAppearance.FontPath"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/_15ssp" />
+                android:textSize="@dimen/_12ssp" />
 
             <EditText
                 android:id="@+id/editVideoURL"
@@ -205,13 +214,28 @@
                 android:text="@string/description"
                 android:textAppearance="@style/TextAppearance.FontPath"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/_15ssp" />
+                android:textSize="@dimen/_12ssp" />
 
             <EditText
                 android:id="@+id/editDescription"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_100sdp"
-                android:inputType="text" />
+                android:layout_gravity="start|top"
+                android:gravity="start|top"
+                android:padding="@dimen/_5sdp"
+                android:background="@drawable/round_shape_edittext"
+                android:inputType="textMultiLine" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="@string/company_logo"
+                android:textAppearance="@style/TextAppearance.FontPath"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_12ssp" />
+
+            <include layout="@layout/content_company_logo"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -220,8 +244,7 @@
                 android:text="@string/cover_image_optional"
                 android:textAppearance="@style/TextAppearance.FontPath"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/_15ssp" />
-
+                android:textSize="@dimen/_12ssp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -271,7 +294,7 @@
                             android:foreground="@drawable/ripple"
                             android:layout_alignParentTop="true"
                             android:contentDescription="@string/cancel"
-                            android:src="@mipmap/ic_delete" />
+                            android:src="@mipmap/ic_remove" />
 
                     </android.support.v7.widget.CardView>
 
@@ -286,8 +309,7 @@
                 android:text="@string/gallery_image_optional"
                 android:textAppearance="@style/TextAppearance.FontPath"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/_15ssp" />
-
+                android:textSize="@dimen/_12ssp" />
 
             <TextView
                 android:id="@+id/tvGallery"
@@ -305,6 +327,28 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="@string/timezone"
+                android:textAppearance="@style/TextAppearance.FontPath"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_12ssp" />
+
+            <Spinner
+                android:id="@+id/spinnerTimezone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:prompt="@string/select_timezone"
+                android:paddingTop="@dimen/_5sdp"
+                android:background="@android:color/transparent" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                android:background="#666666"/>
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -319,13 +363,13 @@
                     android:text="@string/hours_of_operation_optional"
                     android:textAppearance="@style/TextAppearance.FontPath"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/_15ssp" />
+                    android:textSize="@dimen/_12ssp" />
 
                 <TextView
                     android:id="@+id/tvAddHours"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:foreground="@drawable/ripple"
+                    android:foreground="?selectableItemBackground"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
@@ -356,7 +400,7 @@
                     android:text="@string/add_title_of_language_section"
                     android:textAppearance="@style/TextAppearance.FontPath"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/_15ssp" />
+                    android:textSize="@dimen/_12ssp" />
 
                 <TextView
                     android:id="@+id/tvAddLanguage"
@@ -365,7 +409,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:foreground="@drawable/ripple"
+                    android:foreground="?selectableItemBackground"
                     android:padding="@dimen/_5sdp"
                     android:text="@string/plus"
                     android:textColor="@color/colorPrimary"
@@ -386,6 +430,7 @@
                 android:background="#2B52A7"
                 android:padding="@dimen/_5sdp"
                 android:text="@string/done"
+                android:foreground="@drawable/ripple"
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:textColor="#fff"

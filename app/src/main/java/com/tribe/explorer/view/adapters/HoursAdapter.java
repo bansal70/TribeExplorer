@@ -6,14 +6,21 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.tribe.explorer.R;
+import com.tribe.explorer.model.Operations;
 import com.tribe.explorer.model.Utils;
 import com.tribe.explorer.model.beans.HoursData;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+
+import static com.tribe.explorer.R.string.monday;
 
 /*
  * Created by win 10 on 9/13/2017.
@@ -25,18 +32,21 @@ public class HoursAdapter extends RecyclerView.Adapter<HoursAdapter.ViewHolder> 
     private ArrayList<HoursData> daysList;
     private Dialog hoursDialog;
     private int pos;
+    private String unit1, unit2;
 
     public HoursAdapter(Context context) {
         this.context = context;
         daysList = new ArrayList<>();
         hoursDialog = Utils.createDialog(context, R.layout.dialog_hours);
-
+        unit1 = context.getString(R.string.AM);
+        unit2 = context.getString(R.string.PM);
         addDays();
         initDialog();
+        Operations.jsonObject = new JSONObject();
     }
 
     private void addDays() {
-        daysList.add(new HoursData(context.getString(R.string.monday), "", ""));
+        daysList.add(new HoursData(context.getString(monday), "", ""));
         daysList.add(new HoursData(context.getString(R.string.tuesday), "", ""));
         daysList.add(new HoursData(context.getString(R.string.wednesday), "", ""));
         daysList.add(new HoursData(context.getString(R.string.thursday), "", ""));
@@ -59,7 +69,7 @@ public class HoursAdapter extends RecyclerView.Adapter<HoursAdapter.ViewHolder> 
         if (!data.getAm().isEmpty())
             holder.tvAM.setText(data.getAm());
 
-        if (!data.getPm().isEmpty())
+        if (!data.getAm().isEmpty())
             holder.tvPM.setText(data.getPm());
     }
 
@@ -94,24 +104,82 @@ public class HoursAdapter extends RecyclerView.Adapter<HoursAdapter.ViewHolder> 
     }
 
     private void initDialog() {
-        final EditText editOpenTime = hoursDialog.findViewById(R.id.editOpenTime);
-        final EditText editCloseTime = hoursDialog.findViewById(R.id.editCloseTime);
+        final EditText editOpen1 = hoursDialog.findViewById(R.id.editOpen1);
+        final EditText editOpen2 = hoursDialog.findViewById(R.id.editOpen2);
+        final EditText editClose1 = hoursDialog.findViewById(R.id.editClose1);
+        final EditText editClose2 = hoursDialog.findViewById(R.id.editClose2);
+        final Button btnOpen = hoursDialog.findViewById(R.id.btnOpen);
+        final Button btnClose = hoursDialog.findViewById(R.id.btnClose);
+
+        btnOpen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (unit1.equals(context.getString(R.string.AM))) {
+                    unit1 = context.getString(R.string.PM);
+                } else {
+                    unit1 = context.getString(R.string.AM);
+                }
+                btnOpen.setText(unit1);
+            }
+        });
+
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (unit2.equals(context.getString(R.string.AM))) {
+                    unit2 = context.getString(R.string.PM);
+                } else {
+                    unit2 = context.getString(R.string.AM);
+                }
+                btnClose.setText(unit2);
+            }
+        });
+
         TextView tvAdd = hoursDialog.findViewById(R.id.tvAdd);
         TextView tvCancel = hoursDialog.findViewById(R.id.tvCancel);
 
         tvAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                hoursDialog.dismiss();
-                String openTime = editOpenTime.getText().toString().trim();
-                String closeTime = editCloseTime.getText().toString().trim();
+                String open1 = editOpen1.getText().toString().trim();
+                String open2 = editOpen2.getText().toString().trim();
+                String close1 = editClose1.getText().toString().trim();
+                String close2 = editClose2.getText().toString().trim();
 
-                HoursData hoursData = daysList.get(pos);
-                hoursData.setAm(openTime);
-                hoursData.setPm(closeTime);
+                if (open1.isEmpty() || open2.isEmpty() || close1.isEmpty() || close2.isEmpty()) {
+                    Toast.makeText(context, R.string.fill_required_fields, Toast.LENGTH_SHORT).show();
+                } else if (Integer.parseInt(open1) > 12 || Integer.parseInt(close1) > 12) {
+                    Toast.makeText(context, R.string.hour_format, Toast.LENGTH_SHORT).show();
+                } else if (Integer.parseInt(open2) > 59 || Integer.parseInt(close2) > 59) {
+                    Toast.makeText(context, R.string.minutes_range, Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    hoursDialog.dismiss();
+                    String openTime = open1 + ":" + open2 + " " + unit1;
+                    String closeTime = close1 + ":" + close2 + " " + unit2;
 
-                daysList.set(pos, hoursData);
-                notifyItemChanged(pos);
+                    HoursData hoursData = daysList.get(pos);
+                    hoursData.setAm(openTime);
+                    hoursData.setPm(closeTime);
+
+                    Operations.jsonHours(daysList.get(pos).getDays(), openTime, closeTime);
+
+
+                   /* JobHours jobHours = new JobHours();
+                    List<JobHours.Days> list = new ArrayList<>();
+                    JobHours.Days day = new JobHours.Days();
+                    day.setOpen(openTime);
+                    day.setClose(closeTime);
+                    list.add(day);
+
+                    jobHours.setDays(list);*/
+
+
+                    daysList.set(pos, hoursData);
+                    notifyItemChanged(pos);
+
+
+                }
             }
         });
 

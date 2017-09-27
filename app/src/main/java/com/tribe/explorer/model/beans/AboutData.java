@@ -21,7 +21,6 @@ public class AboutData {
     public List<Data> data = null;
 
     public class Data {
-
         @SerializedName("ID")
         @Expose
         public Integer iD;
@@ -34,6 +33,5 @@ public class AboutData {
         @SerializedName("featured_image")
         @Expose
         public String featuredImage;
-
     }
 }

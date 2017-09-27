@@ -13,6 +13,78 @@
 
     <include layout="@layout/header"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/_10sdp"
+        android:paddingLeft="@dimen/_10sdp"
+        android:paddingRight="@dimen/_10sdp">
+
+        <EditText
+            android:id="@+id/editQuery"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_shape_edittext"
+            android:hint="@string/looking_for"
+            android:inputType="text"
+            android:padding="@dimen/_5sdp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp">
+
+            <TextView
+                android:id="@+id/tvLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_shape_edittext"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:hint="@string/location"
+                android:padding="@dimen/_8sdp" />
+
+            <ImageView
+                android:id="@+id/imgLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_location"
+                android:padding="@dimen/_2sdp"
+                android:clickable="true"
+                android:contentDescription="@string/location"
+                android:foreground="?selectableItemBackground"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tvCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:background="@drawable/round_shape_edittext"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="@string/language"
+            android:padding="@dimen/_8sdp" />
+
+        <TextView
+            android:id="@+id/tvSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:background="@color/colorPrimary"
+            android:foreground="@drawable/ripple"
+            android:gravity="center"
+            android:padding="@dimen/_8sdp"
+            android:text="@string/menu_search"
+            android:textColor="#fff" />
+
+    </LinearLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerCategories"
         android:layout_width="match_parent"

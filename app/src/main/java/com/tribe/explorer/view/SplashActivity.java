@@ -43,11 +43,18 @@ public class SplashActivity extends BaseActivity implements AdapterView.OnItemSe
         langLayout = (LinearLayout) findViewById(R.id.langLayout);
         spinner = (Spinner) findViewById(R.id.spinner);
 
+        languageList.add("Select language");
         languageList.add("English");
-        languageList.add("French");
         languageList.add("Spanish");
-        languageList.add("German");
+        languageList.add("Chinese");
+        languageList.add("French");
+        languageList.add("Tagalog");
+        languageList.add("Hindustani");
+        languageList.add("Arabic");
+        languageList.add("Korean");
         languageList.add("Russian");
+        languageList.add("Portuguese");
+        languageList.add("Italian");
 
         ArrayAdapter<String> listAdapter = new ArrayAdapter<>(this,
                 R.layout.spinner_item, languageList);
@@ -76,6 +83,9 @@ public class SplashActivity extends BaseActivity implements AdapterView.OnItemSe
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long l) {
         // String item = parent.getItemAtPosition(position).toString();
+        if (position == 0)
+            return;
+
         TEPreferences.putString(this, "lang", "en");
 
         if (user_id.isEmpty())

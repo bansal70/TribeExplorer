@@ -29,7 +29,7 @@ import org.greenrobot.eventbus.Subscribe;
 public class MainActivity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
     BottomNavigationView bottomNavigationView;
-    String lang;
+    String user_id;
     Dialog dialog;
 
     @Override
@@ -41,49 +41,15 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     }
 
     public void initViews() {
-        lang = TEPreferences.readString(this, "lang");
+        user_id = TEPreferences.readString(this, "user_id");
+        String lang = TEPreferences.readString(this, "lang");
         dialog = Utils.showDialog(this);
+        dialog.show();
+        ModelManager.getInstance().getHomeManager().categoriesTask(Operations.getCategoriesParams(lang));
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
-
-        dialog.show();
-        ModelManager.getInstance().getHomeManager().categoriesTask(Operations.getCategoriesParams(lang));
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Subscribe(sticky = true)
-    public void onEvent(Event event) {
-        EventBus.getDefault().removeAllStickyEvents();
-        dialog.dismiss();
-        switch (event.getKey()) {
-            case Constants.CATEGORIES_SUCCESS:
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.frame_layout, HomeFragment.newInstance());
-                transaction.commit();
-                break;
-
-            case Constants.CATEGORIES_ERROR:
-                break;
-
-            case Constants.NO_RESPONSE:
-                Toast.makeText(this, R.string.no_response, Toast.LENGTH_SHORT).show();
-                break;
-        }
     }
 
     @Override
@@ -117,6 +83,40 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         transaction.replace(R.id.frame_layout, selectedFragment);
         transaction.commit();
         return true;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(sticky = true)
+    public void onEvent(Event event) {
+        EventBus.getDefault().removeAllStickyEvents();
+        dialog.dismiss();
+        switch (event.getKey()) {
+            case Constants.CATEGORIES_SUCCESS:
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.frame_layout, new HomeFragment());
+                transaction.commit();
+                break;
+
+            case Constants.CATEGORIES_ERROR:
+                break;
+
+            case Constants.NO_RESPONSE:
+                Toast.makeText(this, R.string.no_response, Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 
     @Override

@@ -1,6 +1,245 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40sdp"
+        android:background="#fff"
+        android:contentDescription="@null"
+        android:src="@mipmap/hdr_" />
+
+    <include layout="@layout/header"/>
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/_20sdp"
+            android:paddingRight="@dimen/_20sdp"
+            android:paddingTop="@dimen/_10sdp">
+
+            <EditText
+                android:id="@+id/editQuery"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_shape_edittext"
+                android:hint="@string/looking_for"
+                android:inputType="text"
+                android:padding="@dimen/_8sdp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp">
+
+                <TextView
+                    android:id="@+id/tvLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/round_shape_edittext"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="@string/location"
+                    android:padding="@dimen/_10sdp" />
+
+                <ImageView
+                    android:id="@+id/imgLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:clickable="true"
+                    android:contentDescription="@string/location"
+                    android:foreground="?selectableItemBackground"
+                    android:padding="@dimen/_2sdp"
+                    android:src="@mipmap/ic_location" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tvCategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@drawable/round_shape_edittext"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:hint="@string/select_categories"
+                android:padding="@dimen/_10sdp" />
+
+            <TextView
+                android:id="@+id/tvRadius"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="@string/radius"
+                android:textSize="@dimen/_15ssp" />
+
+            <com.crystal.crystalrangeseekbar.widgets.CrystalSeekbar
+                android:id="@+id/seekRadius"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                app:bar_color="@color/colorGray"
+                app:bar_highlight_color="@color/colorPrimary"
+                app:left_thumb_color="@color/colorPrimary"
+                app:left_thumb_color_pressed="@color/colorPrimary" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/spinnerFilters"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/round_shape_edittext"
+                    android:hint="@string/filter_results"
+                    android:layout_weight="1"
+                    android:padding="@dimen/_8sdp" />
+
+                <View
+                    android:layout_width="@dimen/_10sdp"
+                    android:layout_height="match_parent"/>
+
+                <TextView
+                    android:id="@+id/tvSortBy"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/round_shape_edittext"
+                    android:hint="@string/sort_by"
+                    android:layout_weight="1"
+                    android:padding="@dimen/_10sdp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvToggleFilters"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@drawable/round_shape_edittext"
+                android:focusable="false"
+                android:visibility="gone"
+                android:focusableInTouchMode="true"
+                android:hint="@string/toggle_filters"
+                android:padding="@dimen/_10sdp" />
+
+            <TextView
+                android:id="@+id/tvSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:background="@color/colorPrimary"
+                android:gravity="center"
+                android:padding="@dimen/_10sdp"
+                android:text="@string/menu_search"
+                android:textColor="#fff" />
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tvListings"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_20sdp"
+                        android:layout_weight="1"
+                        android:background="@color/colorPrimary"
+                        android:foreground="?selectableItemBackground"
+                        android:gravity="center"
+                        android:padding="@dimen/_10sdp"
+                        android:text="@string/list"
+                        android:textColor="#fff" />
+
+                    <View
+                        android:layout_width="@dimen/_1sdp"
+                        android:layout_height="match_parent" />
+
+                    <TextView
+                        android:id="@+id/tvMap"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_20sdp"
+                        android:layout_weight="1"
+                        android:background="@color/colorWhite"
+                        android:foreground="?selectableItemBackground"
+                        android:gravity="center"
+                        android:padding="@dimen/_10sdp"
+                        android:text="@string/map"
+                        android:textColor="@color/colorPrimary" />
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerListings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp" />
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cardMap"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_150sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:focusableInTouchMode="true"
+                android:visibility="gone"
+                app:cardElevation="@dimen/_2sdp"
+                app:cardUseCompatPadding="true">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <fragment
+                        android:id="@+id/map"
+                        android:name="com.tribe.explorer.model.custom.MySupportMapFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                    <ImageView
+                        android:id="@+id/imgTransparent"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignBottom="@+id/map"
+                        android:layout_alignEnd="@+id/map"
+                        android:layout_alignLeft="@+id/map"
+                        android:layout_alignRight="@+id/map"
+                        android:layout_alignStart="@+id/map"
+                        android:layout_alignTop="@+id/map"
+                        android:contentDescription="@null"
+                        android:src="@android:color/transparent" />
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
 
 </LinearLayout>

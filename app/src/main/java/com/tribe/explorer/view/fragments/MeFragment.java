@@ -1,5 +1,6 @@
 package com.tribe.explorer.view.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,20 +10,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.tribe.explorer.R;
 import com.tribe.explorer.model.TEPreferences;
 import com.tribe.explorer.model.Utils;
+import com.tribe.explorer.view.LoginActivity;
 
 public class MeFragment extends Fragment implements View.OnClickListener{
 
     TextView tvUser, tvAccount, tvAddListing, tvMyListing, tvBlog, tvAbout, tvLogout;
     ImageView imgUser;
+    String user_id;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        user_id = TEPreferences.readString(getActivity(), "user_id");
     }
 
     @Nullable
@@ -51,6 +57,9 @@ public class MeFragment extends Fragment implements View.OnClickListener{
         tvAbout.setOnClickListener(this);
         tvLogout.setOnClickListener(this);
 
+        if (user_id.isEmpty())
+            tvLogout.setText(R.string.login);
+
         setAccount();
     }
 
@@ -60,11 +69,17 @@ public class MeFragment extends Fragment implements View.OnClickListener{
         String name = first_name + " " + last_name;
         String image = TEPreferences.readString(getActivity(), "image");
 
-        tvUser.setText(name);
+        if (user_id.isEmpty())
+            tvUser.setText(R.string.guest);
+        else
+            tvUser.setText(name);
+
         Glide.with(getActivity())
                 .load(image)
                 .crossFade()
                 .fitCenter()
+                .placeholder(R.mipmap.ic_user)
+                .error(R.mipmap.ic_user)
                 .centerCrop()
                 .into(imgUser);
     }
@@ -74,16 +89,28 @@ public class MeFragment extends Fragment implements View.OnClickListener{
         Fragment fragment;
         switch (view.getId()) {
             case R.id.tvAccount:
+                if (user_id.isEmpty()) {
+                    Toast.makeText(getActivity(), R.string.login_to_create_account, Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 fragment = new ProfileFragment();
                 selectFragment(fragment);
                 break;
 
             case R.id.tvAddListing:
+                if (user_id.isEmpty()) {
+                    Toast.makeText(getActivity(), R.string.login_to_add_business, Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 fragment = new AddListingFragment();
                 selectFragment(fragment);
                 break;
 
             case R.id.tvMyListing:
+                if (user_id.isEmpty()) {
+                    Toast.makeText(getActivity(), R.string.login_to_check_listings, Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 fragment = new MyListingFragment();
                 selectFragment(fragment);
                 break;
@@ -99,7 +126,10 @@ public class MeFragment extends Fragment implements View.OnClickListener{
                 break;
 
             case R.id.tvLogout:
-                Utils.logoutAlert(getActivity());
+                if (!user_id.isEmpty())
+                    Utils.logoutAlert(getActivity());
+                else
+                    getActivity().startActivity(new Intent(getActivity(), LoginActivity.class));
                 break;
         }
     }

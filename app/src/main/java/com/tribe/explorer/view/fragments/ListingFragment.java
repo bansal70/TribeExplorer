@@ -46,11 +46,12 @@ public class ListingFragment extends Fragment implements View.OnClickListener{
         if (bundle != null) {
             int cat_id = bundle.getInt("cat_id", defaultValue);
             String lang = TEPreferences.readString(getActivity(), "lang");
+            String user_id = TEPreferences.readString(getActivity(), "user_id");
             listData = new ArrayList<>();
             dialog = Utils.showDialog(getActivity());
             dialog.show();
             ModelManager.getInstance().getListingManager()
-                    .listingTask(Operations.getListingParams(cat_id, lang));
+                    .listingTask(Operations.getListingParams(cat_id, lang, user_id));
         }
     }
 

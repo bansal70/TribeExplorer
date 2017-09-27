@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    app:cardCornerRadius="@dimen/_10sdp"
-    android:layout_margin="@dimen/_20sdp">
+    app:cardCornerRadius="@dimen/_5sdp"
+    android:layout_margin="@dimen/_30sdp">
 
     <LinearLayout
         android:orientation="vertical"
@@ -20,6 +20,7 @@
             android:textSize="@dimen/_15ssp"
             android:textColor="#fff"
             android:layout_gravity="center"
+            style="@style/TextAppearance.FontPath"
             android:gravity="center"
             android:padding="@dimen/_10sdp"
             android:background="@color/colorPrimary"/>
@@ -27,7 +28,7 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerCategories"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_200sdp" />
+            android:layout_height="@dimen/_160sdp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -38,14 +39,15 @@
                 android:id="@+id/tvCancel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@color/colorAccent"
+                android:background="@color/colorPrimary"
+                android:foreground="@drawable/ripple"
                 android:textColor="@color/colorWhite"
                 android:layout_weight="1"
                 android:text="@string/cancel"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:padding="@dimen/_10sdp"
-                android:textSize="@dimen/_15ssp"
+                android:textSize="@dimen/_13ssp"
                 android:textAllCaps="false"/>
 
             <View
@@ -59,13 +61,14 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:background="@color/colorAccent"
+                android:background="@color/colorPrimary"
+                android:foreground="@drawable/ripple"
                 android:gravity="center"
                 android:padding="@dimen/_10sdp"
                 android:text="@string/confirm"
                 android:textAllCaps="false"
                 android:textColor="@color/colorWhite"
-                android:textSize="@dimen/_15ssp" />
+                android:textSize="@dimen/_13ssp" />
 
         </LinearLayout>
 

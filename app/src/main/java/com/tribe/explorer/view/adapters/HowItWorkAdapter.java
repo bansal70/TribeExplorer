@@ -12,8 +12,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.tribe.explorer.R;
+import com.tribe.explorer.model.Utils;
 import com.tribe.explorer.model.beans.AboutData;
 
 import java.util.List;
@@ -39,14 +39,7 @@ public class HowItWorkAdapter extends RecyclerView.Adapter<HowItWorkAdapter.View
         holder.tvTitle.setText(data.title);
         holder.tvContent.setText(data.content);
 
-        Glide.with(context)
-                .load(data.featuredImage)
-                .crossFade()
-                .fitCenter()
-                .centerCrop()
-                .placeholder(R.mipmap.placeholder)
-                .error(R.mipmap.placeholder)
-                .into(holder.imgFeatured);
+        Utils.setImage(context, data.featuredImage, holder.imgFeatured);
     }
 
     @Override

@@ -5,26 +5,26 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     app:cardCornerRadius="@dimen/_10sdp"
-    android:layout_margin="@dimen/_20sdp">
+    android:layout_margin="@dimen/_30sdp">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#fff">
+        android:background="#fff"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/hours_of_operation_optional"
-            android:textSize="@dimen/_15ssp"
-            android:textColor="#fff"
             android:layout_gravity="center"
+            android:background="@color/colorPrimary"
             android:gravity="center"
             android:padding="@dimen/_10sdp"
-            android:background="@color/colorPrimary"/>
+            android:text="@string/hours_of_operation_optional"
+            android:textColor="#fff"
+            android:textSize="@dimen/_15ssp" />
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -33,19 +33,60 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/opening_time"/>
+                android:layout_centerVertical="true"
+                android:textColor="#000"
+                android:text="@string/opening_time" />
 
-            <EditText
-                android:id="@+id/editOpenTime"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:padding="@dimen/_15sdp"
-                android:maxLength="2"/>
+                android:layout_marginLeft="@dimen/_90sdp"
+                android:layout_marginStart="@dimen/_90sdp"
+                android:orientation="horizontal">
 
-        </LinearLayout>
+                <EditText
+                    android:id="@+id/editOpen1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:hint="00"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:padding="@dimen/_15sdp" />
 
-        <LinearLayout
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=":"
+                    android:textColor="#000" />
+
+                <EditText
+                    android:id="@+id/editOpen2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:hint="00"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:padding="@dimen/_15sdp" />
+
+                <Button
+                    android:id="@+id/btnOpen"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_35sdp"
+                    android:background="#fff"
+                    android:shadowColor="#fff"
+                    android:shadowRadius="5"
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:layout_gravity="center"
+                    android:text="@string/AM" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -54,56 +95,99 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/closing_time"/>
+                android:layout_centerVertical="true"
+                android:textColor="#000"
+                android:text="@string/closing_time" />
 
-            <EditText
-                android:id="@+id/editCloseTime"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:padding="@dimen/_15sdp"
-                android:maxLength="2"/>
+                android:layout_marginLeft="@dimen/_90sdp"
+                android:layout_marginStart="@dimen/_90sdp"
+                android:orientation="horizontal">
 
-        </LinearLayout>
+                <EditText
+                    android:id="@+id/editClose1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:hint="00"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:padding="@dimen/_15sdp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=":"
+                    android:textColor="#000" />
+
+                <EditText
+                    android:id="@+id/editClose2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:hint="00"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:padding="@dimen/_15sdp" />
+
+                <Button
+                    android:id="@+id/btnClose"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_35sdp"
+                    android:background="#fff"
+                    android:shadowColor="#fff"
+                    android:shadowRadius="5"
+                    android:shadowDx="2"
+                    android:shadowDy="2"
+                    android:layout_gravity="center"
+                    android:text="@string/PM" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="@dimen/_10sdp">
+            android:layout_marginTop="@dimen/_10sdp"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tvCancel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@color/colorAccent"
-                android:textColor="@color/colorWhite"
-                android:layout_weight="1"
-                android:text="@string/cancel"
                 android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:foreground="@drawable/ripple"
                 android:gravity="center"
                 android:padding="@dimen/_10sdp"
-                android:textSize="@dimen/_15ssp"
-                android:textAllCaps="false"/>
+                android:text="@string/cancel"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/_15ssp" />
 
             <View
                 android:layout_width="@dimen/_1sdp"
                 android:layout_height="match_parent"
-                android:background="#fff"/>
+                android:background="#fff" />
 
             <TextView
                 android:id="@+id/tvAdd"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@color/colorAccent"
-                android:textColor="@color/colorWhite"
-                android:layout_weight="1"
                 android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:foreground="@drawable/ripple"
                 android:gravity="center"
                 android:padding="@dimen/_10sdp"
                 android:text="@string/add"
                 android:textAllCaps="false"
-                android:textSize="@dimen/_15ssp"/>
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/_15ssp" />
 
         </LinearLayout>
 

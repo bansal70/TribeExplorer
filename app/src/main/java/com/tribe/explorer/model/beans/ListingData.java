@@ -65,13 +65,13 @@ public class ListingData {
         public List<Object> products = null;
         @SerializedName("category")
         @Expose
-        public String category;
+        public List<String> category = null;
         @SerializedName("job_hours")
         @Expose
         public JobHours jobHours;
         @SerializedName("region")
         @Expose
-        public String region;
+        public List<String> region = null;
         @SerializedName("job_hours_timezone")
         @Expose
         public String jobHoursTimezone;
@@ -81,9 +81,9 @@ public class ListingData {
         @SerializedName("social")
         @Expose
         public List<Social> social = null;
-        @SerializedName("review")
+       /* @SerializedName("review")
         @Expose
-        public List<Review> review = null;
+        public List<Review> review = null;*/
         @SerializedName("rating")
         @Expose
         public String rating;
@@ -137,23 +137,8 @@ public class ListingData {
         public String language;
     }
 
-    public class Review {
-        @SerializedName("comment_ID")
-        @Expose
-        public String commentID;
-        @SerializedName("comment_author")
-        @Expose
-        public String commentAuthor;
-        @SerializedName("comment_author_email")
-        @Expose
-        public String commentAuthorEmail;
-        @SerializedName("comment_content")
-        @Expose
-        public String commentContent;
-    }
 
     public class JobHours {
-
         @SerializedName("mon")
         @Expose
         public List<Mon> mon = null;

@@ -29,6 +29,7 @@ dependencies {
     compile('com.squareup.retrofit2:retrofit:2.1.0') {
         exclude module: 'okhttp'
     }
+    // compile "de.mrmaffen:vlc-android-sdk:2.0.6"
     compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
     compile 'com.android.support:design:26.0.0-alpha1'
     compile 'com.android.support:support-v4:26.0.0-alpha1'
@@ -39,11 +40,16 @@ dependencies {
     compile 'com.intuit.sdp:sdp-android:1.0.4'
     compile 'com.intuit.ssp:ssp-android:1.0.4'
     compile 'uk.co.chrisjenx:calligraphy:2.3.0'
+    compile 'com.twitter.sdk.android:twitter-core:3.1.1'
+    compile 'com.twitter.sdk.android:tweet-ui:3.1.1'
     compile 'com.facebook.android:facebook-android-sdk:4.26.0'
+    compile 'com.google.android.gms:play-services-places:11.0.4'
     compile 'com.google.android.gms:play-services-maps:11.0.4'
+    compile 'com.google.android.gms:play-services-location:11.0.4'
     compile 'com.google.firebase:firebase-messaging:11.0.4'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.google.code.gson:gson:2.7'
     compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
     compile 'org.greenrobot:eventbus:3.0.0'
@@ -54,6 +60,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-tasks:11.0.4'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.github.bumptech.glide:glide:3.8.0'
+    compile 'com.crystal:crystalrangeseekbar:1.1.1'
     testCompile 'junit:junit:4.12'
 }
 apply plugin: 'com.google.gms.google-services'

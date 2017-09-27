@@ -29,13 +29,18 @@ public class ListingManager {
         call.enqueue(new Callback<ListingData>() {
             @Override
             public void onResponse(Call<ListingData> call, Response<ListingData> response) {
-                ListingData listingData = response.body();
-                String status = listingData.status;
-                if (status.equalsIgnoreCase("success")) {
-                    dataList = listingData.data;
-                    EventBus.getDefault().postSticky(new Event(Constants.LISTING_SUCCESS, ""));
-                } else {
-                    EventBus.getDefault().postSticky(new Event(Constants.LISTING_EMPTY, ""));
+                try {
+                    ListingData listingData = response.body();
+                    String status = listingData.status;
+                    if (status.equalsIgnoreCase("success")) {
+                        dataList = listingData.data;
+                        EventBus.getDefault().postSticky(new Event(Constants.LISTING_SUCCESS, ""));
+                    } else {
+                        EventBus.getDefault().postSticky(new Event(Constants.LISTING_EMPTY, ""));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    EventBus.getDefault().postSticky(new Event(Constants.NO_RESPONSE, ""));
                 }
 
             }

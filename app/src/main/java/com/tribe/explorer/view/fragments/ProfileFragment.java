@@ -22,7 +22,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.tribe.explorer.R;
 import com.tribe.explorer.controller.ModelManager;
 import com.tribe.explorer.controller.ProfileManager;
@@ -114,6 +113,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     }
 
     public void setProfileData() {
+        tvEditProfile.setText(R.string.edit);
         ProfileData.Data data = ProfileManager.data;
         editFirstName.setText(data.firstName);
         editLastName.setText(data.lastName);
@@ -126,17 +126,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         else
             rbNo.setChecked(true);
 
-        filePath = data.userUrl;
-
-        Glide.with(getActivity())
-                .load(data.userUrl)
-                .centerCrop()
-                .fitCenter()
-                .crossFade()
-               /* .placeholder(R.mipmap.ic_user)
-                .error(R.mipmap.ic_user)*/
-                .into(imgProfilePic);
-
+       // filePath = data.userUrl;
+        Utils.setImage(getActivity(), data.userUrl, imgProfilePic);
     }
 
     public void selectOwner() {
@@ -165,7 +156,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
             Toast.makeText(getActivity(), R.string.gender_male_female, Toast.LENGTH_SHORT).show();
         } else {
             ModelManager.getInstance().getProfileManager().editProfileTask(Operations
-                    .getUpdateProfileParams(firstName, lastName, email, role, gender,
+                    .getUpdateProfileParams(user_id, firstName, lastName, email, role, gender,
                             birthDate, lang), filePath);
             dialog.show();
         }

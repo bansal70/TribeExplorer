@@ -29,15 +29,19 @@ public class HomeManager {
         call.enqueue(new Callback<CategoriesData>() {
             @Override
             public void onResponse(Call<CategoriesData> call, Response<CategoriesData> response) {
-                CategoriesData categoriesData = response.body();
-                String status = categoriesData.status;
-                if (status.equalsIgnoreCase("success")) {
-                    categoriesList = categoriesData.data;
-                    EventBus.getDefault().postSticky(new Event(Constants.CATEGORIES_SUCCESS, ""));
-                } else {
-                    EventBus.getDefault().postSticky(new Event(Constants.CATEGORIES_ERROR, ""));
+                try {
+                    CategoriesData categoriesData = response.body();
+                    String status = categoriesData.status;
+                    if (status.equalsIgnoreCase("success")) {
+                        categoriesList = categoriesData.data;
+                        EventBus.getDefault().postSticky(new Event(Constants.CATEGORIES_SUCCESS, ""));
+                    } else {
+                        EventBus.getDefault().postSticky(new Event(Constants.CATEGORIES_ERROR, ""));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    EventBus.getDefault().postSticky(new Event(Constants.NO_RESPONSE, ""));
                 }
-
             }
 
             @Override

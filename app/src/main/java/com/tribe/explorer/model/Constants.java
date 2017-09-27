@@ -10,9 +10,11 @@ public class Constants {
     public static String SecretKey = "6LdNPjAUAAAAAOQSC5zclAoQ9hNeB52yV9qWftM9";
 
     public static final int NO_RESPONSE = 1000;
+    public static final int RETRY = 10000;
 
     public static final int LOGIN_SUCCESS = 1001;
     public static final int LOGIN_ERROR = 1002;
+    public static final int ALREADY_REGISTERED = 12121;
 
     public static final int REGISTRATION_SUCCESS = 1003;
     public static final int REGISTRATION_ERROR = 1004;
@@ -40,4 +42,23 @@ public class Constants {
 
     public static final int EDIT_PROFILE_SUCCESS = 1019;
     public static final int EDIT_PROFILE_EMPTY = 1020;
+
+    public static final int LISTING_DETAILS_SUCCESS = 1021;
+    public static final int LISTING_DETAILS_EMPTY = 1022;
+
+    public static final int LOCATION_SUCCESS = 1023;
+    public static final int LOCATION_EMPTY = 1024;
+
+    public static final int REGION_EMPTY = 1025;
+    public static final int TIMEZONE_EMPTY = 1026;
+    public static final int DETAILS_SUCCESS = 1027;
+
+    public static final int LABELS_SUCCESS = 1028;
+    public static final int LABELS_EMPTY = 1029;
+
+    public static final int ADD_REVIEW_SUCCESS = 1030;
+    public static final int ADD_REVIEW_ERROR = 1031;
+
+    public static final int REVIEW_SUCCESS = 1032;
+    public static final int REVIEW_ERROR = 1033;
 }
