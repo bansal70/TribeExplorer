@@ -65,10 +65,15 @@ public class ListingDetailsData {
         public List<Social> social = null;
         @SerializedName("review")
         public List<Review> review = null;
+        @SerializedName("review_count")
+        @Expose
+        public int reviewCount;
         @SerializedName("rating")
         public List<Rating> rating = null;
         @SerializedName("fav")
         public String fav;
+        @SerializedName("fav_count")
+        public String favCount;
         @SerializedName("cover_image")
         public String coverImage;
         @SerializedName("latitude")

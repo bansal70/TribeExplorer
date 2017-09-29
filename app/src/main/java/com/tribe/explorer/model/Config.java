@@ -22,6 +22,7 @@ public class Config {
     static final String MY_LIST_URL = "user_listing.php";
     public static final String BLOG_URL = "http://nimbyisttechnologies.com/himanshu/listify/blog/";
     public static final String SHOP_URL = "http://nimbyisttechnologies.com/himanshu/listify/shop/";
+    public static final String HOW_IT_WORK_URL = "http://nimbyisttechnologies.com/himanshu/listify/how-it-works/";
     public static final String ABOUT_URL = "how_it_works.php?lang=";
     static final String FORGOT_PASSWORD_URL = "forget.php";
     static final String PROFILE_URL = "ownerProfile.php";
@@ -30,4 +31,6 @@ public class Config {
     public static final String LABEL_LIST_URL = "label_list.php?lang=";
     static final String ADD_REVIEW_URL = "writeReview.php";
     static final String REVIEWS_URL = "getReview.php";
+    static final String CLAIM_LISTING_URL = "addClaim.php";
+    static final String ADD_PHOTO_URL = "add_photo.php";
 }

@@ -21,9 +21,6 @@ public class ListingData {
         @SerializedName("ID")
         @Expose
         public Integer iD;
-        @SerializedName("author")
-        @Expose
-        public Integer author;
         @SerializedName("title")
         @Expose
         public String title;
@@ -81,9 +78,12 @@ public class ListingData {
         @SerializedName("social")
         @Expose
         public List<Social> social = null;
-       /* @SerializedName("review")
+        /* @SerializedName("review")
+         @Expose
+         public List<Review> review = null;*/
+        @SerializedName("review_count")
         @Expose
-        public List<Review> review = null;*/
+        public int reviewCount;
         @SerializedName("rating")
         @Expose
         public String rating;
@@ -129,14 +129,13 @@ public class ListingData {
     }
 
     public class Language {
-        @SerializedName("name")
+        @SerializedName("id")
         @Expose
         public String name;
         @SerializedName("language")
         @Expose
         public String language;
     }
-
 
     public class JobHours {
         @SerializedName("mon")

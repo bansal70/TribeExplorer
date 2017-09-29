@@ -53,8 +53,8 @@ import com.tribe.explorer.view.adapters.LanguageAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONArray;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,10 +65,10 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
         AdapterView.OnItemSelectedListener {
     private final String TAG = AddListingFragment.class.getSimpleName();
 
-    EditText editEmail, editBusinessName, editLocation, editContact, editCategory,
+    EditText editEmail, editBusinessName, editContact, editCategory,
             editBusinessLabel, editWeb, editPhone, editVideoURL, editDescription;
     Spinner spinnerRegion, spinnerTimezone;
-    TextView tvCompanyLogo, tvCover, tvGallery, tvAddHours, tvAddLanguage, tvDone;
+    TextView editLocation, tvCompanyLogo, tvCover, tvGallery, tvAddHours, tvAddLanguage, tvDone;
     ImageView imgCover, imgDelete, imgLogo, imgLogoDelete;
     RecyclerView recyclerHours, recyclerLanguage, recyclerGallery;
     HoursAdapter hoursAdapter;
@@ -86,7 +86,7 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
     Dialog dialog, dialogCategories, dialogLanguage;
     TextView tvCancel, tvConfirm, tvLangCancel, tvLangAdd;
     EditText editOwner;
-    String str_language = "", id = "", timezone = "", region = "", email = "";
+    String str_language = "", id = "", timezone = "", region = "", email = "", user_id, lang;
     private List<CategoriesData.Data> categoriesList;
     private List<String> languagesList, timezoneList, regionsList, categories;
     List<LanguageData.Data> dataList;
@@ -100,6 +100,8 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
         super.onCreate(savedInstanceState);
         Utils.location = "";
         email = TEPreferences.readString(getActivity(), "email");
+        user_id = TEPreferences.readString(getActivity(), "user_id");
+        lang = TEPreferences.readString(getActivity(), "lang");
     }
 
     @Override
@@ -111,6 +113,8 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
     }
 
     public void initViews(View view) {
+        Operations.jsonLanguages = new JSONArray();
+        categories = new ArrayList<>();
         languagesList = new ArrayList<>();
         regionsList = new ArrayList<>();
         regionsList.add(getString(R.string.select_region));
@@ -163,7 +167,7 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
         recyclerLanguage.setNestedScrollingEnabled(false);
 
         recyclerGallery = view.findViewById(R.id.recyclerGallery);
-        recyclerGallery.setLayoutManager(new GridLayoutManager(getActivity(), 5));
+        recyclerGallery.setLayoutManager(new GridLayoutManager(getActivity(), 4));
         DividerItemDecoration decor = new DividerItemDecoration(getActivity(),
                 DividerItemDecoration.HORIZONTAL);
         decor.setDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.divider));
@@ -296,6 +300,7 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
                 break;
 
             case R.id.imgDelete:
+                uriCover = null;
                 imgCover.setImageBitmap(null);
                 rlCover.setVisibility(View.GONE);
                 break;
@@ -307,6 +312,7 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
                 break;
 
             case R.id.imgLogoDelete:
+                uriLogo = null;
                 imgLogo.setImageBitmap(null);
                 rlCompany.setVisibility(View.GONE);
                 break;
@@ -336,10 +342,33 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
                 break;
 
             case R.id.tvDone:
-                Log.e(TAG, "hours: "+ Operations.jsonObject.toString());
-                Log.e(TAG, "languages: "+list);
-                Log.e(TAG, "categories: "+categories);
+                dialog.show();
+                Operations.jsonLanguages = new JSONArray();
+                Operations.addLanguages(list);
+                String business = editBusinessName.getText().toString();
+                String location = editLocation.getText().toString();
+                String phone = editPhone.getText().toString();
+                String contact_email = editContact.getText().toString();
+                String labels = editBusinessLabel.getText().toString();
+                String website = editWeb.getText().toString();
+                String videoUrl = editVideoURL.getText().toString();
+                String description = editDescription.getText().toString();
+                String businessCategories = categories.toString().replace("[", "").replace("]", "");
+                String languages = Operations.jsonLanguages.toString();
+                String hours = Operations.hours.toString();
+                Log.e(TAG, "region : "+region);
+                Log.e(TAG, "timezone: "+timezone);
+
+                String params = Operations.getAddListingParams(user_id, email, business, contact_email,
+                        description, location, website, videoUrl, phone, businessCategories,
+                        labels, region, hours, languages, timezone,uriList.size(), lang);
+                ModelManager.getInstance().getAddListingManager().addListingTask(getActivity(),
+                        params, uriLogo, uriCover, uriList);
+
                 Log.e(TAG, "galleries: "+uriList);
+                Log.e(TAG, "cover: "+uriCover);
+                Log.e(TAG, "logo: "+uriLogo);
+
                 break;
         }
     }
@@ -434,6 +463,14 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
                 backScreen();
                 break;
 
+            case Constants.ADD_LISTING_SUCCESS:
+                Toast.makeText(getActivity(), R.string.listing_added, Toast.LENGTH_SHORT).show();
+                break;
+
+            case Constants.ADD_LISTING_FAILED:
+                Toast.makeText(getActivity(), R.string.fill_required_fields, Toast.LENGTH_SHORT).show();
+                break;
+
             case Constants.NO_RESPONSE:
                 break;
         }
@@ -474,7 +511,7 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
     public void chooseImage() {
         Intent chooseImageIntent;
         if (isGallery) {
-            chooseImageIntent = ImagePicker.getMultiImageIntent(getActivity());
+            chooseImageIntent = ImagePicker.getPickImageIntent(getActivity());
             startActivityForResult(chooseImageIntent, REQUEST_IMAGE_GALLERY);
         } else if (isCover){
             chooseImageIntent = ImagePicker.getPickImageIntent(getActivity());
@@ -490,8 +527,12 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_GALLERY && resultCode == RESULT_OK) {
             recyclerGallery.setVisibility(View.VISIBLE);
+            Bitmap photo = ImagePicker.getImageFromResult(getActivity(), resultCode, data);
+            Uri uriGallery = ImagePicker.getImageUri(getActivity(), photo);
+            uriList.add(uriGallery);
+            galleryAdapter.notifyDataSetChanged();
 
-            File imageFile = ImagePicker.getTempFile(getActivity());
+            /*File imageFile = ImagePicker.getTempFile(getActivity());
             boolean isCamera = (data == null || data.getData() == null ||
                     data.getData().toString().contains(imageFile.toString()));
 
@@ -507,19 +548,15 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
                 Uri selectedImage = data.getClipData().getItemAt(i).getUri();
                 uriList.add(selectedImage);
                 galleryAdapter.notifyDataSetChanged();
-            }
+            }*/
         } else if (requestCode == REQUEST_IMAGE_COVER && resultCode == RESULT_OK) {
             Bitmap photo = ImagePicker.getImageFromResult(getActivity(), resultCode, data);
             uriCover = ImagePicker.getImageUri(getActivity(), photo);
-            //File finalFile = new File(ImagePicker.getRealPathFromURI(getActivity(), tempUri));
-            // filePath = finalFile.getAbsolutePath();
             rlCover.setVisibility(View.VISIBLE);
             imgCover.setImageBitmap(photo);
         } else if (requestCode == REQUEST_IMAGE_LOGO && resultCode == RESULT_OK) {
             Bitmap photo = ImagePicker.getImageFromResult(getActivity(), resultCode, data);
             uriLogo = ImagePicker.getImageUri(getActivity(), photo);
-            //File finalFile = new File(ImagePicker.getRealPathFromURI(getActivity(), tempUri));
-            // filePath = finalFile.getAbsolutePath();
             rlCompany.setVisibility(View.VISIBLE);
             imgLogo.setImageBitmap(photo);
         }

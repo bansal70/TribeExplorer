@@ -6,19 +6,21 @@ package com.tribe.explorer.model;
 
 import android.util.Log;
 
+import com.tribe.explorer.model.beans.Language;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Operations {
     private static final String TAG = Operations.class.getSimpleName();
     public static JSONObject jsonObject = new JSONObject();
-    public static ArrayList<String> langList = new ArrayList<>();
-    public static ArrayList<String> categoriesList = new ArrayList<>();
-    public static ArrayList<String> galleriesList = new ArrayList<>();
+    public static JSONArray jsonLanguages = new JSONArray();
     public static ArrayList<String> labelsList = new ArrayList<>();
+    public static ArrayList<String> hours = new ArrayList<>();
 
     public static String getLoginParams(String email, String password, String deviceToken,
                                         String deviceType, String lang) {
@@ -112,15 +114,19 @@ public class Operations {
         return params;
     }
 
-    public static String getAddListingParams(String email, String business_name, String contact_email,
-                                             String description, String location, String website,
-                                             String video, String phone, String category, String labels,
-                                             String region, String lang) {
-        String params = Config.ADD_LISTING_URL + "?email=" + email + "&listing_name=" + business_name
-                +"&contact_email_Url=" + contact_email + "&descrtiption=" + description
-                +"&location=" + location + "&website=" + website + "&video_url=" + video
-                +"&Phone_number=" + phone + "&listing_category=" + category + "&business_labels=" + labels
-                +"&listing_region=" + region + "&lang=" + lang;
+    public static String getAddListingParams(String user_id, String email, String business_name,
+                                             String contact_email, String description, String location,
+                                             String website, String video, String phone, String category,
+                                             String labels, String region, String hours, String languages,
+                                             String timezone, int imgCount, String lang) {
+
+        String params = Config.ADD_LISTING_URL + "?user_id=" +user_id + "&email=" + email
+                + "&listing_name=" + business_name +"&contact_email_Url=" + contact_email
+                + "&descrtiption=" + description +"&location=" + location + "&website=" + website
+                + "&video_url=" + video +"&Phone_number=" + phone + "&listing_category=" + category
+                + "&label=" + labels + "&listing_region=" + region + hours
+                + "&language=" + languages + "&timezone=" + timezone
+                + "&imgcount=" + imgCount + "&lang=" + lang;
 
         Log.e(TAG, "add_listing params-- "+params);
 
@@ -135,7 +141,7 @@ public class Operations {
             obj.put("close", closeTime);
             jsonArray.put(obj);
             jsonObject.put(day, jsonArray);
-            Log.e(TAG, "hours: " + jsonObject.toString());
+            Log.e(TAG, "view_hours: " + jsonObject.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -143,23 +149,19 @@ public class Operations {
         return jsonObject;
     }
 
-    public static ArrayList<String> addLanguages(String owner, String language) {
-        try {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("id", owner);
-            jsonObject.put("language", language);
-            JSONArray jsonArray = new JSONArray();
-            jsonArray.put(jsonObject);
-            for (int i = 0; i < jsonArray.length(); i++) {
-                langList.add(jsonArray.get(i).toString());
+    public static JSONArray addLanguages(List<Language> languageList) {
+        for (Language languages :  languageList) {
+            try {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("id", languages.getOwner());
+                jsonObject.put("language", languages.getLanguage());
+                jsonLanguages.put(jsonObject);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-
-            Log.e(TAG, "languages: " + jsonObject.toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
 
-        return langList;
+        return jsonLanguages;
     }
 
     public static String getListingParams(int category_id, String lang, String user_id) {
@@ -178,6 +180,16 @@ public class Operations {
                 +"&user_id="+user_id;
 
         Log.e(TAG, "listing_details params-- "+params);
+
+        return params;
+    }
+
+    public static String getAddPhotoParams(int listing_id, int imgCount, String lang) {
+        String params = Config.ADD_PHOTO_URL + "?listing_id="+listing_id
+                +"&imgcount="+imgCount
+                +"&lang="+lang;
+
+        Log.e(TAG, "add_photos params-- "+params);
 
         return params;
     }
@@ -209,12 +221,16 @@ public class Operations {
         return params;
     }
 
-    public static String getSearchParams(String query, String lat, String lng,
-                                         String radius, String lang, String user_id) {
+    public static String getSearchParams(String query, String lat, String lng, String radius,
+                                         String categories, String filter, String order,
+                                         String lang, String user_id) {
         String params = Config.SEARCH_URL + "?listing_title="+query
                 +"&lat="+lat
                 +"&lng="+lng
                 +"&radius="+radius
+                +"&cat_id="+categories
+                +"&label="+filter
+                +"&orderby="+order
                 +"&lang="+lang
                 +"&user_id="+user_id;
 
@@ -243,6 +259,16 @@ public class Operations {
                 +"&lang="+lang;
 
         Log.e(TAG, "reviews params-- "+params);
+
+        return params;
+    }
+
+    public static String getClaimParams(int listing_id, String user_id, String lang) {
+        String params = Config.CLAIM_LISTING_URL + "?listing_id=" + listing_id
+                +"&user_id="+user_id
+                +"&lang="+lang;
+
+        Log.e(TAG, "claim_listing params-- "+params);
 
         return params;
     }

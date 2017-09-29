@@ -16,6 +16,8 @@ import com.tribe.explorer.model.Operations;
 import com.tribe.explorer.model.Utils;
 import com.tribe.explorer.model.beans.HoursData;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -33,6 +35,7 @@ public class HoursAdapter extends RecyclerView.Adapter<HoursAdapter.ViewHolder> 
     private Dialog hoursDialog;
     private int pos;
     private String unit1, unit2;
+    private String day="";
 
     public HoursAdapter(Context context) {
         this.context = context;
@@ -42,6 +45,7 @@ public class HoursAdapter extends RecyclerView.Adapter<HoursAdapter.ViewHolder> 
         unit2 = context.getString(R.string.PM);
         addDays();
         initDialog();
+        Operations.hours = new ArrayList<>();
         Operations.jsonObject = new JSONObject();
     }
 
@@ -162,23 +166,35 @@ public class HoursAdapter extends RecyclerView.Adapter<HoursAdapter.ViewHolder> 
                     hoursData.setAm(openTime);
                     hoursData.setPm(closeTime);
 
-                    Operations.jsonHours(daysList.get(pos).getDays(), openTime, closeTime);
+                    try {
+                        JSONObject jsonObject = new JSONObject();
+                        jsonObject.put("open", openTime);
+                        jsonObject.put("close", closeTime);
+                        JSONArray jsonArray = new JSONArray();
+                        jsonArray.put(jsonObject);
+                        if (pos==0) {
+                            day = "&Monday="+jsonArray.toString();
+                        } else if (pos == 1) {
+                            day = "&Tuesday="+jsonArray.toString();
+                        } else if (pos == 2) {
+                            day = "&Wednesday="+jsonArray.toString();
+                        } else if (pos == 3) {
+                            day = "&Thursday="+jsonArray.toString();
+                        } else if (pos == 4) {
+                            day = "&Friday="+jsonArray.toString();
+                        } else if (pos == 5) {
+                            day = "&Saturday="+jsonArray.toString();
+                        } else if (pos == 6) {
+                            day = "&Sunday="+jsonArray.toString();
+                        }
 
-
-                   /* JobHours jobHours = new JobHours();
-                    List<JobHours.Days> list = new ArrayList<>();
-                    JobHours.Days day = new JobHours.Days();
-                    day.setOpen(openTime);
-                    day.setClose(closeTime);
-                    list.add(day);
-
-                    jobHours.setDays(list);*/
-
+                        Operations.hours.add(day);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
                     daysList.set(pos, hoursData);
                     notifyItemChanged(pos);
-
-
                 }
             }
         });

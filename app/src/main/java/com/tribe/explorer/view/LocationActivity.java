@@ -20,6 +20,7 @@ import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,6 +64,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
     String address = "";
     double latitude = 0.0, longitude = 0.0;
     Location location;
+    ImageView imgBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +91,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
         cardSearch = (CardView) findViewById(R.id.cardSearch);
         tvSearch = (TextView) findViewById(R.id.tvSearch);
         btnLocation = (Button) findViewById(R.id.btnLocation);
+        imgBack = (ImageView) findViewById(R.id.imgBack);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -96,6 +99,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
 
         cardSearch.setOnClickListener(this);
         btnLocation.setOnClickListener(this);
+        imgBack.setOnClickListener(this);
         enableLoc();
     }
 
@@ -114,6 +118,10 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
                     Utils.location = address;
                     finish();
                 }
+                break;
+
+            case R.id.imgBack:
+                finish();
                 break;
         }
     }

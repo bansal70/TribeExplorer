@@ -9,9 +9,12 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
+import android.media.MediaMetadataRetriever;
+import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
@@ -28,6 +31,7 @@ import com.tribe.explorer.view.LoginActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -94,6 +98,7 @@ public class Utils {
         Glide.with(context)
                 .load(imageURL)
                 .fitCenter().centerCrop()
+                .dontAnimate()
                 .placeholder(R.mipmap.placeholder)
                 .error(R.mipmap.placeholder)
                 .into(view);
@@ -127,6 +132,43 @@ public class Utils {
         return strAdd;
     }
 
+    public static void setThumbnail(final ImageView imageView, final String videoPath,
+                                    final ImageView imgPlay) {
+        new AsyncTask<Void, Void, Bitmap>() {
+
+            @Override
+            protected Bitmap doInBackground(Void... params) {
+                Bitmap bitmap = null;
+                MediaMetadataRetriever mediaMetadataRetriever = null;
+                try {
+                    mediaMetadataRetriever = new MediaMetadataRetriever();
+                    mediaMetadataRetriever.setDataSource(videoPath, new HashMap<String, String>());
+                    //   mediaMetadataRetriever.setDataSource(videoPath);
+                    bitmap = mediaMetadataRetriever.getFrameAtTime(10);
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                } finally {
+                    if (mediaMetadataRetriever != null)
+                        mediaMetadataRetriever.release();
+                }
+                return bitmap;
+            }
+
+            @Override
+            protected void onPostExecute(Bitmap bitmap) {
+                super.onPostExecute(bitmap);
+                if (bitmap != null) {
+                    imageView.setImageBitmap(bitmap);
+                    imgPlay.setVisibility(View.VISIBLE);
+                }
+                else {
+                    imageView.setImageResource(R.mipmap.ic_no_thumb);
+                    imgPlay.setVisibility(View.GONE);
+                }
+            }
+        }.execute();
+    }
 
     public static void logoutAlert(final Activity context) {
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);

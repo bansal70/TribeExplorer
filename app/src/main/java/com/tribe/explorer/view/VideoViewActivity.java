@@ -1,55 +1,59 @@
 package com.tribe.explorer.view;
 
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
 import com.tribe.explorer.R;
+import com.tribe.explorer.model.Utils;
 
 import java.io.File;
 
 public class VideoViewActivity extends AppCompatActivity {
-
-    ProgressDialog pDialog;
     VideoView videoview;
 
     // Insert your Video URL
-    String VideoURL = "http://www.demonuts.com/Demonuts/smallvideo.mp4";
+    String VideoURL;
+    Toolbar toolbar;
+    Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_view);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        dialog = Utils.showDialog(this);
+        setSupportActionBar(toolbar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
+        initViews();
+    }
+
+    private void initViews() {
+        dialog.show();
+        VideoURL = getIntent().getStringExtra("videoUrl");
         videoview = (VideoView) findViewById(R.id.VideoView);
-        // Execute StreamVideo AsyncTask
-
-        // Create a progressbar
-        pDialog = new ProgressDialog(VideoViewActivity.this);
-        // Set progressbar title
-        // Set progressbar message
-        pDialog.setMessage("Buffering...");
-        pDialog.setIndeterminate(false);
-        pDialog.setCancelable(false);
-        // Show progressbar
-        pDialog.show();
-
         try {
-            // Start the MediaController
-            MediaController mediacontroller = new MediaController(
-                    VideoViewActivity.this);
+            MediaController mediacontroller = new MediaController(this);
             mediacontroller.setAnchorView(videoview);
-            // Get the URL from String VideoURL
             Uri video = Uri.fromFile(new File(VideoURL));
             videoview.setMediaController(mediacontroller);
             videoview.setVideoURI(video);
 
         } catch (Exception e) {
-            Log.e("Error", e.getMessage());
+            Log.e("Error ", e.getMessage());
+            dialog.dismiss();
             e.printStackTrace();
         }
 
@@ -57,11 +61,17 @@ public class VideoViewActivity extends AppCompatActivity {
         videoview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             // Close the progress bar and play the video
             public void onPrepared(MediaPlayer mp) {
-                pDialog.dismiss();
+                dialog.dismiss();
                 videoview.start();
             }
         });
 
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
 }

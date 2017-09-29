@@ -36,7 +36,7 @@
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_370sdp"
+                android:layout_height="@dimen/_340sdp"
                 app:cardElevation="@dimen/_3sdp">
 
                 <RelativeLayout
@@ -47,12 +47,18 @@
                         android:id="@+id/imgFeatured"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@mipmap/placeholder"
-                        android:scaleType="fitXY"
-                        android:contentDescription="@string/your_listing"
-                        android:layout_alignParentTop="true"
                         android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true" />
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:contentDescription="@string/your_listing"
+                        android:scaleType="fitXY"
+                        android:src="@mipmap/placeholder" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@color/colorTransparent"
+                        android:contentDescription="@null"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -60,171 +66,206 @@
                         android:orientation="vertical"
                         android:padding="@dimen/_10sdp">
 
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
                         <ImageView
+                            android:id="@+id/imgClaimed"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@mipmap/ic_unclaimed"
-                            android:contentDescription="@string/claim_listing"/>
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="true"
+                            android:contentDescription="@string/claim_listing"
+                            android:src="@mipmap/ic_unclaimed" />
 
                         <TextView
                             android:id="@+id/tvTitle"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textAppearance="@style/TextAppearance.FontPath"
-                            android:textColor="#fff"
-                            android:textSize="@dimen/_18ssp"
+                            android:layout_marginTop="@dimen/_10sdp"
                             android:shadowColor="#000"
-                            android:shadowRadius="5"
                             android:shadowDx="5"
                             android:shadowDy="5"
-                            android:layout_marginTop="@dimen/_10sdp"/>
+                            android:shadowRadius="5"
+                            android:maxLines="1"
+                            android:ellipsize="end"
+                            android:layout_toLeftOf="@+id/imgClaimed"
+                            android:layout_toStartOf="@+id/imgClaimed"
+                            android:textAppearance="@style/TextAppearance.FontPath"
+                            android:textColor="#fff"
+                            android:textAllCaps="true"
+                            android:textSize="@dimen/_18ssp" />
+
+                        </RelativeLayout>
 
                         <TextView
                             android:id="@+id/tvLocation"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text=""
-                            android:textAppearance="@style/TextAppearance.FontPath"
-                            android:textColor="#fff"
+                            android:layout_marginTop="@dimen/_10sdp"
                             android:shadowColor="#000"
-                            android:shadowRadius="10"
                             android:shadowDx="5"
                             android:shadowDy="5"
-                            android:layout_marginTop="@dimen/_10sdp"/>
+                            android:shadowRadius="10"
+                            android:text=""
+                            android:textAppearance="@style/TextAppearance.FontPath"
+                            android:textColor="#fff" />
 
                         <TextView
                             android:id="@+id/tvCategory"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text=""
-                            android:textAppearance="@style/TextAppearance.FontPath"
-                            android:textColor="#fff"
+                            android:layout_marginTop="@dimen/_10sdp"
                             android:shadowColor="#000"
-                            android:shadowRadius="10"
                             android:shadowDx="5"
                             android:shadowDy="5"
-                            android:layout_marginTop="@dimen/_10sdp"/>
+                            android:shadowRadius="10"
+                            android:text=""
+                            android:textAppearance="@style/TextAppearance.FontPath"
+                            android:textColor="#fff" />
 
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_marginTop="@dimen/_10sdp">
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/speed"
-                                android:textColor="#fff"
-                                android:textAppearance="@style/TextAppearance.FontPath"
                                 android:layout_gravity="center"
                                 android:shadowColor="#000"
-                                android:shadowRadius="10"
                                 android:shadowDx="5"
-                                android:shadowDy="5"/>
+                                android:shadowDy="5"
+                                android:shadowRadius="10"
+                                android:text="@string/speed"
+                                android:textAppearance="@style/TextAppearance.FontPath"
+                                android:textColor="#fff" />
 
                             <RatingBar
                                 android:id="@+id/rbSpeed"
+                                style="@style/Base.Widget.AppCompat.RatingBar.Small"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/_50sdp"
                                 android:layout_marginStart="@dimen/_50sdp"
-                                android:theme="@style/RatingBar"
-                                style="@style/Base.Widget.AppCompat.RatingBar.Small"/>
+                                android:layout_centerVertical="true"
+                                android:theme="@style/RatingBar" />
 
                         </RelativeLayout>
 
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_marginTop="@dimen/_10sdp">
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/quality"
-                                android:textColor="#fff"
-                                android:textAppearance="@style/TextAppearance.FontPath"
                                 android:layout_gravity="center"
                                 android:shadowColor="#000"
-                                android:shadowRadius="10"
                                 android:shadowDx="5"
-                                android:shadowDy="5"/>
+                                android:shadowDy="5"
+                                android:shadowRadius="10"
+                                android:text="@string/quality"
+                                android:textAppearance="@style/TextAppearance.FontPath"
+                                android:textColor="#fff" />
 
                             <RatingBar
                                 android:id="@+id/rbQuality"
+                                style="@style/Base.Widget.AppCompat.RatingBar.Small"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
                                 android:layout_marginLeft="@dimen/_50sdp"
                                 android:layout_marginStart="@dimen/_50sdp"
-                                android:theme="@style/RatingBar"
-                                style="@style/Base.Widget.AppCompat.RatingBar.Small"/>
+                                android:theme="@style/RatingBar" />
                         </RelativeLayout>
 
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_marginTop="@dimen/_10sdp">
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/price"
-                                android:textAppearance="@style/TextAppearance.FontPath"
-                                android:textColor="#fff"
                                 android:layout_gravity="center"
                                 android:shadowColor="#000"
-                                android:shadowRadius="10"
                                 android:shadowDx="5"
-                                android:shadowDy="5"/>
+                                android:shadowDy="5"
+                                android:shadowRadius="10"
+                                android:text="@string/price"
+                                android:textAppearance="@style/TextAppearance.FontPath"
+                                android:textColor="#fff" />
 
                             <RatingBar
                                 android:id="@+id/rbPrice"
+                                style="@style/Base.Widget.AppCompat.RatingBar.Small"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/_50sdp"
                                 android:layout_marginStart="@dimen/_50sdp"
-                                android:theme="@style/RatingBar"
-                                style="@style/Base.Widget.AppCompat.RatingBar.Small"/>
+                                android:layout_centerVertical="true"
+                                android:theme="@style/RatingBar" />
                         </RelativeLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_marginTop="@dimen/_10sdp">
+                            android:layout_marginTop="@dimen/_10sdp"
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:id="@+id/tvTotalReviews"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/reviews"
-                                android:textColor="#fff"
-                                android:textAppearance="@style/TextAppearance.FontPath"
-                                android:textSize="@dimen/_15ssp"
                                 android:layout_gravity="center"
+                                android:foreground="?selectableItemBackground"
                                 android:shadowColor="#000"
-                                android:shadowRadius="10"
                                 android:shadowDx="5"
-                                android:shadowDy="5"/>
+                                android:shadowDy="5"
+                                android:shadowRadius="10"
+                                android:text="@string/reviews"
+                                android:textAppearance="@style/TextAppearance.FontPath"
+                                android:textColor="#fff"
+                                android:textSize="@dimen/_15ssp" />
+
+                            <View
+                                android:layout_width="@dimen/_2sdp"
+                                android:layout_height="match_parent"
+                                android:background="#eee"
+                                android:layout_marginLeft="@dimen/_10sdp"
+                                android:layout_marginRight="@dimen/_10sdp"/>
+
+                            <ImageView
+                                android:id="@+id/imgFavourite"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:contentDescription="@string/menu_favourites"
+                                android:foreground="?selectableItemBackground"
+                                android:src="@mipmap/ic_unfavourite" />
 
                             <TextView
                                 android:id="@+id/tvTotalFav"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/favorites"
-                                android:textColor="#fff"
-                                android:textSize="@dimen/_15ssp"
-                                android:textAppearance="@style/TextAppearance.FontPath"
-                                android:layout_marginLeft="@dimen/_15sdp"
-                                android:layout_marginStart="@dimen/_15sdp"
                                 android:gravity="center"
+                                android:layout_gravity="center"
                                 android:shadowColor="#000"
-                                android:shadowRadius="10"
                                 android:shadowDx="5"
-                                android:shadowDy="5"/>
+                                android:shadowDy="5"
+                                android:shadowRadius="10"
+                                android:text="@string/favorites"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_marginStart="@dimen/_5sdp"
+                                android:textAppearance="@style/TextAppearance.FontPath"
+                                android:textColor="#fff"
+                                android:textSize="@dimen/_15ssp" />
 
                         </LinearLayout>
 
@@ -235,62 +276,80 @@
                             android:layout_marginTop="@dimen/_10sdp"
                             android:gravity="center"
                             android:shadowColor="#000"
-                            android:shadowRadius="10"
                             android:shadowDx="5"
                             android:shadowDy="5"
-                            android:textAppearance="@style/TextAppearance.FontPath"
+                            android:shadowRadius="10"
                             android:text="@string/claim_listing"
-                            android:textColor="#fff"
-                            android:textSize="@dimen/_15ssp" />
-
-                        <TextView
-                            android:id="@+id/tvAddPhotos"
-                            style="@style/TextAppearance.FontPath"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_10sdp"
-                            android:drawableLeft="@mipmap/ic_add_photo"
-                            android:drawablePadding="@dimen/_5sdp"
-                            android:drawableStart="@mipmap/ic_add_photo"
                             android:foreground="?selectableItemBackground"
-                            android:gravity="center"
-                            android:shadowColor="#000"
-                            android:shadowRadius="10"
-                            android:shadowDx="5"
-                            android:shadowDy="5"
                             android:textAppearance="@style/TextAppearance.FontPath"
-                            android:text="@string/add_photos"
                             android:textColor="#fff"
                             android:textSize="@dimen/_15ssp" />
 
-                        <Button
-                            android:id="@+id/btReview"
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/_30sdp"
-                            android:text="@string/write_review"
-                            android:textSize="@dimen/_12ssp"
-                            android:layout_marginTop="@dimen/_10sdp"
-                            android:textAppearance="@style/TextAppearance.FontPath"
-                            android:background="@color/colorPrimary"
-                            android:foreground="@drawable/ripple"
-                            android:paddingLeft="@dimen/_20sdp"
-                            android:paddingRight="@dimen/_20sdp"
-                            android:textColor="#fff"/>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="@dimen/_10sdp">
+
+                            <TextView
+                                android:id="@+id/tvAddPhotos"
+                                style="@style/TextAppearance.FontPath"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawableLeft="@mipmap/ic_add_photo"
+                                android:drawablePadding="@dimen/_5sdp"
+                                android:drawableStart="@mipmap/ic_add_photo"
+                                android:foreground="?selectableItemBackground"
+                                android:gravity="center"
+                                android:shadowColor="#000"
+                                android:shadowDx="5"
+                                android:shadowDy="5"
+                                android:shadowRadius="10"
+                                android:layout_gravity="center"
+                                android:text="@string/add_photos"
+                                android:textAppearance="@style/TextAppearance.FontPath"
+                                android:textColor="#fff"
+                                android:textSize="@dimen/_15ssp" />
+
+                            <View
+                                android:layout_width="@dimen/_2sdp"
+                                android:layout_height="match_parent"
+                                android:background="#eee"
+                                android:layout_marginLeft="@dimen/_10sdp"
+                                android:layout_marginRight="@dimen/_10sdp"/>
+
+                            <TextView
+                                android:id="@+id/btReview"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@android:color/transparent"
+                                android:foreground="?selectableItemBackground"
+                                android:text="@string/write_review"
+                                android:shadowColor="#000"
+                                android:shadowDx="5"
+                                android:shadowDy="5"
+                                android:shadowRadius="10"
+                                android:layout_gravity="center"
+                                android:textAppearance="@style/TextAppearance.FontPath"
+                                android:textColor="#fff"
+                                android:textSize="@dimen/_15ssp"/>
+
+                        </LinearLayout>
 
                         <TextView
+                            style="@style/TextAppearance.FontPath"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/we_speak"
-                            android:textColor="#fff"
-                            android:textAppearance="@style/TextAppearance.FontPath"
-                            style="@style/TextAppearance.FontPath"
-                            android:textSize="@dimen/_15ssp"
+                            android:layout_marginTop="@dimen/_10sdp"
                             android:gravity="center"
                             android:shadowColor="#000"
-                            android:shadowRadius="10"
                             android:shadowDx="5"
                             android:shadowDy="5"
-                            android:layout_marginTop="@dimen/_10sdp"/>
+                            android:shadowRadius="10"
+                            android:text="@string/we_speak"
+                            android:textAppearance="@style/TextAppearance.FontPath"
+                            android:textColor="#fff"
+                            android:textSize="@dimen/_15ssp" />
 
                     </LinearLayout>
 
@@ -298,39 +357,56 @@
 
             </android.support.v7.widget.CardView>
 
-            <SurfaceView
-                android:id="@+id/videoView"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_150sdp"
-                android:layout_margin="@dimen/_10sdp"
-                android:src="@mipmap/placeholder"
-                android:scaleType="fitXY"/>
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/imgThumbnail"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_150sdp"
+                    android:layout_margin="@dimen/_10sdp"
+                    android:scaleType="fitXY"
+                    android:contentDescription="@string/url_to_video"
+                    android:src="@color/colorGray" />
+
+                <ImageView
+                    android:id="@+id/imgPlay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_play"
+                    android:visibility="gone"
+                    android:foreground="?selectableItemBackground"
+                    android:contentDescription="@string/url_to_video"
+                    android:layout_centerInParent="true"/>
+
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/tvDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/description"
-                android:textColor="#666666"
-                android:shadowColor="#fff"
+                android:layout_margin="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:gravity="start"
-                android:shadowRadius="5"
+                android:shadowColor="#fff"
                 android:shadowDx="1"
                 android:shadowDy="1"
-                android:layout_margin="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_10sdp"/>
+                android:shadowRadius="5"
+                android:text="@string/description"
+                android:textColor="#666666" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerLabels"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingRight="@dimen/_10sdp"/>
+                android:paddingRight="@dimen/_10sdp" />
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardUseCompatPadding="true"
-                android:layout_marginTop="@dimen/_10sdp">
+                android:layout_marginTop="@dimen/_10sdp"
+                app:cardUseCompatPadding="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -341,24 +417,24 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:shadowColor="#fff"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:shadowRadius="5"
                         android:text="@string/opening_hours"
                         android:textColor="#666666"
-                        android:textSize="@dimen/_15ssp"
-                        android:shadowColor="#fff"
-                        android:gravity="center"
-                        android:shadowRadius="5"
-                        android:shadowDx="1"
-                        android:shadowDy="1"/>
+                        android:textSize="@dimen/_15ssp" />
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/recyclerTimings"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="@dimen/_10sdp"
-                        android:visibility="gone"
-                        android:paddingRight="@dimen/_10sdp"/>
+                        android:paddingRight="@dimen/_10sdp"
+                        android:visibility="gone" />
 
-                    <include layout="@layout/hours"/>
+                    <include layout="@layout/view_hours" />
 
                 </LinearLayout>
 
@@ -367,8 +443,8 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardUseCompatPadding="true"
-                android:layout_marginTop="@dimen/_10sdp">
+                android:layout_marginTop="@dimen/_10sdp"
+                app:cardUseCompatPadding="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -379,21 +455,21 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:shadowColor="#fff"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:shadowRadius="5"
                         android:text="@string/social_profiles"
                         android:textColor="#666666"
-                        android:textSize="@dimen/_15ssp"
-                        android:shadowColor="#fff"
-                        android:gravity="center"
-                        android:shadowRadius="5"
-                        android:shadowDx="1"
-                        android:shadowDy="1"/>
+                        android:textSize="@dimen/_15ssp" />
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/recyclerProfiles"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="@dimen/_10sdp"
-                        android:paddingRight="@dimen/_10sdp"/>
+                        android:paddingRight="@dimen/_10sdp" />
 
                 </LinearLayout>
 
@@ -402,8 +478,8 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardUseCompatPadding="true"
-                android:layout_marginTop="@dimen/_10sdp">
+                android:layout_marginTop="@dimen/_10sdp"
+                app:cardUseCompatPadding="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -414,31 +490,31 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:shadowColor="#fff"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:shadowRadius="5"
                         android:text="@string/photo_gallery"
                         android:textColor="#666666"
-                        android:textSize="@dimen/_15ssp"
-                        android:shadowColor="#fff"
-                        android:gravity="center"
-                        android:shadowRadius="5"
-                        android:shadowDx="1"
-                        android:shadowDy="1"/>
+                        android:textSize="@dimen/_15ssp" />
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/recyclerGallery"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_5sdp"/>
+                        android:layout_marginTop="@dimen/_5sdp" />
 
                     <TextView
                         android:id="@+id/tvNoPhotos"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="#000"
-                        android:text="@string/no_photos"
                         android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/_5sdp"
                         android:gravity="center"
-                        android:visibility="gone"
-                        android:layout_marginTop="@dimen/_5sdp"/>
+                        android:text="@string/no_photos"
+                        android:textColor="#000"
+                        android:visibility="gone" />
 
                 </LinearLayout>
 
@@ -463,23 +539,23 @@
                         android:id="@+id/imgDirections"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:cardBackgroundColor="@android:color/transparent"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentRight="true"
                         android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_margin="@dimen/_10sdp"
                         android:clickable="true"
-                        app:cardMaxElevation="0dp"
-                        app:cardPreventCornerOverlap="false"
                         android:foreground="?android:attr/selectableItemBackground"
-                        android:layout_margin="@dimen/_10sdp">
+                        app:cardBackgroundColor="@android:color/transparent"
+                        app:cardMaxElevation="0dp"
+                        app:cardPreventCornerOverlap="false">
 
                         <ImageView
                             android:layout_width="@dimen/_25sdp"
                             android:layout_height="@dimen/_25sdp"
-                            android:contentDescription="@null"
-                            android:src="@mipmap/directions"
                             android:background="#fff"
-                            android:padding="@dimen/_5sdp" />
+                            android:contentDescription="@null"
+                            android:padding="@dimen/_5sdp"
+                            android:src="@mipmap/directions" />
 
                     </android.support.v7.widget.CardView>
 
@@ -491,13 +567,13 @@
                 android:id="@+id/tvContactAdmin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/contact_admin"
-                android:textColor="#fff"
                 android:layout_gravity="center"
-                android:gravity="center"
-                android:foreground="@drawable/ripple"
                 android:background="@color/colorPrimary"
-                android:padding="@dimen/_10sdp"/>
+                android:foreground="@drawable/ripple"
+                android:gravity="center"
+                android:padding="@dimen/_10sdp"
+                android:text="@string/contact_admin"
+                android:textColor="#fff" />
 
         </LinearLayout>
 

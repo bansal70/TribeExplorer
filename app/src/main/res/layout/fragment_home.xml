@@ -17,9 +17,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="@dimen/_10sdp"
         android:paddingLeft="@dimen/_10sdp"
-        android:paddingRight="@dimen/_10sdp">
+        android:paddingRight="@dimen/_10sdp"
+        android:paddingTop="@dimen/_10sdp">
 
         <EditText
             android:id="@+id/editQuery"
@@ -28,7 +28,7 @@
             android:background="@drawable/round_shape_edittext"
             android:hint="@string/looking_for"
             android:inputType="text"
-            android:padding="@dimen/_5sdp" />
+            android:padding="@dimen/_8sdp" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -43,20 +43,20 @@
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:hint="@string/location"
-                android:padding="@dimen/_8sdp" />
+                android:padding="@dimen/_10sdp" />
 
             <ImageView
                 android:id="@+id/imgLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/ic_location"
-                android:padding="@dimen/_2sdp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
                 android:clickable="true"
                 android:contentDescription="@string/location"
                 android:foreground="?selectableItemBackground"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"/>
+                android:padding="@dimen/_2sdp"
+                android:src="@mipmap/ic_location" />
 
         </RelativeLayout>
 
@@ -69,7 +69,7 @@
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:hint="@string/language"
-            android:padding="@dimen/_8sdp" />
+            android:padding="@dimen/_10sdp" />
 
         <TextView
             android:id="@+id/tvSearch"
@@ -88,6 +88,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerCategories"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_10sdp"/>
 
 </LinearLayout>

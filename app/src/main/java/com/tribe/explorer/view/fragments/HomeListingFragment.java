@@ -52,7 +52,7 @@ public class HomeListingFragment extends Fragment implements View.OnClickListene
             dialog.show();
 
             ModelManager.getInstance().getListingManager().listingTask(Operations
-                    .getSearchParams(query, lat, lng, "50", lang, user_id));
+                    .getSearchParams(query, lat, lng, "50","","","", lang, user_id));
         }
     }
 

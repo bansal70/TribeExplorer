@@ -4,9 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardBackgroundColor="#fff"
-    android:layout_marginTop="@dimen/_10sdp"
-    android:layout_marginLeft="@dimen/_10sdp"
-    android:layout_marginRight="@dimen/_10sdp">
+    android:layout_marginTop="@dimen/_10sdp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,7 +15,7 @@
         <RelativeLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_150sdp"
+            android:layout_height="@dimen/_180sdp"
             android:orientation="vertical">
 
             <ImageView
@@ -29,14 +27,21 @@
                 android:foreground="@drawable/ripple"
                 android:src="@mipmap/placeholder" />
 
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@color/colorTransparent"
+                android:contentDescription="@null"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
                 android:orientation="vertical"
-                android:padding="@dimen/_15sdp">
+                android:paddingLeft="@dimen/_10sdp"
+                android:paddingRight="@dimen/_10sdp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true">
 
                 <ImageView
                     android:id="@+id/imgFavourite"
@@ -44,51 +49,61 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:contentDescription="@string/menu_favourites"
+                    android:foreground="?selectableItemBackground"
                     android:src="@mipmap/ic_unfavourite" />
 
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/_25sdp"
                     android:background="@color/colorPrimary"
-                    android:paddingLeft="@dimen/_20sdp"
-                    android:paddingRight="@dimen/_20sdp"
+                    android:paddingLeft="@dimen/_10sdp"
+                    android:paddingRight="@dimen/_10sdp"
                     android:text="@string/featured"
+                    android:shadowColor="@color/colorPrimary"
+                    android:shadowRadius="5"
+                    android:shadowDx="1"
+                    android:shadowDy="1"
+                    android:textSize="@dimen/_10ssp"
                     android:textAllCaps="true"
                     android:textAppearance="@style/TextAppearance.FontPath"
-                    android:textColor="#fff"
-                    android:textSize="@dimen/_12ssp" />
+                    android:textColor="#fff" />
 
                 <TextView
                     android:id="@+id/tvTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
                     android:shadowColor="#fff"
                     android:shadowDx="1"
                     android:shadowDy="1"
                     android:shadowRadius="5"
                     android:text=""
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:textAppearance="@style/TextAppearance.FontPath"
                     android:textColor="#fff"
+                    android:textAllCaps="true"
                     android:textSize="@dimen/_15ssp" />
 
                 <TextView
                     android:id="@+id/tvLocation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:shadowColor="#fff"
                     android:shadowDx="1"
                     android:shadowDy="1"
                     android:shadowRadius="5"
                     android:text=""
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:textColor="#fff" />
 
                 <TextView
                     android:id="@+id/tvPhone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:shadowColor="#fff"
                     android:shadowDx="1"
                     android:shadowDy="1"
@@ -100,22 +115,33 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerHorizontal="true"
             android:layout_marginEnd="@dimen/_15sdp"
             android:layout_marginRight="@dimen/_15sdp"
-            android:layout_marginTop="@dimen/_120sdp">
+            android:layout_marginTop="@dimen/_150sdp">
 
             <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imgAvatar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:src="@mipmap/placeholder" />
+
+            <ImageView
+                android:id="@+id/imgClaim"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@mipmap/ic_claimed"
+                android:layout_alignBottom="@+id/imgAvatar"
+                android:layout_alignRight="@+id/imgAvatar"
+                android:layout_alignEnd="@+id/imgAvatar"
+                android:contentDescription="@null"/>
 
         </RelativeLayout>
 

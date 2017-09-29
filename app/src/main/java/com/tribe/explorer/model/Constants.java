@@ -61,4 +61,13 @@ public class Constants {
 
     public static final int REVIEW_SUCCESS = 1032;
     public static final int REVIEW_ERROR = 1033;
+
+    public static final int CLAIMED_SUCCESS = 1034;
+    public static final int CLAIMED_ERROR = 1035;
+
+    public static final int ADD_LISTING_SUCCESS = 1036;
+    public static final int ADD_LISTING_FAILED = 1037;
+
+    public static final int ADD_PHOTO_SUCCESS = 1038;
+    public static final int ADD_PHOTO_FAILED = 1039;
 }

@@ -1,9 +1,5 @@
 package com.tribe.explorer.view.adapters;
 
-/*
- * Created by rishav on 9/14/2017.
- */
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -33,14 +29,14 @@ import com.tribe.explorer.view.fragments.ListingDetailsFragment;
 
 import java.util.List;
 
-public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.ViewHolder> {
+public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.ViewHolder> {
     private Context context;
     private List<ListingData.Data> listData;
     private String lang;
     private String user_id;
     private String isFav = "";
 
-    public ListingAdapter(Context context, List<ListingData.Data> listData) {
+    public FavoriteAdapter(Context context, List<ListingData.Data> listData) {
         this.context = context;
         this.listData = listData;
         lang = TEPreferences.readString(context, "lang");
@@ -49,13 +45,13 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.ViewHold
     }
 
     @Override
-    public ListingAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public FavoriteAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.view_listing, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ListingAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final FavoriteAdapter.ViewHolder holder, int position) {
         ListingData.Data data = listData.get(position);
         holder.tvTitle.setText(data.title);
         holder.tvLocation.setText(data.loc);
@@ -139,17 +135,17 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.ViewHold
                                 .getFavouriteParams(Config.REMOVE_FAV_URL, user_id, data.iD, lang));
                         imgFavourite.setImageResource(R.mipmap.ic_unfavourite);
                         Toast.makeText(context, listing_name + " " +
-                                        context.getString(R.string.fav_removed), Toast.LENGTH_LONG).show();
-                       /* listData.remove(getAdapterPosition());
+                                context.getString(R.string.fav_removed), Toast.LENGTH_LONG).show();
+                        listData.remove(getAdapterPosition());
                         notifyItemRemoved(getAdapterPosition());
-                        notifyItemRangeChanged(getAdapterPosition(), listData.size());*/
+                        notifyItemRangeChanged(getAdapterPosition(), listData.size());
                     }
                     else {
                         ModelManager.getInstance().getFavouriteManager().favouriteTask(Operations
                                 .getFavouriteParams(Config.ADD_FAV_URL, user_id, data.iD, lang));
                         imgFavourite.setImageResource(R.mipmap.ic_favourite);
                         Toast.makeText(context, listing_name + " " +
-                                        context.getString(R.string.fav_added), Toast.LENGTH_LONG).show();
+                                context.getString(R.string.fav_added), Toast.LENGTH_LONG).show();
                     }
                     break;
             }
@@ -168,5 +164,4 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.ViewHold
         transaction.addToBackStack(null);
         transaction.commit();
     }
-
 }

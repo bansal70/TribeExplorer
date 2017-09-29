@@ -23,16 +23,31 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon,android:allowBackup">
-        <activity android:name=".view.SplashActivity">
+        <activity android:name=".view.SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.MainActivity" />
-        <activity android:name=".view.LoginActivity" />
-        <activity android:name=".view.RegistrationActivity" />
+
+        <activity android:name=".view.MainActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".view.LoginActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".view.RegistrationActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait" />
+        <activity android:name=".view.ForgotPasswordActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".view.VideoViewActivity"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|keyboardHidden" />
+        <activity android:name=".view.LocationActivity"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -84,9 +99,6 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".view.ForgotPasswordActivity" />
-        <activity android:name=".view.VideoViewActivity" />
-        <activity android:name=".view.LocationActivity"/>
     </application>
 
 </manifest>

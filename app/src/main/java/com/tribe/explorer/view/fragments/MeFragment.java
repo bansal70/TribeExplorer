@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.tribe.explorer.R;
 import com.tribe.explorer.model.TEPreferences;
 import com.tribe.explorer.model.Utils;
+import com.tribe.explorer.model.custom.CircleTransform;
 import com.tribe.explorer.view.LoginActivity;
 
 public class MeFragment extends Fragment implements View.OnClickListener{
@@ -76,11 +77,8 @@ public class MeFragment extends Fragment implements View.OnClickListener{
 
         Glide.with(getActivity())
                 .load(image)
-                .crossFade()
-                .fitCenter()
+                .transform(new CircleTransform(getActivity()))
                 .placeholder(R.mipmap.ic_user)
-                .error(R.mipmap.ic_user)
-                .centerCrop()
                 .into(imgUser);
     }
 

@@ -22,6 +22,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.tribe.explorer.R;
 import com.tribe.explorer.controller.ModelManager;
 import com.tribe.explorer.controller.ProfileManager;
@@ -31,6 +32,7 @@ import com.tribe.explorer.model.Operations;
 import com.tribe.explorer.model.TEPreferences;
 import com.tribe.explorer.model.Utils;
 import com.tribe.explorer.model.beans.ProfileData;
+import com.tribe.explorer.model.custom.CircleTransform;
 import com.tribe.explorer.model.custom.ImagePicker;
 
 import org.greenrobot.eventbus.EventBus;
@@ -38,12 +40,15 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 import static android.app.Activity.RESULT_OK;
 import static android.os.Build.VERSION_CODES.M;
 
 public class ProfileFragment extends Fragment implements View.OnClickListener{
 
-    ImageView imgProfilePic, imgBack;
+    CircleImageView imgProfilePic;
+    ImageView imgBack;
     TextView tvEditProfile, tvUpdatePassword;
     EditText editFirstName, editLastName, editEmail,
             editBirthDate, editGender;
@@ -126,8 +131,12 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         else
             rbNo.setChecked(true);
 
-       // filePath = data.userUrl;
-        Utils.setImage(getActivity(), data.userUrl, imgProfilePic);
+        TEPreferences.putString(getActivity(), "image", data.userUrl);
+        Glide.with(getActivity())
+                .load(data.userUrl)
+                .transform(new CircleTransform(getActivity()))
+                .placeholder(R.mipmap.ic_user)
+                .into(imgProfilePic);
     }
 
     public void selectOwner() {
@@ -208,27 +217,32 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
 
     @Subscribe(sticky = true)
     public void onEvent(Event event) {
-        dialog.dismiss();
         EventBus.getDefault().removeAllStickyEvents();
         switch (event.getKey()) {
             case Constants.PROFILE_SUCCESS:
+                dialog.dismiss();
                 setProfileData();
+                editFields(false);
                 break;
 
             case Constants.PROFILE_EMPTY:
+                dialog.dismiss();
                 Toast.makeText(getActivity(), R.string.invalid_user, Toast.LENGTH_SHORT).show();
                 break;
 
             case Constants.EDIT_PROFILE_SUCCESS:
-                editFields(false);
+                ModelManager.getInstance().getProfileManager().profileTask(Operations
+                        .getProfileParams(user_id, lang));
                 Toast.makeText(getActivity(), R.string.profile_updated, Toast.LENGTH_SHORT).show();
                 break;
 
             case Constants.EDIT_PROFILE_EMPTY:
+                dialog.dismiss();
                 Toast.makeText(getActivity(), R.string.failed_profile_update, Toast.LENGTH_SHORT).show();
                 break;
 
             case Constants.NO_RESPONSE:
+                dialog.dismiss();
                 Toast.makeText(getActivity(), R.string.no_response, Toast.LENGTH_SHORT).show();
                 break;
         }

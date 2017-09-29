@@ -26,8 +26,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/_10sdp"
             android:orientation="vertical"
-            android:paddingLeft="@dimen/_20sdp"
-            android:paddingRight="@dimen/_20sdp"
+            android:paddingLeft="@dimen/_10sdp"
+            android:paddingRight="@dimen/_10sdp"
             android:paddingTop="@dimen/_10sdp">
 
             <EditText
@@ -37,108 +37,118 @@
                 android:background="@drawable/round_shape_edittext"
                 android:hint="@string/looking_for"
                 android:inputType="text"
-                android:padding="@dimen/_8sdp" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp">
-
-                <TextView
-                    android:id="@+id/tvLocation"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/round_shape_edittext"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:hint="@string/location"
-                    android:padding="@dimen/_10sdp" />
-
-                <ImageView
-                    android:id="@+id/imgLocation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:clickable="true"
-                    android:contentDescription="@string/location"
-                    android:foreground="?selectableItemBackground"
-                    android:padding="@dimen/_2sdp"
-                    android:src="@mipmap/ic_location" />
-
-            </RelativeLayout>
-
-            <TextView
-                android:id="@+id/tvCategory"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:background="@drawable/round_shape_edittext"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:hint="@string/select_categories"
-                android:padding="@dimen/_10sdp" />
-
-            <TextView
-                android:id="@+id/tvRadius"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:text="@string/radius"
-                android:textSize="@dimen/_15ssp" />
-
-            <com.crystal.crystalrangeseekbar.widgets.CrystalSeekbar
-                android:id="@+id/seekRadius"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                app:bar_color="@color/colorGray"
-                app:bar_highlight_color="@color/colorPrimary"
-                app:left_thumb_color="@color/colorPrimary"
-                app:left_thumb_color_pressed="@color/colorPrimary" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:orientation="horizontal">
-
-                <Spinner
-                    android:id="@+id/spinnerFilters"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/round_shape_edittext"
-                    android:hint="@string/filter_results"
-                    android:layout_weight="1"
-                    android:padding="@dimen/_8sdp" />
-
-                <View
-                    android:layout_width="@dimen/_10sdp"
-                    android:layout_height="match_parent"/>
-
-                <TextView
-                    android:id="@+id/tvSortBy"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/round_shape_edittext"
-                    android:hint="@string/sort_by"
-                    android:layout_weight="1"
-                    android:padding="@dimen/_10sdp" />
-
-            </LinearLayout>
+                android:padding="@dimen/_5sdp" />
 
             <TextView
                 android:id="@+id/tvToggleFilters"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
                 android:background="@drawable/round_shape_edittext"
-                android:focusable="false"
-                android:visibility="gone"
-                android:focusableInTouchMode="true"
-                android:hint="@string/toggle_filters"
-                android:padding="@dimen/_10sdp" />
+                android:foreground="?selectableItemBackground"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="@string/toggle"
+                android:gravity="start|center"
+                android:drawableRight="@mipmap/dropdown"
+                android:drawableEnd="@mipmap/dropdown"
+                android:padding="@dimen/_8sdp"/>
+
+            <LinearLayout
+                android:id="@+id/filterLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp">
+
+                    <TextView
+                        android:id="@+id/tvLocation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/round_shape_edittext"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:hint="@string/location"
+                        android:padding="@dimen/_8sdp" />
+
+                    <ImageView
+                        android:id="@+id/imgLocation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:clickable="true"
+                        android:contentDescription="@string/location"
+                        android:foreground="?selectableItemBackground"
+                        android:padding="@dimen/_2sdp"
+                        android:src="@mipmap/ic_location" />
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tvCategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:background="@drawable/round_shape_edittext"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="@string/select_categories"
+                    android:padding="@dimen/_8sdp" />
+
+                <TextView
+                    android:id="@+id/tvRadius"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:text="@string/radius"
+                    android:textSize="@dimen/_15ssp" />
+
+                <com.crystal.crystalrangeseekbar.widgets.CrystalSeekbar
+                    android:id="@+id/seekRadius"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    app:bar_color="@color/colorGray"
+                    app:bar_highlight_color="@color/colorPrimary"
+                    app:left_thumb_color="@color/colorPrimary"
+                    app:left_thumb_color_pressed="@color/colorPrimary" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:orientation="horizontal">
+
+                    <Spinner
+                        android:id="@+id/spinnerFilters"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/round_shape_edittext"
+                        android:hint="@string/filter_results"
+                        android:layout_weight="1"
+                        android:padding="@dimen/_8sdp" />
+
+                    <View
+                        android:layout_width="@dimen/_10sdp"
+                        android:layout_height="match_parent"/>
+
+                    <Spinner
+                        android:id="@+id/spinnerSort"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/round_shape_edittext"
+                        android:hint="@string/sort_by"
+                        android:layout_weight="1"
+                        android:padding="@dimen/_8sdp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tvSearch"
@@ -146,8 +156,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_20sdp"
                 android:background="@color/colorPrimary"
+                android:foreground="@drawable/ripple"
                 android:gravity="center"
-                android:padding="@dimen/_10sdp"
+                android:padding="@dimen/_8sdp"
                 android:text="@string/menu_search"
                 android:textColor="#fff" />
 
@@ -169,7 +180,7 @@
                         android:background="@color/colorPrimary"
                         android:foreground="?selectableItemBackground"
                         android:gravity="center"
-                        android:padding="@dimen/_10sdp"
+                        android:padding="@dimen/_8sdp"
                         android:text="@string/list"
                         android:textColor="#fff" />
 
@@ -186,7 +197,7 @@
                         android:background="@color/colorWhite"
                         android:foreground="?selectableItemBackground"
                         android:gravity="center"
-                        android:padding="@dimen/_10sdp"
+                        android:padding="@dimen/_8sdp"
                         android:text="@string/map"
                         android:textColor="@color/colorPrimary" />
 
@@ -203,7 +214,7 @@
             <android.support.v7.widget.CardView
                 android:id="@+id/cardMap"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_150sdp"
+                android:layout_height="@dimen/_200sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:focusableInTouchMode="true"
                 android:visibility="gone"

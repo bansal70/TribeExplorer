@@ -6,7 +6,6 @@ package com.tribe.explorer.model.network;
 
 import com.tribe.explorer.model.beans.AboutData;
 import com.tribe.explorer.model.beans.CategoriesData;
-import com.tribe.explorer.model.beans.HoursData;
 import com.tribe.explorer.model.beans.LabelsData;
 import com.tribe.explorer.model.beans.LanguageData;
 import com.tribe.explorer.model.beans.ListingData;
@@ -19,7 +18,6 @@ import com.tribe.explorer.model.beans.TimezoneData;
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.http.Body;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -55,15 +53,23 @@ public interface APIService {
 
     @Multipart
     @POST
-    Call<ResponseBody> addListing(@Url String string, @Part MultipartBody.Part coverFile,
-                                  @Part MultipartBody.Part[] galleryFiles,
-                                  @Body HoursData hoursData);
+    Call<ResponseBody> addListing(@Url String string, @Part MultipartBody.Part logoFile,
+                                  @Part MultipartBody.Part coverFile,
+                                  @Part MultipartBody.Part[] galleryFiles);
 
     @POST
     Call<ListingData> listings(@Url String string);
 
     @POST
     Call<ListingDetailsData> listingsDetails(@Url String string);
+
+    @Multipart
+    @POST
+    Call<ResponseBody> addPhotos(@Url String string, @Part MultipartBody.Part file);
+
+    @Multipart
+    @POST
+    Call<ResponseBody> addReview(@Url String string, @Part MultipartBody.Part file);
 
     @POST
     Call<ReviewsData> getReviews(@Url String string);

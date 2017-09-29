@@ -1,7 +1,7 @@
 package com.tribe.explorer.controller;
 
 /*
- * Created by rishav on 9/26/2017.
+ * Created by rishav on 9/29/2017.
  */
 
 import android.util.Log;
@@ -24,10 +24,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AddReviewManager {
-    private static final String TAG = ForgotPasswordManager.class.getSimpleName();
+public class AddPhotoManager {
+    private static final String TAG = AddPhotoManager.class.getSimpleName();
 
-    public void addReviewTask(String params, String filePath) {
+    public void addPhotoTask(String params, String filePath, int count) {
         Call<ResponseBody> resultCall;
         APIService apiService = APIClient.getClient().create(APIService.class);
 
@@ -35,8 +35,8 @@ public class AddReviewManager {
             File file = new File(filePath);
             RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
             MultipartBody.Part body =
-                    MultipartBody.Part.createFormData("image", file.getName(), requestFile);
-            resultCall = apiService.addReview(params, body);
+                    MultipartBody.Part.createFormData("gallery_images"+count, file.getName(), requestFile);
+            resultCall = apiService.addPhotos(params, body);
         } else {
             resultCall = apiService.response(params);
         }
@@ -47,13 +47,13 @@ public class AddReviewManager {
                 try {
                     String output = response.body().string();
                     JSONObject jsonObject = new JSONObject(output);
-                    Log.e(TAG, "add reviews response-- "+output);
+                    Log.e(TAG, "add photos response-- "+output);
                     String status = jsonObject.getString("status");
 
                     if (status.equalsIgnoreCase("success"))
-                        EventBus.getDefault().postSticky(new Event(Constants.ADD_REVIEW_SUCCESS, ""));
+                        EventBus.getDefault().postSticky(new Event(Constants.ADD_PHOTO_SUCCESS, ""));
                     else
-                        EventBus.getDefault().postSticky(new Event(Constants.ADD_REVIEW_ERROR, ""));
+                        EventBus.getDefault().postSticky(new Event(Constants.ADD_PHOTO_FAILED, ""));
                 } catch (Exception e) {
                     e.printStackTrace();
                     EventBus.getDefault().postSticky(new Event(Constants.NO_RESPONSE, ""));

@@ -49,13 +49,14 @@ public class SimpleLoginManager {
                         String isOwner = data.getString("businessowner");
 
                         if (isChecked) {
-                            TEPreferences.putString(context, "user_id", user_id);
-                            TEPreferences.putString(context, "first_name", first_name);
-                            TEPreferences.putString(context, "last_name", last_name);
-                            TEPreferences.putString(context, "email", email);
-                            TEPreferences.putString(context, "isOwner", isOwner);
-                            TEPreferences.putString(context, "image", image);
+                            TEPreferences.putBoolean(context, "remember", true);
                         }
+                        TEPreferences.putString(context, "user_id", user_id);
+                        TEPreferences.putString(context, "first_name", first_name);
+                        TEPreferences.putString(context, "last_name", last_name);
+                        TEPreferences.putString(context, "email", email);
+                        TEPreferences.putString(context, "isOwner", isOwner);
+                        TEPreferences.putString(context, "image", image);
 
                         EventBus.getDefault().postSticky(new Event(Constants.LOGIN_SUCCESS, ""));
                     } else {

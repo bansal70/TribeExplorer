@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tribe.explorer.R;
+import com.tribe.explorer.model.Operations;
 import com.tribe.explorer.model.beans.Language;
 
 import java.util.List;

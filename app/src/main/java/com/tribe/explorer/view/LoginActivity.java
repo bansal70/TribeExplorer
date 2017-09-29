@@ -180,6 +180,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
+        if (mTwitterAuthClient != null)
         mTwitterAuthClient.onActivityResult(requestCode, resultCode, data);
         if(requestCode == TwitterAuthConfig.DEFAULT_AUTH_REQUEST_CODE){
             pd.show();

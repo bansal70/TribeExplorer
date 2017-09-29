@@ -1,119 +1,92 @@
 package com.tribe.explorer.view.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import com.tribe.explorer.R;
-import com.tribe.explorer.controller.AboutManager;
-import com.tribe.explorer.controller.ModelManager;
 import com.tribe.explorer.model.Config;
-import com.tribe.explorer.model.Constants;
-import com.tribe.explorer.model.Event;
-import com.tribe.explorer.model.TEPreferences;
 import com.tribe.explorer.model.Utils;
-import com.tribe.explorer.model.beans.AboutData;
-import com.tribe.explorer.view.adapters.HowItWorkAdapter;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
+public class HowItWorksFragment extends Fragment {
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class HowItWorksFragment extends Fragment implements View.OnClickListener{
-
-    private Dialog dialog;
-    private List<AboutData.Data> dataList;
-    String language;
-    RecyclerView recyclerAbout;
-    HowItWorkAdapter howItWorkAdapter;
-    ImageView imgBack;
+    WebView webBlog;
+    Dialog dialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        dataList = new ArrayList<>();
-        dialog = Utils.showDialog(getActivity());
-        dialog.show();
-        language = TEPreferences.readString(getActivity(), "lang");
-        ModelManager.getInstance().getAboutManager().aboutTask(Config.ABOUT_URL + language);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_how_it_works, container, false);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_blog, container, false);
         initViews(view);
         return view;
     }
 
     public void initViews(View view) {
-        imgBack = view.findViewById(R.id.imgBack);
-        recyclerAbout = view.findViewById(R.id.recyclerAbout);
-        recyclerAbout.setLayoutManager(new LinearLayoutManager(getActivity()));
+        dialog = Utils.showDialog(getActivity());
+        dialog.show();
+        webBlog = view.findViewById(R.id.webBlog);
 
-        howItWorkAdapter = new HowItWorkAdapter(getActivity(), dataList);
-        recyclerAbout.setAdapter(howItWorkAdapter);
-
-        imgBack.setOnClickListener(this);
+        initWebView();
+        webBlog.loadUrl(Config.BLOG_URL);
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.imgBack:
-                backScreen();
-                break;
-        }
+    @SuppressLint("SetJavaScriptEnabled")
+    private void initWebView() {
+        webBlog.setWebChromeClient(new MyWebChromeClient(getActivity()));
+        webBlog.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+            }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                return super.shouldOverrideUrlLoading(view, request);
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                dialog.dismiss();
+            }
+
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                super.onReceivedError(view, request, error);
+                dialog.dismiss();
+                Toast.makeText(getActivity(), R.string.failed_to_load_data, Toast.LENGTH_SHORT).show();
+            }
+        });
+        webBlog.clearCache(true);
+        webBlog.clearHistory();
+        webBlog.getSettings().setJavaScriptEnabled(true);
+        webBlog.setHorizontalScrollBarEnabled(false);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
+    private class MyWebChromeClient extends WebChromeClient {
+        Context context;
 
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Subscribe(sticky = true)
-    public void onEvent(Event event) {
-        dialog.dismiss();
-        EventBus.getDefault().removeAllStickyEvents();
-        switch (event.getKey()) {
-            case Constants.ABOUT_SUCCESS:
-                dataList.addAll(AboutManager.dataList);
-                howItWorkAdapter.notifyDataSetChanged();
-                break;
-
-            case Constants.ABOUT_EMPTY:
-                Toast.makeText(getActivity(), R.string.no_data, Toast.LENGTH_SHORT).show();
-                break;
-
-            case Constants.NO_RESPONSE:
-                Toast.makeText(getActivity(), R.string.no_response, Toast.LENGTH_SHORT).show();
-                break;
-        }
-    }
-
-    public void backScreen() {
-        if (getActivity().getSupportFragmentManager().getBackStackEntryCount() > 0) {
-            getActivity().getSupportFragmentManager().popBackStack();
+        private MyWebChromeClient(Context context) {
+            super();
+            this.context = context;
         }
     }
 

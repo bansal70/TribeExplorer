@@ -20,7 +20,7 @@ import com.tribe.explorer.model.Operations;
 import com.tribe.explorer.model.TEPreferences;
 import com.tribe.explorer.model.Utils;
 import com.tribe.explorer.model.beans.ListingData;
-import com.tribe.explorer.view.adapters.ListingAdapter;
+import com.tribe.explorer.view.adapters.FavoriteAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -31,7 +31,7 @@ import java.util.List;
 public class FavouritesFragment extends Fragment{
 
     RecyclerView recyclerListing;
-    private ListingAdapter listingAdapter;
+    private FavoriteAdapter listingAdapter;
     private Dialog dialog;
     private List<ListingData.Data> listData;
     String user_id, lang;
@@ -67,7 +67,7 @@ public class FavouritesFragment extends Fragment{
         recyclerListing = view.findViewById(R.id.recyclerListings);
         recyclerListing.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        listingAdapter = new ListingAdapter(getActivity(), listData);
+        listingAdapter = new FavoriteAdapter(getActivity(), listData);
         recyclerListing.setAdapter(listingAdapter);
     }
 

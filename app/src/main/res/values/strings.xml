@@ -54,7 +54,7 @@
     <string name="select_pic">Please select your profile pic</string>
     <string name="password_length">Password must contains at least 6 letters.</string>
     <string name="menu_home">Home</string>
-    <string name="menu_favourites">Favourites</string>
+    <string name="menu_favourites">Favorites</string>
     <string name="menu_search">Search</string>
     <string name="menu_coupons">Coupons</string>
     <string name="menu_me">Me</string>
@@ -135,7 +135,7 @@
     <string name="quality">Quality</string>
     <string name="price">Price</string>
     <string name="reviews">Reviews</string>
-    <string name="favorites">Favourites</string>
+    <string name="favorites">Favorites</string>
     <string name="claim_listing">Claim this listing</string>
     <string name="add_photos">Add Photos</string>
     <string name="photo_gallery">Photo Gallery</string>
@@ -153,7 +153,7 @@
     <string name="confirm_edit_profile">Are you sure you want to edit your profile ?</string>
     <string name="write_review">Write a review</string>
     <string name="we_speak">We speak</string>
-    <string name="contact_admin">Contact Admin</string>
+    <string name="contact_admin">Contact</string>
     <string name="featured">Featured</string>
     <string name="language">Language</string>
     <string name="something_went_wrong">Something went wrong!</string>
@@ -187,4 +187,15 @@
     <string name="add_review_failed">Unable to submit your review. Please try again.</string>
     <string name="add_comment">Please add the comment</string>
     <string name="no_rating">THere is no rating for this listing</string>
+    <string name="already_claimed">You have already claimed this listing</string>
+    <string name="successfully_claimed">You have successfully claimed this listing</string>
+    <string name="failed_to_claim">Failed to claim this listing. Please try again.</string>
+    <string name="listing_added">Your listing has been added successfully</string>
+    <string name="no_file_selected">No file selected (Optional)</string>
+    <string name="toggle">Toggle Search</string>
+    <string name="newest_first">newest First</string>
+    <string name="oldest_first">oldest First</string>
+    <string name="random">random</string>
+    <string name="most_popular">most popular</string>
+    <string name="failed_to_add_photo">Failed to add photo. Please try again.</string>
 </resources>

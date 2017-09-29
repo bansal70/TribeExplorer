@@ -23,6 +23,12 @@
             android:foreground="@drawable/ripple"
             android:contentDescription="@string/menu_home"/>
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@color/colorTransparent"
+            android:contentDescription="@null"/>
+
         <TextView
             android:id="@+id/tvCategories"
             android:layout_width="wrap_content"

@@ -13,15 +13,15 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.tribe.explorer.R;
-import com.tribe.explorer.controller.ListingManager;
+import com.tribe.explorer.controller.AboutManager;
 import com.tribe.explorer.controller.ModelManager;
+import com.tribe.explorer.model.Config;
 import com.tribe.explorer.model.Constants;
 import com.tribe.explorer.model.Event;
-import com.tribe.explorer.model.Operations;
 import com.tribe.explorer.model.TEPreferences;
 import com.tribe.explorer.model.Utils;
-import com.tribe.explorer.model.beans.ListingData;
-import com.tribe.explorer.view.adapters.ListingAdapter;
+import com.tribe.explorer.model.beans.AboutData;
+import com.tribe.explorer.view.adapters.HowItWorkAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -29,45 +29,41 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyListingFragment extends Fragment implements View.OnClickListener{
+public class About extends Fragment implements View.OnClickListener{
 
-    RecyclerView recyclerListing;
-    private ListingAdapter listingAdapter;
     private Dialog dialog;
-    private List<ListingData.Data> listData;
-    String user_id, lang;
+    private List<AboutData.Data> dataList;
+    String language;
+    RecyclerView recyclerAbout;
+    HowItWorkAdapter howItWorkAdapter;
     ImageView imgBack;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        listData = new ArrayList<>();
-        user_id = TEPreferences.readString(getActivity(), "user_id");
-        lang = TEPreferences.readString(getActivity(), "lang");
+        dataList = new ArrayList<>();
         dialog = Utils.showDialog(getActivity());
         dialog.show();
-        ModelManager.getInstance().getListingManager()
-                .listingTask(Operations.getMyListingParams(user_id, lang));
-
+        language = TEPreferences.readString(getActivity(), "lang");
+        ModelManager.getInstance().getAboutManager().aboutTask(Config.ABOUT_URL + language);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_my_listing, container, false);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_how_it_works, container, false);
         initViews(view);
-
         return view;
     }
 
     public void initViews(View view) {
         imgBack = view.findViewById(R.id.imgBack);
-        recyclerListing = view.findViewById(R.id.recyclerListings);
-        recyclerListing.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerAbout = view.findViewById(R.id.recyclerAbout);
+        recyclerAbout.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        listingAdapter = new ListingAdapter(getActivity(), listData);
-        recyclerListing.setAdapter(listingAdapter);
+        howItWorkAdapter = new HowItWorkAdapter(getActivity(), dataList);
+        recyclerAbout.setAdapter(howItWorkAdapter);
 
         imgBack.setOnClickListener(this);
     }
@@ -100,13 +96,13 @@ public class MyListingFragment extends Fragment implements View.OnClickListener{
         dialog.dismiss();
         EventBus.getDefault().removeAllStickyEvents();
         switch (event.getKey()) {
-            case Constants.LISTING_SUCCESS:
-                listData.addAll(ListingManager.dataList);
-                listingAdapter.notifyDataSetChanged();
+            case Constants.ABOUT_SUCCESS:
+                dataList.addAll(AboutManager.dataList);
+                howItWorkAdapter.notifyDataSetChanged();
                 break;
 
-            case Constants.LISTING_EMPTY:
-                Toast.makeText(getActivity(), R.string.no_listing, Toast.LENGTH_SHORT).show();
+            case Constants.ABOUT_EMPTY:
+                Toast.makeText(getActivity(), R.string.no_data, Toast.LENGTH_SHORT).show();
                 break;
 
             case Constants.NO_RESPONSE:
@@ -120,4 +116,5 @@ public class MyListingFragment extends Fragment implements View.OnClickListener{
             getActivity().getSupportFragmentManager().popBackStack();
         }
     }
+
 }

@@ -14,6 +14,8 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.CardView;
@@ -27,6 +29,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,6 +48,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.tribe.explorer.R;
 import com.tribe.explorer.controller.HomeManager;
@@ -68,6 +72,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
@@ -76,7 +81,7 @@ import static com.tribe.explorer.controller.HomeManager.categoriesList;
 public class SearchFragment extends Fragment implements View.OnClickListener,
         AdapterView.OnItemSelectedListener, OnSeekbarChangeListener,
         OnMapReadyCallback, MySupportMapFragment.OnTouchListener,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnInfoWindowClickListener{
 
     private final String TAG = SearchFragment.class.getSimpleName();
 
@@ -87,12 +92,13 @@ public class SearchFragment extends Fragment implements View.OnClickListener,
     Location location;
 
     EditText editQuery;
-    TextView tvLocation, tvCategory;
-    TextView tvRadius, tvSearch, tvListings, tvMap, tvSortBy;
-    Spinner spinnerFilters;
+    TextView tvLocation, tvCategory, tvToggleFilters;
+    TextView tvRadius, tvSearch, tvListings, tvMap;
+    Spinner spinnerFilters, spinnerSort;
     CrystalSeekbar seekRadius;
     String lat = "", lng = "", radius = "";
     ImageView imgLocation;
+    LinearLayout filterLayout;
 
     RecyclerView recyclerListing;
     private ListingAdapter listingAdapter;
@@ -105,8 +111,12 @@ public class SearchFragment extends Fragment implements View.OnClickListener,
     NestedScrollView nestedScrollView;
     private ArrayList<Double> latList, lngList;
     GoogleMap mGoogleMap;
-    private List<String> labelsDataList;
-    private ArrayAdapter labelsAdapter;
+    List<String> labelsDataList, sortList;
+    ArrayAdapter labelsAdapter, sortAdapter;
+    String filter = "", sort = "", category = "", label = "";
+    private List<String> locName;
+    private HashMap<Marker, Integer> mHashMap;
+    private ArrayList<Integer> catIdList;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -127,6 +137,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener,
         listData = new ArrayList<>();
         user_id = TEPreferences.readString(getActivity(), "user_id");
         lang = TEPreferences.readString(getActivity(), "lang");
+        dialog.show();
         ModelManager.getInstance().getLabelsManager()
                 .labelsTask(getActivity(), Config.LABEL_LIST_URL+lang);
     }
@@ -141,10 +152,16 @@ public class SearchFragment extends Fragment implements View.OnClickListener,
     }
 
     public void initViews(View view) {
-        latList = new ArrayList<>();
-        lngList = new ArrayList<>();
+        listData = new ArrayList<>();
         labelsDataList = new ArrayList<>();
         labelsDataList.add(getString(R.string.filter_results));
+        sortList = new ArrayList<>();
+        catIdList = new ArrayList<>();
+        sortList.add(getString(R.string.sort_by));
+        sortList.add(getString(R.string.newest_first));
+        sortList.add(getString(R.string.oldest_first));
+        sortList.add(getString(R.string.random));
+        sortList.add(getString(R.string.most_popular));
 
         tvSearch = view.findViewById(R.id.tvSearch);
         editQuery = view.findViewById(R.id.editQuery);
@@ -152,10 +169,12 @@ public class SearchFragment extends Fragment implements View.OnClickListener,
         imgLocation = view.findViewById(R.id.imgLocation);
         tvCategory = view.findViewById(R.id.tvCategory);
         spinnerFilters = view.findViewById(R.id.spinnerFilters);
-        tvSortBy = view.findViewById(R.id.tvSortBy);
+        spinnerSort = view.findViewById(R.id.spinnerSort);
         seekRadius = view.findViewById(R.id.seekRadius);
         tvRadius = view.findViewById(R.id.tvRadius);
         tvListings = view.findViewById(R.id.tvListings);
+        tvToggleFilters = view.findViewById(R.id.tvToggleFilters);
+        filterLayout = view.findViewById(R.id.filterLayout);
 
         tvMap = view.findViewById(R.id.tvMap);
         cardMap = view.findViewById(R.id.cardMap);
@@ -174,10 +193,11 @@ public class SearchFragment extends Fragment implements View.OnClickListener,
         tvLocation.setOnClickListener(this);
         tvCategory.setOnClickListener(this);
         tvMap.setOnClickListener(this);
-        tvSortBy.setOnClickListener(this);
         tvListings.setOnClickListener(this);
         seekRadius.setOnSeekbarChangeListener(this);
+        spinnerSort.setOnItemSelectedListener(this);
         spinnerFilters.setOnItemSelectedListener(this);
+        tvToggleFilters.setOnClickListener(this);
 
         mapFragment = (MySupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
@@ -189,12 +209,41 @@ public class SearchFragment extends Fragment implements View.OnClickListener,
         labelsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerFilters.setAdapter(labelsAdapter);
 
+        sortAdapter = new ArrayAdapter<>(getActivity(),
+                R.layout.spinner_item, sortList);
+        sortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerSort.setAdapter(sortAdapter);
+
+        if (!ListingManager.dataList.isEmpty())
+            listData.addAll(ListingManager.dataList);
+
         initDialog();
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+        switch (adapterView.getId()) {
+            case R.id.spinnerFilters:
+                if (position != 0)
+                    filter = labelsDataList.get(position);
+                else
+                    filter = "";
+                break;
 
+            case R.id.spinnerSort:
+                if (position == 0) {
+                    sort = "";
+                }
+                else if (position == 1 || position == 2) {
+                    sort = sortList.get(position).substring(0,
+                            Math.min(sortList.get(position).length(), 3));
+                } else {
+                    sort = sortList.get(position).substring(0,
+                            Math.min(sortList.get(position).length(), 4));
+                }
+                Toast.makeText(getActivity(), ""+sort, Toast.LENGTH_SHORT).show();
+                    break;
+        }
     }
 
     @Override
@@ -220,10 +269,12 @@ public class SearchFragment extends Fragment implements View.OnClickListener,
 
     public void setCategories() {
         dialogCategories.dismiss();
+        catIdList = new ArrayList<>();
         ArrayList<String> categories = new ArrayList<>();
         for (CategoriesData.Data data : HomeManager.categoriesList) {
             if (data.isSelected()) {
                 categories.add(data.name);
+                catIdList.add(data.termId);
             }
         }
         tvCategory.setText(categories.toString().replace("[", "").replace("]", ""));
@@ -238,6 +289,13 @@ public class SearchFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.tvToggleFilters:
+                if (filterLayout.getVisibility() == View.VISIBLE)
+                    filterLayout.setVisibility(View.GONE);
+                else
+                    filterLayout.setVisibility(View.VISIBLE);
+                break;
+
             case R.id.imgLocation:
                 enableLoc();
                 break;
@@ -248,9 +306,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener,
 
             case R.id.tvCategory:
                 dialogCategories.show();
-                break;
-
-            case R.id.tvSortBy:
                 break;
 
             case R.id.tvConfirm:
@@ -294,16 +349,15 @@ public class SearchFragment extends Fragment implements View.OnClickListener,
     public void searchListings() {
         if (mGoogleMap != null)
             mGoogleMap.clear();
-        latList.clear();
-        lngList.clear();
-        listData.clear();
-        listingAdapter.notifyDataSetChanged();
-
         String query = editQuery.getText().toString().trim();
 
         dialog.show();
+        String category = catIdList.toString().replace("[", "").replace("]", "");
         ModelManager.getInstance().getListingManager().listingTask(Operations
-                .getSearchParams(query, lat, lng, radius, lang, user_id));
+                .getSearchParams(query, lat, lng, radius, category, filter, sort, lang, user_id));
+
+        listData.clear();
+        listingAdapter.notifyDataSetChanged();
     }
 
     public void findPlace() {
@@ -367,9 +421,14 @@ public class SearchFragment extends Fragment implements View.OnClickListener,
             case Constants.LISTING_SUCCESS:
                 listData.addAll(ListingManager.dataList);
                 listingAdapter.notifyDataSetChanged();
+                latList = new ArrayList<>();
+                lngList = new ArrayList<>();
+                mHashMap = new HashMap<>();
+                locName = new ArrayList<>();
 
                 for (ListingData.Data data : listData) {
                     if (!data.latitude.isEmpty() || !data.longitude.isEmpty()) {
+                        locName.add(data.title);
                         latList.add(Double.parseDouble(data.latitude));
                         lngList.add(Double.parseDouble(data.longitude));
                     }
@@ -406,6 +465,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
+        mGoogleMap.setOnInfoWindowClickListener(this);
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         int counter = 0;
@@ -413,8 +473,11 @@ public class SearchFragment extends Fragment implements View.OnClickListener,
             double latitude = latList.get(i);
             double longitude = lngList.get(i);
             LatLng latLng = new LatLng(latitude, longitude);
-            builder.include(latLng) ;
-            googleMap.addMarker(new MarkerOptions().position(latLng));
+            builder.include(latLng);
+            String name = locName.get(i);
+            Marker marker = googleMap.addMarker(new MarkerOptions().position(latLng).title(name));
+           // marker.showInfoWindow();
+            mHashMap.put(marker, i);
             counter++;
         }
 
@@ -526,4 +589,22 @@ public class SearchFragment extends Fragment implements View.OnClickListener,
 
     }
 
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        int pos = mHashMap.get(marker);
+        replaceFragment(pos);
+    }
+
+    private void replaceFragment(int position) {
+        ListingData.Data data = listData.get(position);
+        Fragment fragment = new ListingDetailsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("cat_id", data.iD);
+        fragment.setArguments(bundle);
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.frame_layout, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
 }

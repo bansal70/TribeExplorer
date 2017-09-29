@@ -95,6 +95,7 @@ public class FacebookLoginManager {
 
                             Log.e(TAG, "Image: " + profilePicUrl);
                         }
+                        TEPreferences.putString(context, "image", profilePicUrl);
 
                         ModelManager.getInstance().getLoginManager().socialLoginTask(context,
                                 Operations.getSocialLoginParams(firstName, lastName, email, id,

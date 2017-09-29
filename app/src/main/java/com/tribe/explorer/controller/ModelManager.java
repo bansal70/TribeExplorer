@@ -23,6 +23,9 @@ public class ModelManager {
     private LabelsManager labelsManager;
     private AddReviewManager addReviewManager;
     private ReviewsManager reviewsManager;
+    private ClaimListingManager claimListingManager;
+    private AddListingManager addListingManager;
+    private AddPhotoManager addPhotoManager;
 
     public static ModelManager getInstance() {
         if (modelManager == null)
@@ -48,6 +51,9 @@ public class ModelManager {
         labelsManager = new LabelsManager();
         addReviewManager = new AddReviewManager();
         reviewsManager = new ReviewsManager();
+        claimListingManager = new ClaimListingManager();
+        addListingManager = new AddListingManager();
+        addPhotoManager = new AddPhotoManager();
     }
 
     public SimpleLoginManager getLoginManager() {
@@ -112,5 +118,17 @@ public class ModelManager {
 
     public ReviewsManager getReviewsManager() {
         return reviewsManager;
+    }
+
+    public ClaimListingManager getClaimListingManager() {
+        return claimListingManager;
+    }
+
+    public AddListingManager getAddListingManager() {
+        return addListingManager;
+    }
+
+    public AddPhotoManager getAddPhotoManager() {
+        return addPhotoManager;
     }
 }

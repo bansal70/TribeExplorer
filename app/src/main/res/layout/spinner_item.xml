@@ -10,5 +10,4 @@
     android:textSize="@dimen/_13ssp"
     android:foreground="?selectableItemBackground"
     android:drawableRight="@mipmap/dropdown"
-    android:drawableEnd="@mipmap/dropdown"
-    android:textColor="#000" />
+    android:drawableEnd="@mipmap/dropdown"/>
