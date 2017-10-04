@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -38,20 +39,24 @@ public class ListingFragment extends Fragment implements View.OnClickListener{
     private Dialog dialog;
     private List<ListingData.Data> listData;
     ImageView imgBack;
+    String user_id, lang;
+    int cat_id;
+    RecyclerView.OnScrollListener onScrollListener;
+    int page = 1;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            int cat_id = bundle.getInt("cat_id", defaultValue);
-            String lang = TEPreferences.readString(getActivity(), "lang");
-            String user_id = TEPreferences.readString(getActivity(), "user_id");
+            cat_id = bundle.getInt("cat_id", defaultValue);
+            lang = TEPreferences.readString(getActivity(), "lang");
+            user_id = TEPreferences.readString(getActivity(), "user_id");
             listData = new ArrayList<>();
             dialog = Utils.showDialog(getActivity());
             dialog.show();
             ModelManager.getInstance().getListingManager()
-                    .listingTask(Operations.getListingParams(cat_id, lang, user_id));
+                    .listingTask(Operations.getListingParams(cat_id, lang, user_id, page));
         }
     }
 
@@ -73,6 +78,7 @@ public class ListingFragment extends Fragment implements View.OnClickListener{
         recyclerListing.setAdapter(listingAdapter);
 
         imgBack.setOnClickListener(this);
+        loadMore();
     }
 
     @Override
@@ -109,6 +115,7 @@ public class ListingFragment extends Fragment implements View.OnClickListener{
                 break;
             
             case Constants.LISTING_EMPTY:
+                recyclerListing.removeOnScrollListener(onScrollListener);
                 Toast.makeText(getActivity(), R.string.no_listing, Toast.LENGTH_SHORT).show();
                 break;
             
@@ -116,6 +123,36 @@ public class ListingFragment extends Fragment implements View.OnClickListener{
                 Toast.makeText(getActivity(), R.string.no_response, Toast.LENGTH_SHORT).show();
                 break;
         }
+    }
+
+    public void loadMore() {
+        final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerListing
+                .getLayoutManager();
+
+        onScrollListener = new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView,
+                                   int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                if(linearLayoutManager.findLastCompletelyVisibleItemPosition()== listData.size()-1)
+                    if (isAtBottom(recyclerListing)) {
+                        if (listData.size() > 1) {
+                            dialog.show();
+                            listData.clear();
+                            ModelManager.getInstance().getListingManager()
+                                    .listingTask(Operations.getListingParams(cat_id, lang, user_id, ++page));
+                        }
+                    }
+            }
+        };
+
+        recyclerListing.addOnScrollListener(onScrollListener);
+    }
+
+    public static boolean isAtBottom(RecyclerView recyclerView) {
+        return !ViewCompat.canScrollVertically(recyclerView, 1);
+
     }
 
     public void backScreen() {

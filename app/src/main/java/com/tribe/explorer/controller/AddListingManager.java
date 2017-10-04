@@ -33,40 +33,43 @@ public class AddListingManager {
 
     public void addListingTask(Context context, String params, Uri uriLogo,
                                Uri uriCover, ArrayList<Uri> uriGallery) {
-        File logoFile = null, coverFile = null;
-        RequestBody requestLogo = null, requestCover;
+        Call<ResponseBody> resultCall;
+        final APIService apiInterface = APIClient.getClient().create(APIService.class);
+        File logoFile, coverFile;
+        RequestBody requestLogo, requestCover;
         MultipartBody.Part bodyLogo = null, bodyCover = null;
         MultipartBody.Part[] bodyGalleries = new MultipartBody.Part[0];
-        if (uriLogo != null)
-            logoFile = new File(ImagePicker.getRealPathFromURI(context, uriLogo));
-        if (uriCover != null)
-            coverFile = new File(ImagePicker.getRealPathFromURI(context, uriCover));
 
-        if (logoFile != null) {
-            requestLogo = RequestBody.create(MediaType.parse("multipart/form-data"), logoFile);
-            bodyLogo = MultipartBody.Part.createFormData("company_avatar",
-                    logoFile.getName(), requestLogo);
-        }
-        if (coverFile != null) {
+        if (uriCover != null) {
+            coverFile = new File(ImagePicker.getRealPathFromURI(context, uriCover));
             requestCover = RequestBody.create(MediaType.parse("multipart/form-data"), coverFile);
             bodyCover = MultipartBody.Part.createFormData("cover_image",
                     coverFile.getName(), requestCover);
         }
+        if (uriLogo != null) {
+            logoFile = new File(ImagePicker.getRealPathFromURI(context, uriLogo));
+            requestLogo = RequestBody.create(MediaType.parse("multipart/form-data"), logoFile);
+            bodyLogo = MultipartBody.Part.createFormData("company_avatar",
+                    logoFile.getName(), requestLogo);
+        }
         if (!uriGallery.isEmpty()) {
             bodyGalleries = new MultipartBody.Part[uriGallery.size()];
-
+            int j = 1;
             for (int i=0; i<uriGallery.size(); i++) {
-                File galleryFile = new File(ImagePicker.getRealPathFromURI(context, uriGallery.get(i)));;
+                File galleryFile = new File(ImagePicker.getRealPathFromURI(context, uriGallery.get(i)));
                 RequestBody requestGallery = RequestBody.create(MediaType.parse("multipart/form-data"),
                         galleryFile);
-                bodyGalleries[i] = MultipartBody.Part.createFormData("gallery_images"+ ++i,
+                bodyGalleries[i] = MultipartBody.Part.createFormData("gallery_images"+ j,
                         galleryFile.getName(), requestGallery);
+                j++;
             }
         }
 
-        final APIService apiInterface = APIClient.getClient().create(APIService.class);
-        Call<ResponseBody> resultCall = apiInterface.addListing(params,
-                bodyLogo, bodyCover, bodyGalleries);
+        if (uriLogo == null && uriCover == null && uriGallery.isEmpty())
+            resultCall = apiInterface.response(params);
+        else
+            resultCall = apiInterface.addListing(params, bodyLogo, bodyCover, bodyGalleries);
+
         resultCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

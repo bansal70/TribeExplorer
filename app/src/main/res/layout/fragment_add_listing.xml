@@ -338,6 +338,54 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
+                android:text="@string/facebook"
+                android:textAppearance="@style/TextAppearance.FontPath"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_12ssp" />
+
+            <EditText
+                android:id="@+id/editFacebookUrl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/facebook_hint"
+                android:inputType="textUri" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="@string/twitter"
+                android:textAppearance="@style/TextAppearance.FontPath"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_12ssp" />
+
+            <EditText
+                android:id="@+id/editTwitterUrl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/twitter_url"
+                android:inputType="textUri" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="@string/instagram"
+                android:textAppearance="@style/TextAppearance.FontPath"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/_12ssp" />
+
+            <EditText
+                    android:id="@+id/editInstagramUrl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/instagram_hint"
+                android:inputType="textUri" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:text="@string/timezone"
                 android:textAppearance="@style/TextAppearance.FontPath"
                 android:textColor="@color/colorPrimary"

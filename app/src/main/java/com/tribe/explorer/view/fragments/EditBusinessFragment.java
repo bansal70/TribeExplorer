@@ -33,6 +33,7 @@ import android.widget.Toast;
 import com.tribe.explorer.R;
 import com.tribe.explorer.controller.HomeManager;
 import com.tribe.explorer.controller.LanguageManager;
+import com.tribe.explorer.controller.ListingManager;
 import com.tribe.explorer.controller.ModelManager;
 import com.tribe.explorer.model.Config;
 import com.tribe.explorer.model.Constants;
@@ -43,27 +44,30 @@ import com.tribe.explorer.model.Utils;
 import com.tribe.explorer.model.beans.CategoriesData;
 import com.tribe.explorer.model.beans.Language;
 import com.tribe.explorer.model.beans.LanguageData;
+import com.tribe.explorer.model.beans.ListingData;
 import com.tribe.explorer.model.beans.RegionData;
 import com.tribe.explorer.model.custom.ImagePicker;
 import com.tribe.explorer.view.LocationActivity;
 import com.tribe.explorer.view.adapters.CategoriesAdapter;
+import com.tribe.explorer.view.adapters.EditHoursAdapter;
 import com.tribe.explorer.view.adapters.GalleryAdapter;
-import com.tribe.explorer.view.adapters.HoursAdapter;
 import com.tribe.explorer.view.adapters.LanguageAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONArray;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.R.attr.defaultValue;
 import static android.app.Activity.RESULT_OK;
 import static android.os.Build.VERSION_CODES.M;
 
-public class AddListingFragment extends Fragment implements View.OnClickListener,
+public class EditBusinessFragment extends Fragment implements View.OnClickListener,
         AdapterView.OnItemSelectedListener {
-    private final String TAG = AddListingFragment.class.getSimpleName();
+    private final String TAG = EditBusinessFragment.class.getSimpleName();
 
     EditText editEmail, editBusinessName, editContact, editCategory, editBusinessLabel,
             editWeb, editPhone, editVideoURL, editDescription,
@@ -72,7 +76,7 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
     TextView editLocation, tvCompanyLogo, tvCover, tvGallery, tvAddHours, tvAddLanguage, tvDone;
     ImageView imgCover, imgDelete, imgLogo, imgLogoDelete;
     RecyclerView recyclerHours, recyclerLanguage, recyclerGallery;
-    HoursAdapter hoursAdapter;
+    EditHoursAdapter editHoursAdapter;
     GalleryAdapter galleryAdapter;
     boolean isHours = false, isGallery = false, isCover = false;
     RelativeLayout rlCover, rlCompany;
@@ -95,19 +99,27 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
     private LanguageAdapter languageAdapter;
     private ArrayAdapter<String> listAdapter, regionAdapter, timezoneAdapter;
     ImageView imgBack;
+    private List<ListingData.Data> listingData;
+    int position, listing_id;
     private ArrayList<Integer> catIdList;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Utils.location = "";
-        email = TEPreferences.readString(getActivity(), "email");
-        user_id = TEPreferences.readString(getActivity(), "user_id");
-        lang = TEPreferences.readString(getActivity(), "lang");
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            listing_id = bundle.getInt("cat_id", defaultValue);
+            position = bundle.getInt("position", defaultValue);
+            Utils.location = "";
+            email = TEPreferences.readString(getActivity(), "email");
+            user_id = TEPreferences.readString(getActivity(), "user_id");
+            lang = TEPreferences.readString(getActivity(), "lang");
+        }
     }
 
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_listing, container, false);
         initViews(view);
 
@@ -115,6 +127,8 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
     }
 
     public void initViews(View view) {
+        listingData = ListingManager.dataList;
+        ListingData.Data data = listingData.get(position);
         Operations.jsonLanguages = new JSONArray();
         categories = new ArrayList<>();
         languagesList = new ArrayList<>();
@@ -165,14 +179,17 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
         recyclerHours = view.findViewById(R.id.recyclerHours);
         recyclerHours.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerHours.setNestedScrollingEnabled(false);
-        hoursAdapter = new HoursAdapter(getActivity());
-        recyclerHours.setAdapter(hoursAdapter);
+
+        editHoursAdapter = new EditHoursAdapter(getActivity(), data);
+        recyclerHours.setAdapter(editHoursAdapter);
+        recyclerHours.setVisibility(View.VISIBLE);
 
         recyclerLanguage = view.findViewById(R.id.recyclerLanguage);
         recyclerLanguage.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerLanguage.setNestedScrollingEnabled(false);
 
         recyclerGallery = view.findViewById(R.id.recyclerGallery);
+        recyclerGallery.setVisibility(View.VISIBLE);
         recyclerGallery.setLayoutManager(new GridLayoutManager(getActivity(), 4));
         DividerItemDecoration decor = new DividerItemDecoration(getActivity(),
                 DividerItemDecoration.HORIZONTAL);
@@ -248,34 +265,70 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
         tvLangAdd.setOnClickListener(this);
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-        switch (adapterView.getId()) {
-            case R.id.spinner:
-                LanguageData.Data data = dataList.get(position);
-                str_language = data.language;
-                id = data.id;
-                break;
-
-            case R.id.spinnerRegion:
-                if (position > 0)
-                    region = regionsList.get(position);
-                else
-                    region = "";
-                break;
-
-            case R.id.spinnerTimezone:
-                if (position > 0)
-                    timezone = timezoneList.get(position);
-                else
-                    timezone = "";
-                break;
+    public void setData() {
+        editBusinessName.setText(listingData.get(position).title);
+        editLocation.setText(listingData.get(position).loc);
+        editContact.setText(listingData.get(position).contactEmail);
+        int regionPosition = regionAdapter.getPosition(listingData.get(position).region.get(0));
+        spinnerRegion.setSelection(regionPosition);
+        for (int id : listingData.get(position).category_id) {
+            catIdList.add(id);
         }
-    }
+        editCategory.setText(listingData.get(position).category.toString().replace("[", "").replace("]", ""));
+        editBusinessLabel.setText(listingData.get(position).label.toString().replace("[", "").replace("]", ""));
+        editWeb.setText(listingData.get(position).website);
+        editPhone.setText(listingData.get(position).phone);
+        editVideoURL.setText(listingData.get(position).vedio);
+        editDescription.setText(listingData.get(position).content);
+        editFacebookUrl.setText(listingData.get(position).facebookUrl);
+        editTwitterUrl.setText(listingData.get(position).twitterUrl);
+        editInstagramUrl.setText(listingData.get(position).instagramUrl);
+        int timezonePosition = timezoneAdapter.getPosition(listingData.get(position).jobHoursTimezone);
+        spinnerTimezone.setSelection(timezonePosition);
+        Utils.setImage(getActivity(), listingData.get(position).coverImage, imgCover);
 
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
+        if (!listingData.get(position).companyAvatar.isEmpty())
+            rlCompany.setVisibility(View.VISIBLE);
+        if (!listingData.get(position).coverImage.isEmpty())
+            rlCover.setVisibility(View.VISIBLE);
+        String[] split = listingData.get(position).companyAvatar.split("/");
+        String name = split[split.length-1];
 
+        Utils.downloadImage(getActivity(), listingData.get(position).companyAvatar, name, imgLogo, "logo");
+        Utils.downloadImage(getActivity(), listingData.get(position).coverImage, name, imgCover, "cover");
+       // Utils.setImage(getActivity(), listingData.get(position).companyAvatar, imgLogo);
+        //Utils.setImage(getActivity(), listingData.get(position).coverImage, imgCover);
+
+        try {
+            URL urlCover = new URL(listingData.get(position).coverImage);
+            uriCover = Uri.parse(urlCover.toURI().toString());
+            URL urlLogo = new URL(listingData.get(position).companyAvatar);
+            uriLogo = Uri.parse(urlLogo.toURI().toString());
+         //   imgCover.setImageURI(uriCover);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        for (String images : listingData.get(position).galleryImages) {
+            try {
+                Utils.downloadImage(getActivity(), images, name, null, "gallery");
+                URL url = new URL(images);
+                Uri uri = Uri.parse(url.toURI().toString());
+                uriList.add(uri);
+                galleryAdapter.notifyDataSetChanged();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        for (int i=0; i < listingData.get(position).language.size(); i++) {
+            String owner = listingData.get(position).language.get(i).name;
+            String lang = listingData.get(position).language.get(i).language;
+
+            Language language = new Language(owner, lang, owner);
+            list.add(language);
+        }
+        languageAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -371,12 +424,107 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
                     hours = hours.substring(1, hours.length()-1);
                 }*/
 
-                String params = Operations.getAddListingParams(user_id, email, business, contact_email,
-                        description, location, website, videoUrl, phone, businessCategories,
-                        labels, region, hours, languages, timezone,uriList.size(),
-                        facebookUrl, twitterUrl, instagramUrl, lang);
+                String params = Operations.getEditListingParams(listing_id, user_id, email, business,
+                        contact_email, description, location, website, videoUrl, phone, businessCategories,
+                        labels, region, hours, languages, timezone, Utils.uriGallery.size(), facebookUrl,
+                        twitterUrl, instagramUrl, lang);
                 ModelManager.getInstance().getAddListingManager().addListingTask(getActivity(),
-                        params, uriLogo, uriCover, uriList);
+                        params, Utils.uriLogo, Utils.uriCover, Utils.uriGallery);
+                break;
+        }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+        switch (adapterView.getId()) {
+            case R.id.spinner:
+                LanguageData.Data data = dataList.get(position);
+                str_language = data.language;
+                id = data.id;
+                break;
+
+            case R.id.spinnerRegion:
+                if (position > 0)
+                    region = regionsList.get(position);
+                else
+                    region = "";
+                break;
+
+            case R.id.spinnerTimezone:
+                if (position > 0)
+                    timezone = timezoneList.get(position);
+                else
+                    timezone = "";
+                break;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (!Utils.location.isEmpty())
+            editLocation.setText(Utils.location);
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(sticky = true)
+    public void onEvent(Event event) {
+        dialog.dismiss();
+        EventBus.getDefault().removeAllStickyEvents();
+        switch (event.getKey()) {
+            case Constants.DETAILS_SUCCESS:
+                dataList.addAll(LanguageManager.languagesList);
+                for (LanguageData.Data data: dataList) {
+                    languagesList.add(data.language);
+                }
+                listAdapter.notifyDataSetChanged();
+                for (RegionData.Data data : LanguageManager.regionsList) {
+                    regionsList.add(data.name);
+                }
+                regionAdapter.notifyDataSetChanged();
+                timezoneList.addAll(LanguageManager.timezoneList);
+                timezoneAdapter.notifyDataSetChanged();
+                setData();
+                break;
+
+            case Constants.LANGUAGE_EMPTY:
+                backScreen();
+                Toast.makeText(getActivity(), R.string.error_processing_request, Toast.LENGTH_SHORT).show();
+                break;
+
+            case Constants.REGION_EMPTY:
+                Toast.makeText(getActivity(), R.string.error_processing_request, Toast.LENGTH_SHORT).show();
+                backScreen();
+                break;
+
+            case Constants.TIMEZONE_EMPTY:
+                Toast.makeText(getActivity(), R.string.error_processing_request, Toast.LENGTH_SHORT).show();
+                backScreen();
+                break;
+
+            case Constants.ADD_LISTING_SUCCESS:
+                backScreen();
+                Toast.makeText(getActivity(), R.string.listing_updated, Toast.LENGTH_SHORT).show();
+                break;
+
+            case Constants.ADD_LISTING_FAILED:
+                Toast.makeText(getActivity(), R.string.fill_required_fields, Toast.LENGTH_SHORT).show();
+                break;
+
+            case Constants.NO_RESPONSE:
                 break;
         }
     }
@@ -421,69 +569,6 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
             recyclerHours.setVisibility(View.GONE);
             isHours = false;
             tvAddHours.setText(R.string.plus);
-        }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (!Utils.location.isEmpty())
-            editLocation.setText(Utils.location);
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Subscribe(sticky = true)
-    public void onEvent(Event event) {
-        dialog.dismiss();
-        EventBus.getDefault().removeAllStickyEvents();
-        switch (event.getKey()) {
-            case Constants.DETAILS_SUCCESS:
-                dataList.addAll(LanguageManager.languagesList);
-                for (LanguageData.Data data: dataList) {
-                    languagesList.add(data.language);
-                }
-                listAdapter.notifyDataSetChanged();
-                for (RegionData.Data data : LanguageManager.regionsList) {
-                    regionsList.add(data.name);
-                }
-                regionAdapter.notifyDataSetChanged();
-                timezoneList.addAll(LanguageManager.timezoneList);
-                timezoneAdapter.notifyDataSetChanged();
-                break;
-
-            case Constants.LANGUAGE_EMPTY:
-                backScreen();
-                Toast.makeText(getActivity(), R.string.error_processing_request, Toast.LENGTH_SHORT).show();
-                break;
-
-            case Constants.REGION_EMPTY:
-                Toast.makeText(getActivity(), R.string.error_processing_request, Toast.LENGTH_SHORT).show();
-                backScreen();
-                break;
-
-            case Constants.TIMEZONE_EMPTY:
-                Toast.makeText(getActivity(), R.string.error_processing_request, Toast.LENGTH_SHORT).show();
-                backScreen();
-                break;
-
-            case Constants.ADD_LISTING_SUCCESS:
-                backScreen();
-                Toast.makeText(getActivity(), R.string.listing_added, Toast.LENGTH_SHORT).show();
-                break;
-
-            case Constants.ADD_LISTING_FAILED:
-                Toast.makeText(getActivity(), R.string.fill_required_fields, Toast.LENGTH_SHORT).show();
-                break;
-
-            case Constants.NO_RESPONSE:
-                break;
         }
     }
 
@@ -542,24 +627,6 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
             Uri uriGallery = ImagePicker.getImageUri(getActivity(), photo);
             uriList.add(uriGallery);
             galleryAdapter.notifyDataSetChanged();
-
-            /*File imageFile = ImagePicker.getTempFile(getActivity());
-            boolean isCamera = (data == null || data.getData() == null ||
-                    data.getData().toString().contains(imageFile.toString()));
-
-            if (isCamera) {
-                Bitmap photo = ImagePicker.getImageFromResult(getActivity(), resultCode, data);
-                Uri tempUri = ImagePicker.getImageUri(getActivity(), photo);
-                uriList.add(tempUri);
-                galleryAdapter.notifyDataSetChanged();
-                return;
-            }
-
-            for (int i = 0; i < data.getClipData().getItemCount(); i++) {
-                Uri selectedImage = data.getClipData().getItemAt(i).getUri();
-                uriList.add(selectedImage);
-                galleryAdapter.notifyDataSetChanged();
-            }*/
         } else if (requestCode == REQUEST_IMAGE_COVER && resultCode == RESULT_OK) {
             Bitmap photo = ImagePicker.getImageFromResult(getActivity(), resultCode, data);
             uriCover = ImagePicker.getImageUri(getActivity(), photo);
@@ -572,6 +639,7 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
             imgLogo.setImageBitmap(photo);
         }
     }
+
 
     public void backScreen() {
         if (getActivity().getSupportFragmentManager().getBackStackEntryCount() > 0) {
@@ -587,5 +655,4 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
             data.setSelected(false);
         }
     }
-
 }

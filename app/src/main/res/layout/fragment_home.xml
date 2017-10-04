@@ -2,93 +2,128 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/imageView"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_40sdp"
-        android:contentDescription="@null"
-        android:src="@mipmap/hdr_" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:background="#fff"
+            android:contentDescription="@null"
+            android:src="@mipmap/hdr_" />
+
+        <ImageView
+            android:id="@+id/imgSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/search_blue"
+            android:layout_centerInParent="true"
+            android:padding="@dimen/_10sdp"
+            android:foreground="?selectableItemBackground"
+            android:contentDescription="@string/menu_search"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
+
+    </RelativeLayout>
 
     <include layout="@layout/header"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="@dimen/_10sdp"
-        android:paddingRight="@dimen/_10sdp"
-        android:paddingTop="@dimen/_10sdp">
+        android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/editQuery"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerCategories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/round_shape_edittext"
-            android:hint="@string/looking_for"
-            android:inputType="text"
-            android:padding="@dimen/_8sdp" />
+            app:cardUseCompatPadding="true">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp">
-
-            <TextView
-                android:id="@+id/tvLocation"
+            <LinearLayout
+                android:id="@+id/searchLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/round_shape_edittext"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:hint="@string/location"
-                android:padding="@dimen/_10sdp" />
+                android:orientation="vertical"
+                android:padding="@dimen/_10sdp"
+                android:visibility="gone"
+                android:paddingTop="@dimen/_10sdp">
 
-            <ImageView
-                android:id="@+id/imgLocation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:clickable="true"
-                android:contentDescription="@string/location"
-                android:foreground="?selectableItemBackground"
-                android:padding="@dimen/_2sdp"
-                android:src="@mipmap/ic_location" />
+                <EditText
+                    android:id="@+id/editQuery"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/round_shape_edittext"
+                    android:hint="@string/looking_for"
+                    android:inputType="text"
+                    android:padding="@dimen/_8sdp" />
 
-        </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp">
 
-        <TextView
-            android:id="@+id/tvCategory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:background="@drawable/round_shape_edittext"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:hint="@string/language"
-            android:padding="@dimen/_10sdp" />
+                    <TextView
+                        android:id="@+id/tvLocation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/round_shape_edittext"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:hint="@string/location"
+                        android:padding="@dimen/_10sdp" />
 
-        <TextView
-            android:id="@+id/tvSearch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:background="@color/colorPrimary"
-            android:foreground="@drawable/ripple"
-            android:gravity="center"
-            android:padding="@dimen/_8sdp"
-            android:text="@string/menu_search"
-            android:textColor="#fff" />
+                    <ImageView
+                        android:id="@+id/imgLocation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:clickable="true"
+                        android:contentDescription="@string/location"
+                        android:foreground="?selectableItemBackground"
+                        android:padding="@dimen/_2sdp"
+                        android:src="@mipmap/ic_location" />
 
-    </LinearLayout>
+                </RelativeLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerCategories"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/_10sdp"/>
+                <TextView
+                    android:id="@+id/tvCategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:background="@drawable/round_shape_edittext"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="@string/language"
+                    android:padding="@dimen/_10sdp" />
+
+                <TextView
+                    android:id="@+id/tvSearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:background="@color/colorPrimary"
+                    android:foreground="@drawable/ripple"
+                    android:gravity="center"
+                    android:padding="@dimen/_8sdp"
+                    android:text="@string/menu_search"
+                    android:textColor="#fff" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+
+    </RelativeLayout>
 
 </LinearLayout>

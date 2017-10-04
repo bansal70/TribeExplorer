@@ -26,6 +26,7 @@ public class ModelManager {
     private ClaimListingManager claimListingManager;
     private AddListingManager addListingManager;
     private AddPhotoManager addPhotoManager;
+    private DeleteListingManager deleteListingManager;
 
     public static ModelManager getInstance() {
         if (modelManager == null)
@@ -54,6 +55,7 @@ public class ModelManager {
         claimListingManager = new ClaimListingManager();
         addListingManager = new AddListingManager();
         addPhotoManager = new AddPhotoManager();
+        deleteListingManager = new DeleteListingManager();
     }
 
     public SimpleLoginManager getLoginManager() {
@@ -130,5 +132,9 @@ public class ModelManager {
 
     public AddPhotoManager getAddPhotoManager() {
         return addPhotoManager;
+    }
+
+    public DeleteListingManager getDeleteListingManager() {
+        return deleteListingManager;
     }
 }

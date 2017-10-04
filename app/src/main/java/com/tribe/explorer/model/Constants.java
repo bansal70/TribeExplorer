@@ -70,4 +70,7 @@ public class Constants {
 
     public static final int ADD_PHOTO_SUCCESS = 1038;
     public static final int ADD_PHOTO_FAILED = 1039;
+
+    public static final int DELETE_LISTING_SUCCESS = 1040;
+    public static final int DELETE_LISTING_ERROR = 1041;
 }

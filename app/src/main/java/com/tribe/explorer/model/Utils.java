@@ -10,27 +10,40 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.media.MediaMetadataRetriever;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.tribe.explorer.BuildConfig;
 import com.tribe.explorer.R;
 import com.tribe.explorer.model.beans.Language;
 import com.tribe.explorer.view.LoginActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -43,6 +56,8 @@ public class Utils {
 
     public static String location = "";
     public static List<Language> langList;
+    public static Uri uriLogo, uriCover;
+    public static ArrayList<Uri> uriGallery = new ArrayList<>();
 
     @SuppressWarnings("ConstantConditions")
     public static void dialogError(Context context) {
@@ -102,6 +117,50 @@ public class Utils {
                 .placeholder(R.mipmap.placeholder)
                 .error(R.mipmap.placeholder)
                 .into(view);
+    }
+
+    public static void downloadImage(final Context mContext, String imageUrl, final String imageName,
+                                     final ImageView imageView, final String image) {
+        Glide.with(mContext)
+                .load(imageUrl)
+                .asBitmap()
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        try {
+                            String root = Environment.getExternalStorageDirectory().toString();
+                            File myDir = new File(root + File.separator + mContext.getString(R.string.app_name));
+                            boolean isSuccess = myDir.mkdirs();
+                            File file = new File(myDir, imageName);
+                            FileOutputStream out = new FileOutputStream(file);
+                            resource.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                            out.flush();
+                            out.close();
+                            switch (image) {
+                                case "logo":
+                                    uriLogo = FileProvider.getUriForFile(mContext,
+                                            BuildConfig.APPLICATION_ID + ".provider", file);
+                                    imageView.setImageBitmap(resource);
+                                    break;
+                                case "cover":
+                                    uriCover = FileProvider.getUriForFile(mContext,
+                                            BuildConfig.APPLICATION_ID + ".provider", file);
+                                    imageView.setImageBitmap(resource);
+                                    break;
+                                case "gallery":
+                                    uriGallery.add(FileProvider.getUriForFile(mContext,
+                                            BuildConfig.APPLICATION_ID + ".provider", file));
+                                    break;
+                            }
+
+                            Log.e(TAG, "uri:" + uriLogo);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                });
     }
 
     public static String getCompleteAddressString(Context context, double LATITUDE, double LONGITUDE) {
@@ -170,11 +229,36 @@ public class Utils {
         }.execute();
     }
 
+    public static void changeRatingBarColor(Context mContext, RatingBar ratingBar, int filledColor, int halfFilledColor, int emptyStarColor) {
+        LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
+        stars.getDrawable(2).setColorFilter(ContextCompat.getColor(mContext,
+                filledColor), PorterDuff.Mode.SRC_ATOP); // for filled stars
+        stars.getDrawable(1).setColorFilter(ContextCompat.getColor(mContext,
+                halfFilledColor), PorterDuff.Mode.SRC_ATOP); // for half filled stars
+        stars.getDrawable(0).setColorFilter(ContextCompat.getColor(mContext,
+                emptyStarColor), PorterDuff.Mode.SRC_ATOP); // for empty stars
+    }
+
+    public static AlertDialog.Builder deleteDialog(final Context context) {
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
+        alertBuilder.setMessage(R.string.sure_to_delete_listing);
+
+        alertBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+
+        return alertBuilder;
+    }
+
+
     public static void logoutAlert(final Activity context) {
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
-        alertBuilder.setMessage("Would you like to go out of the app?");
+        alertBuilder.setMessage(R.string.logout_from_app);
 
-        alertBuilder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+        alertBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
@@ -184,7 +268,7 @@ public class Utils {
                 Toast.makeText(context, R.string.logged_out, Toast.LENGTH_SHORT).show();
             }
         });
-        alertBuilder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+        alertBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();

@@ -10,10 +10,8 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.tribe.explorer.R;
-import com.tribe.explorer.controller.ModelManager;
 import com.tribe.explorer.model.Constants;
 import com.tribe.explorer.model.Event;
-import com.tribe.explorer.model.Operations;
 import com.tribe.explorer.model.TEPreferences;
 import com.tribe.explorer.model.Utils;
 import com.tribe.explorer.model.custom.BottomNavigationViewHelper;
@@ -45,11 +43,15 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         String lang = TEPreferences.readString(this, "lang");
         dialog = Utils.showDialog(this);
         dialog.show();
-        ModelManager.getInstance().getHomeManager().categoriesTask(Operations.getCategoriesParams(lang));
+       // ModelManager.getInstance().getHomeManager().categoriesTask(Operations.getCategoriesParams(lang, 1));
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_layout, new HomeFragment());
+        transaction.commit();
     }
 
     @Override
@@ -105,9 +107,9 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         dialog.dismiss();
         switch (event.getKey()) {
             case Constants.CATEGORIES_SUCCESS:
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                /*FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.frame_layout, new HomeFragment());
-                transaction.commit();
+                transaction.commit();*/
                 break;
 
             case Constants.CATEGORIES_ERROR:

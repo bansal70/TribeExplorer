@@ -33,6 +33,18 @@ public class ListingData {
         @SerializedName("email")
         @Expose
         public String email;
+        @SerializedName("facebook_url")
+        @Expose
+        public String facebookUrl;
+        @SerializedName("twitter_url")
+        @Expose
+        public String twitterUrl;
+        @SerializedName("instagram_url")
+        @Expose
+        public String instagramUrl;
+        @SerializedName("contact_email")
+        @Expose
+        public String contactEmail;
         @SerializedName("website")
         @Expose
         public String website;
@@ -63,6 +75,9 @@ public class ListingData {
         @SerializedName("category")
         @Expose
         public List<String> category = null;
+        @SerializedName("category_id")
+        @Expose
+        public List<Integer> category_id = null;
         @SerializedName("job_hours")
         @Expose
         public JobHours jobHours;
@@ -90,6 +105,9 @@ public class ListingData {
         @SerializedName("fav")
         @Expose
         public String fav;
+        @SerializedName("fav_count")
+        @Expose
+        public String favCount;
         @SerializedName("cover_image")
         @Expose
         public String coverImage;

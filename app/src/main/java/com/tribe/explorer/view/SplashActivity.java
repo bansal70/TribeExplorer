@@ -12,6 +12,8 @@ import android.widget.Spinner;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.tribe.explorer.R;
+import com.tribe.explorer.controller.ModelManager;
+import com.tribe.explorer.model.Config;
 import com.tribe.explorer.model.TEPreferences;
 
 import java.util.ArrayList;
@@ -60,6 +62,7 @@ public class SplashActivity extends BaseActivity implements AdapterView.OnItemSe
                 R.layout.spinner_item, languageList);
 
         listAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ModelManager.getInstance().getLanguageManager().languageTask(this, Config.LANGUAGE_URL);
 
         spinner.setAdapter(listAdapter);
         spinner.setOnItemSelectedListener(this);

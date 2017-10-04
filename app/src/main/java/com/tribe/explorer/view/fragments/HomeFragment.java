@@ -16,6 +16,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -24,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,22 +41,30 @@ import com.tribe.explorer.controller.HomeManager;
 import com.tribe.explorer.controller.ModelManager;
 import com.tribe.explorer.model.Constants;
 import com.tribe.explorer.model.Event;
+import com.tribe.explorer.model.Operations;
 import com.tribe.explorer.model.TEPreferences;
 import com.tribe.explorer.model.Utils;
+import com.tribe.explorer.model.beans.CategoriesData;
 import com.tribe.explorer.view.adapters.HomeAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 
 public class HomeFragment extends Fragment implements View.OnClickListener,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
+
     RecyclerView recyclerCategories;
     HomeAdapter homeAdapter;
+    private List<CategoriesData.Data> categoriesList;
     Dialog dialog;
-    ImageView imgLocation;
+    ImageView imgLocation, imgSearch;
+    LinearLayout searchLayout;
     private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 100;
     private static final int PERMISSION_REQUEST_CODE = 10001;
     GoogleApiClient mGoogleApiClient;
@@ -64,6 +74,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener,
     EditText editQuery;
     String lat = "", lng = "";
     String lang, user_id;
+    RecyclerView.OnScrollListener onScrollListener;
+    int page = 1;
+    boolean isSearch = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -94,19 +107,28 @@ public class HomeFragment extends Fragment implements View.OnClickListener,
 
     private void initViews(View v) {
         dialog = Utils.showDialog(getActivity());
+        categoriesList = new ArrayList<>();
+        dialog.show();
+        ModelManager.getInstance().getHomeManager().categoriesTask(Operations.getCategoriesParams(lang, 1));
+
+        searchLayout = v.findViewById(R.id.searchLayout);
         imgLocation = v.findViewById(R.id.imgLocation);
+        imgSearch = v.findViewById(R.id.imgSearch);
         tvLocation = v.findViewById(R.id.tvLocation);
         tvSearch = v.findViewById(R.id.tvSearch);
         editQuery = v.findViewById(R.id.editQuery);
         recyclerCategories = v.findViewById(R.id.recyclerCategories);
         recyclerCategories.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        homeAdapter = new HomeAdapter(getActivity(), HomeManager.categoriesList);
+        //categoriesList.addAll(HomeManager.categoriesList);
+        homeAdapter = new HomeAdapter(getActivity(), categoriesList);
         recyclerCategories.setAdapter(homeAdapter);
 
         imgLocation.setOnClickListener(this);
         tvLocation.setOnClickListener(this);
         tvSearch.setOnClickListener(this);
+        imgSearch.setOnClickListener(this);
+        loadMore();
     }
 
     @Override
@@ -122,6 +144,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener,
 
             case R.id.tvSearch:
                 selectFragment(new HomeListingFragment());
+                break;
+
+            case R.id.imgSearch:
+                if (isSearch) {
+                    imgSearch.setImageResource(R.mipmap.search_blue);
+                    isSearch = false;
+                    searchLayout.setVisibility(View.GONE);
+                } else {
+                    imgSearch.setImageResource(R.drawable.ic_cancel);
+                    isSearch = true;
+                    searchLayout.setVisibility(View.VISIBLE);
+                }
                 break;
         }
     }
@@ -255,7 +289,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener,
 
     @Subscribe(sticky = true)
     public void onEvent(Event event) {
+        dialog.dismiss();
+        EventBus.getDefault().removeAllStickyEvents();
         switch (event.getKey()) {
+            case Constants.CATEGORIES_SUCCESS:
+                categoriesList.addAll(HomeManager.categoriesList);
+                homeAdapter.notifyDataSetChanged();
+                break;
+
+            case Constants.CATEGORIES_ERROR:
+                recyclerCategories.removeOnScrollListener(onScrollListener);
+                break;
+
             case Constants.LOCATION_SUCCESS:
                 lat = String.valueOf(TEPreferences.readDouble(getActivity(), "latitude"));
                 lng = String.valueOf(TEPreferences.readDouble(getActivity(), "longitude"));
@@ -264,7 +309,41 @@ public class HomeFragment extends Fragment implements View.OnClickListener,
 
             case Constants.LOCATION_EMPTY:
                 break;
+
+            case Constants.NO_RESPONSE:
+                Toast.makeText(getActivity(), R.string.something_went_wrong, Toast.LENGTH_SHORT).show();
+                break;
         }
+    }
+
+    public void loadMore() {
+        final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerCategories
+                .getLayoutManager();
+
+        onScrollListener = new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView,
+                                   int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                if(linearLayoutManager.findLastCompletelyVisibleItemPosition()== categoriesList.size()-1)
+                if (isAtBottom(recyclerCategories)) {
+                    if (HomeManager.categoriesList.size() > 1) {
+                        dialog.show();
+                        HomeManager.categoriesList.clear();
+                        ModelManager.getInstance().getHomeManager().categoriesTask(Operations
+                                .getCategoriesParams(lang, ++page));
+                    }
+                }
+            }
+        };
+
+        recyclerCategories.addOnScrollListener(onScrollListener);
+    }
+
+    public static boolean isAtBottom(RecyclerView recyclerView) {
+        return !ViewCompat.canScrollVertically(recyclerView, 1);
+
     }
 
     @Override

@@ -143,7 +143,7 @@
     <string name="google_maps_key">AIzaSyDDYmhfyC7KnZgJDlQldnDkSt317EAU9_s</string>
     <string name="opening_hours">Opening Hours</string>
     <string name="no_photos">There are no photos for this listing.</string>
-    <string name="to">   to   </string>
+    <string name="to">to</string>
     <string name="looking_for">What are you looking for?</string>
     <string name="radius">Radius:</string>
     <string name="list">LIST</string>
@@ -198,4 +198,14 @@
     <string name="random">random</string>
     <string name="most_popular">most popular</string>
     <string name="failed_to_add_photo">Failed to add photo. Please try again.</string>
+    <string name="facebook">Facebook</string>
+    <string name="twitter">Twitter</string>
+    <string name="instagram">Instagram</string>
+    <string name="instagram_hint">https://www.instagram.com/username</string>
+    <string name="twitter_url">https://twitter.com/username</string>
+    <string name="facebook_hint">https://www.facebook.com/username</string>
+    <string name="logout_from_app">Would you like to go out of the app?</string>
+    <string name="sure_to_delete_listing">Are you sure you want to delete your listing?</string>
+    <string name="listing_deleted">Your listing has been deleted successfully</string>
+    <string name="listing_updated">Your listing has been updated successfully</string>
 </resources>

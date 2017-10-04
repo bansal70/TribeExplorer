@@ -21,6 +21,7 @@ public class Operations {
     public static JSONArray jsonLanguages = new JSONArray();
     public static ArrayList<String> labelsList = new ArrayList<>();
     public static ArrayList<String> hours = new ArrayList<>();
+    public static String hoursOfOperation = "";
 
     public static String getLoginParams(String email, String password, String deviceToken,
                                         String deviceType, String lang) {
@@ -106,8 +107,9 @@ public class Operations {
         return params;
     }
 
-    public static String getCategoriesParams(String lang) {
-        String params = Config.CATEGORIES_URL + "?lang="+lang;
+    public static String getCategoriesParams(String lang, int page) {
+        String params = Config.CATEGORIES_URL + "?lang=" + lang
+                +"&page=" + page;
 
         Log.e(TAG, "categories params-- "+params);
 
@@ -118,7 +120,8 @@ public class Operations {
                                              String contact_email, String description, String location,
                                              String website, String video, String phone, String category,
                                              String labels, String region, String hours, String languages,
-                                             String timezone, int imgCount, String lang) {
+                                             String timezone, int imgCount, String facebookUrl,
+                                             String twitterUrl, String instagramUrl, String lang) {
 
         String params = Config.ADD_LISTING_URL + "?user_id=" +user_id + "&email=" + email
                 + "&listing_name=" + business_name +"&contact_email_Url=" + contact_email
@@ -126,7 +129,29 @@ public class Operations {
                 + "&video_url=" + video +"&Phone_number=" + phone + "&listing_category=" + category
                 + "&label=" + labels + "&listing_region=" + region + hours
                 + "&language=" + languages + "&timezone=" + timezone
-                + "&imgcount=" + imgCount + "&lang=" + lang;
+                + "&imgcount=" + imgCount + "&facebook_url=" + facebookUrl + "&twitter_url=" + twitterUrl
+                + "&instagram_url=" +instagramUrl + "&lang=" + lang;
+
+        Log.e(TAG, "add_listing params-- "+params);
+
+        return params;
+    }
+
+    public static String getEditListingParams(int listing_id, String user_id, String email, String business_name,
+                                             String contact_email, String description, String location,
+                                             String website, String video, String phone, String category,
+                                             String labels, String region, String hours, String languages,
+                                             String timezone, int imgCount, String facebookUrl,
+                                             String twitterUrl, String instagramUrl, String lang) {
+
+        String params = Config.EDIT_LISTING_URL + "?listing_id=" + listing_id + "&user_id=" +user_id
+                + "&email=" + email + "&listing_name=" + business_name +"&contact_email_Url=" + contact_email
+                + "&descrtiption=" + description +"&location=" + location + "&website=" + website
+                + "&video_url=" + video +"&Phone_number=" + phone + "&listing_category=" + category
+                + "&label=" + labels + "&listing_region=" + region + hours
+                + "&language=" + languages + "&timezone=" + timezone
+                + "&imgcount=" + imgCount + "&facebook_url=" + facebookUrl + "&twitter_url=" + twitterUrl
+                + "&instagram_url=" +instagramUrl + "&lang=" + lang;
 
         Log.e(TAG, "add_listing params-- "+params);
 
@@ -164,10 +189,11 @@ public class Operations {
         return jsonLanguages;
     }
 
-    public static String getListingParams(int category_id, String lang, String user_id) {
+    public static String getListingParams(int category_id, String lang, String user_id, int page) {
         String params = Config.LISTING_URL + "?cat_id="+category_id
-                +"&lang="+lang
-                +"&user_id="+user_id;
+                +"&lang=" + lang
+                +"&user_id=" + user_id
+                +"&page=" + page;
 
         Log.e(TAG, "listing params-- "+params);
 
@@ -269,6 +295,15 @@ public class Operations {
                 +"&lang="+lang;
 
         Log.e(TAG, "claim_listing params-- "+params);
+
+        return params;
+    }
+
+    public static String getDeleteListingParams(int listing_id, String lang) {
+        String params = Config.DELETE_LISTING_URL + "?listing_id=" + listing_id
+                +"&lang=" + lang;
+
+        Log.e(TAG, "delete_listing params-- "+params);
 
         return params;
     }

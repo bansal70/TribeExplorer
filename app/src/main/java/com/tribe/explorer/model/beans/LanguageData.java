@@ -17,6 +17,7 @@ public class LanguageData {
     @Expose
     public List<Data> data = null;
 
+
     public class Data {
         @SerializedName("id")
         @Expose
@@ -24,6 +25,9 @@ public class LanguageData {
         @SerializedName("language")
         @Expose
         public String language;
+        @SerializedName("url")
+        @Expose
+        public String url;
     }
 
 }

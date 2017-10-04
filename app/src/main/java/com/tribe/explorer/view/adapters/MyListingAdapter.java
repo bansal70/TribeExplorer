@@ -1,17 +1,15 @@
 package com.tribe.explorer.view.adapters;
 
-/*
- * Created by rishav on 9/14/2017.
- */
-
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,19 +33,20 @@ import com.tribe.explorer.model.Utils;
 import com.tribe.explorer.model.beans.ListingData;
 import com.tribe.explorer.model.custom.CircleTransform;
 import com.tribe.explorer.view.MainActivity;
+import com.tribe.explorer.view.fragments.EditBusinessFragment;
 import com.tribe.explorer.view.fragments.ListingDetailsFragment;
 
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.ViewHolder> {
+public class MyListingAdapter extends RecyclerView.Adapter<MyListingAdapter.ViewHolder> {
     private Context context;
     private List<ListingData.Data> listData;
     private String lang;
     private String user_id;
 
-    public ListingAdapter(Context context, List<ListingData.Data> listData) {
+    public MyListingAdapter(Context context, List<ListingData.Data> listData) {
         this.context = context;
         this.listData = listData;
         lang = TEPreferences.readString(context, "lang");
@@ -56,13 +55,13 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.ViewHold
     }
 
     @Override
-    public ListingAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.view_listing, parent, false);
+    public MyListingAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.view_my_listing, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ListingAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final MyListingAdapter.ViewHolder holder, int position) {
         ListingData.Data data = listData.get(position);
         holder.tvTitle.setText(data.title);
         holder.tvLocation.setText(data.loc);
@@ -120,7 +119,7 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.ViewHold
     @SuppressLint("NewApi")
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView tvTitle, tvLocation, tvPhone, tvFavCount;
-        private ImageView imgFeature, imgFavourite, imgAvatar, imgClaim;
+        private ImageView imgFeature, imgFavourite, imgAvatar, imgClaim, imgEdit, imgDelete;
         private RatingBar rbRatings;
         private LinearLayout layoutFlag;
 
@@ -136,17 +135,29 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.ViewHold
             imgFavourite = itemView.findViewById(R.id.imgFavourite);
             imgAvatar = itemView.findViewById(R.id.imgAvatar);
             imgClaim = itemView.findViewById(R.id.imgClaim);
+            imgEdit = itemView.findViewById(R.id.imgEdit);
+            imgDelete = itemView.findViewById(R.id.imgDelete);
             layoutFlag = itemView.findViewById(R.id.layoutFlag);
 
             imgFavourite.setOnClickListener(this);
             imgFeature.setOnClickListener(this);
+            imgEdit.setOnClickListener(this);
+            imgDelete.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.imgCover:
-                    replaceFragment(getAdapterPosition());
+                    replaceFragment(getAdapterPosition(), new ListingDetailsFragment());
+                    break;
+
+                case R.id.imgEdit:
+                    replaceFragment(getAdapterPosition(), new EditBusinessFragment());
+                    break;
+
+                case R.id.imgDelete:
+                    deleteListing(getAdapterPosition());
                     break;
 
                 case R.id.imgFavourite:
@@ -173,25 +184,42 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.ViewHold
                                 .getFavouriteParams(Config.REMOVE_FAV_URL, user_id, data.iD, lang));
                         imgFavourite.setImageResource(R.mipmap.ic_unfavourite);
                         Toast.makeText(context, listing_name + " " +
-                                        context.getString(R.string.fav_removed), Toast.LENGTH_LONG).show();
+                                context.getString(R.string.fav_removed), Toast.LENGTH_LONG).show();
                     }
                     else {
                         ModelManager.getInstance().getFavouriteManager().favouriteTask(Operations
                                 .getFavouriteParams(Config.ADD_FAV_URL, user_id, data.iD, lang));
                         imgFavourite.setImageResource(R.mipmap.ic_favourite);
                         Toast.makeText(context, listing_name + " " +
-                                        context.getString(R.string.fav_added), Toast.LENGTH_LONG).show();
+                                context.getString(R.string.fav_added), Toast.LENGTH_LONG).show();
                     }
                     break;
             }
         }
     }
 
-    private void replaceFragment(int position) {
+    private void deleteListing(final int position) {
+        final ListingData.Data listing = listData.get(position);
+        AlertDialog.Builder alert = Utils.deleteDialog(context);
+        alert.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+                ModelManager.getInstance().getDeleteListingManager().deleteListingTask(Operations
+                .getDeleteListingParams(listing.iD, lang));
+                listData.remove(position);
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, listData.size());
+                Toast.makeText(context, R.string.listing_deleted, Toast.LENGTH_SHORT).show();
+            }
+        }).create().show();
+    }
+
+    private void replaceFragment(int position, Fragment fragment) {
         ListingData.Data data = listData.get(position);
-        Fragment fragment = new ListingDetailsFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("cat_id", data.iD);
+        bundle.putInt("position", position);
         fragment.setArguments(bundle);
         FragmentManager fragmentManager = ((MainActivity)context).getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();

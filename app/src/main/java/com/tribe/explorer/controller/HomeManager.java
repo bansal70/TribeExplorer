@@ -20,7 +20,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class HomeManager {
-    private static final String TAG = HomeManager.class.getSimpleName();
     public static List<CategoriesData.Data> categoriesList = new ArrayList<>();
 
     public void categoriesTask(String params) {

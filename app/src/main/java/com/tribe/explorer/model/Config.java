@@ -11,6 +11,7 @@ public class Config {
     static final String SOCIAL_LOGIN_URL = "social_login.php";
     static final String CATEGORIES_URL = "GetCategoryList.php";
     static final String ADD_LISTING_URL = "add_listing.php";
+    static final String EDIT_LISTING_URL = "edit_business.php";
     public static final String LANGUAGE_URL = "language.php";
     public static final String REGION_URL = "region_list.php?lang=";
     public static final String TIMEZONE_URL = "timzone_list.php?lang=";
@@ -33,4 +34,6 @@ public class Config {
     static final String REVIEWS_URL = "getReview.php";
     static final String CLAIM_LISTING_URL = "addClaim.php";
     static final String ADD_PHOTO_URL = "add_photo.php";
+    static final String DELETE_LISTING_URL = "delete_business.php";
+
 }

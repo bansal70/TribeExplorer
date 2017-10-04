@@ -306,7 +306,7 @@ public class ListingDetailsFragment extends Fragment implements OnMapReadyCallba
 
         videoUrl = data.vedio;
         Utils.setThumbnail(imgThumbnail, videoUrl, imgPlay);
-        Utils.setImage(getActivity(), data.featured, imgFeatured);
+        Utils.setImage(getActivity(), data.companyAvatar, imgFeatured);
         tvTitle.setText(data.title);
         tvLocation.setText(data.loc);
         tvCategory.setText(data.category.toString().replace("[", "").replace("]",""));

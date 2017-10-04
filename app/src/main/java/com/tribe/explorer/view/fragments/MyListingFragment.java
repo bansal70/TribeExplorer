@@ -21,7 +21,7 @@ import com.tribe.explorer.model.Operations;
 import com.tribe.explorer.model.TEPreferences;
 import com.tribe.explorer.model.Utils;
 import com.tribe.explorer.model.beans.ListingData;
-import com.tribe.explorer.view.adapters.ListingAdapter;
+import com.tribe.explorer.view.adapters.MyListingAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -32,7 +32,7 @@ import java.util.List;
 public class MyListingFragment extends Fragment implements View.OnClickListener{
 
     RecyclerView recyclerListing;
-    private ListingAdapter listingAdapter;
+    private MyListingAdapter listingAdapter;
     private Dialog dialog;
     private List<ListingData.Data> listData;
     String user_id, lang;
@@ -66,7 +66,7 @@ public class MyListingFragment extends Fragment implements View.OnClickListener{
         recyclerListing = view.findViewById(R.id.recyclerListings);
         recyclerListing.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        listingAdapter = new ListingAdapter(getActivity(), listData);
+        listingAdapter = new MyListingAdapter(getActivity(), listData);
         recyclerListing.setAdapter(listingAdapter);
 
         imgBack.setOnClickListener(this);

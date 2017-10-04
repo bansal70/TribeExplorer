@@ -3,6 +3,7 @@ package com.tribe.explorer.view.adapters;
 import android.app.Dialog;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +12,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.tribe.explorer.R;
 import com.tribe.explorer.model.Operations;
 import com.tribe.explorer.model.Utils;
 import com.tribe.explorer.model.beans.HoursData;
+import com.tribe.explorer.model.beans.ListingData;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,13 +25,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import static com.tribe.explorer.R.string.monday;
-
-/*
- * Created by win 10 on 9/13/2017.
- */
-
-public class HoursAdapter extends RecyclerView.Adapter<HoursAdapter.ViewHolder> {
+public class EditHoursAdapter extends RecyclerView.Adapter<EditHoursAdapter.ViewHolder> {
 
     private Context context;
     private ArrayList<HoursData> daysList;
@@ -36,9 +33,12 @@ public class HoursAdapter extends RecyclerView.Adapter<HoursAdapter.ViewHolder> 
     private int pos;
     private String unit1, unit2;
     private String day="";
+    private ListingData.Data listData;
+    String hoursOperation = "";
 
-    public HoursAdapter(Context context) {
+    public EditHoursAdapter(Context context, ListingData.Data listData) {
         this.context = context;
+        this.listData = listData;
         daysList = new ArrayList<>();
         hoursDialog = Utils.createDialog(context, R.layout.dialog_hours);
         unit1 = context.getString(R.string.AM);
@@ -51,7 +51,7 @@ public class HoursAdapter extends RecyclerView.Adapter<HoursAdapter.ViewHolder> 
     }
 
     private void addDays() {
-        daysList.add(new HoursData(context.getString(monday), "", ""));
+        daysList.add(new HoursData(context.getString(R.string.monday), "", ""));
         daysList.add(new HoursData(context.getString(R.string.tuesday), "", ""));
         daysList.add(new HoursData(context.getString(R.string.wednesday), "", ""));
         daysList.add(new HoursData(context.getString(R.string.thursday), "", ""));
@@ -70,6 +70,34 @@ public class HoursAdapter extends RecyclerView.Adapter<HoursAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, int position) {
         HoursData data = daysList.get(position);
         holder.tvDays.setText(data.getDays());
+        ListingData.JobHours jobHours = listData.jobHours;
+        Gson gson = new Gson();
+        String json = gson.toJson(jobHours);
+
+        try {
+            JSONObject issueObj = new JSONObject(json);
+            for (int j = 0; j < issueObj.length(); j++) {
+                String key = issueObj.names().getString(j);
+                String day = daysList.get(position).getDays().toLowerCase().substring(0,
+                        Math.min(daysList.get(position).getDays().length(), 3));
+                Log.e("days", key);
+                if (key.equals(day)) {
+                    JSONArray jsonArray = issueObj.getJSONArray(key);
+                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+                    String open = jsonObject.getString("open");
+                    String close = jsonObject.getString("close");
+                    data.setAm(open);
+                    data.setPm(close);
+                    holder.tvAM.setText(open);
+                    holder.tvPM.setText(close);
+                    hoursOperation = "&" + daysList.get(position).getDays() + "=" + jsonArray;
+                    Operations.hoursOfOperation += hoursOperation;
+                }
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         if (!data.getAm().isEmpty())
             holder.tvAM.setText(data.getAm());
@@ -102,7 +130,6 @@ public class HoursAdapter extends RecyclerView.Adapter<HoursAdapter.ViewHolder> 
                 case R.id.tvDays:
                     hoursDialog.show();
                     pos = getAdapterPosition();
-
                     break;
             }
         }

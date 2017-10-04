@@ -113,7 +113,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener,
     GoogleMap mGoogleMap;
     List<String> labelsDataList, sortList;
     ArrayAdapter labelsAdapter, sortAdapter;
-    String filter = "", sort = "", category = "", label = "";
+    String filter = "", sort = "";
     private List<String> locName;
     private HashMap<Marker, Integer> mHashMap;
     private ArrayList<Integer> catIdList;
@@ -241,7 +241,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener,
                     sort = sortList.get(position).substring(0,
                             Math.min(sortList.get(position).length(), 4));
                 }
-                Toast.makeText(getActivity(), ""+sort, Toast.LENGTH_SHORT).show();
                     break;
         }
     }

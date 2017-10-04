@@ -29,11 +29,14 @@ public class APIClient {
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(Config.BASE_URL)
+                .addConverterFactory(new NullOnEmptyConverterFactory())
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build();
 
         return retrofit;
     }
+
+
 
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardBackgroundColor="#fff"
@@ -9,7 +10,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clickable="true"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -23,40 +23,41 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:contentDescription="@string/cover_image_optional"
-                android:scaleType="fitXY"
                 android:foreground="@drawable/ripple"
+                android:scaleType="fitXY"
                 android:src="@mipmap/placeholder" />
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@color/colorTransparent"
-                android:contentDescription="@null"/>
+                android:contentDescription="@null"
+                android:src="@color/colorTransparent" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
                 android:orientation="vertical"
                 android:paddingLeft="@dimen/_10sdp"
-                android:paddingRight="@dimen/_10sdp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true">
+                android:paddingRight="@dimen/_10sdp">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="end"
                     android:orientation="horizontal"
-                    android:layout_gravity="end">
+                    tools:ignore="UseCompoundDrawables">
 
                     <TextView
                         android:id="@+id/tvFavCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/_5sdp"
                         android:layout_gravity="center"
-                        android:textSize="@dimen/_15ssp"
-                        android:textColor="#fff"/>
+                        android:padding="@dimen/_5sdp"
+                        android:textColor="#fff"
+                        android:textSize="@dimen/_15ssp" />
 
                     <ImageView
                         android:id="@+id/imgFavourite"
@@ -75,31 +76,31 @@
                     android:background="@color/colorPrimary"
                     android:paddingLeft="@dimen/_10sdp"
                     android:paddingRight="@dimen/_10sdp"
-                    android:text="@string/featured"
                     android:shadowColor="@color/colorPrimary"
-                    android:shadowRadius="5"
                     android:shadowDx="1"
                     android:shadowDy="1"
-                    android:textSize="@dimen/_10ssp"
+                    android:shadowRadius="5"
+                    android:text="@string/featured"
                     android:textAllCaps="true"
                     android:textAppearance="@style/TextAppearance.FontPath"
-                    android:textColor="#fff" />
+                    android:textColor="#fff"
+                    android:textSize="@dimen/_10ssp" />
 
                 <TextView
                     android:id="@+id/tvTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_8sdp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:shadowColor="#fff"
                     android:shadowDx="1"
                     android:shadowDy="1"
                     android:shadowRadius="5"
                     android:text=""
-                    android:maxLines="1"
-                    android:ellipsize="end"
+                    android:textAllCaps="true"
                     android:textAppearance="@style/TextAppearance.FontPath"
                     android:textColor="#fff"
-                    android:textAllCaps="true"
                     android:textSize="@dimen/_15ssp" />
 
                 <TextView
@@ -107,13 +108,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:shadowColor="#fff"
                     android:shadowDx="1"
                     android:shadowDy="1"
                     android:shadowRadius="5"
                     android:text=""
-                    android:maxLines="1"
-                    android:ellipsize="end"
                     android:textColor="#fff" />
 
                 <TextView
@@ -162,11 +163,11 @@
                 android:id="@+id/imgClaim"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@mipmap/ic_claimed"
                 android:layout_alignBottom="@+id/imgAvatar"
-                android:layout_alignRight="@+id/imgAvatar"
                 android:layout_alignEnd="@+id/imgAvatar"
-                android:contentDescription="@null"/>
+                android:layout_alignRight="@+id/imgAvatar"
+                android:contentDescription="@null"
+                app:srcCompat="@mipmap/ic_claimed" />
 
         </RelativeLayout>
 
@@ -174,14 +175,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/linearLayout"
-            android:orientation="horizontal"
-            android:padding="@dimen/_10sdp">
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:text="@string/we_speak"/>
+                android:text="@string/we_speak"
+                android:visibility="gone" />
 
             <HorizontalScrollView
                 android:layout_width="@dimen/_100sdp"
@@ -192,9 +192,27 @@
                     android:id="@+id/layoutFlag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"/>
+                    android:orientation="horizontal" />
 
             </HorizontalScrollView>
+
+            <ImageView
+                android:id="@+id/imgEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_edit"
+                android:layout_gravity="center|end"
+                android:foreground="?selectableItemBackground"
+                android:contentDescription="@string/edit"/>
+
+            <ImageView
+                android:id="@+id/imgDelete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|end"
+                android:src="@mipmap/ic_del"
+                android:foreground="?selectableItemBackground"
+                android:contentDescription="@string/delete"/>
 
         </LinearLayout>
 
