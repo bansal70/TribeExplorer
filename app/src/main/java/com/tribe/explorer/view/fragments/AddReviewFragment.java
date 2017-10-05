@@ -43,6 +43,7 @@ import static android.os.Build.VERSION_CODES.M;
 
 public class AddReviewFragment extends Fragment implements View.OnClickListener{
 
+    View view;
     private Dialog dialog;
     RatingBar rbSpeed, rbQuality, rbPrice;
     EditText editComment, editCaptcha;
@@ -69,8 +70,10 @@ public class AddReviewFragment extends Fragment implements View.OnClickListener{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_review, container, false);
-        initViews(view);
+        if (view == null) {
+            view = inflater.inflate(R.layout.fragment_add_review, container, false);
+            initViews(view);
+        }
 
         return view;
     }

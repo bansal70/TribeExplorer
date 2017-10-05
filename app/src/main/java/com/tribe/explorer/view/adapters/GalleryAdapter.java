@@ -15,6 +15,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.tribe.explorer.R;
+import com.tribe.explorer.model.Utils;
 
 import java.util.ArrayList;
 
@@ -67,6 +68,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             switch (view.getId()) {
                 case R.id.cardCancel:
                     uriList.remove(getAdapterPosition());
+                    Utils.uriGallery.remove(getAdapterPosition());
                     notifyItemRemoved(getAdapterPosition());
                     notifyItemRangeChanged(getAdapterPosition(), uriList.size());
                     break;

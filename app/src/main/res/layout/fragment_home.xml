@@ -64,7 +64,7 @@
                     android:background="@drawable/round_shape_edittext"
                     android:hint="@string/looking_for"
                     android:inputType="text"
-                    android:padding="@dimen/_8sdp" />
+                    android:padding="@dimen/_4sdp" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -77,9 +77,10 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/round_shape_edittext"
                         android:focusable="false"
+                        android:textSize="@dimen/_14ssp"
                         android:focusableInTouchMode="false"
                         android:hint="@string/location"
-                        android:padding="@dimen/_10sdp" />
+                        android:padding="@dimen/_5sdp" />
 
                     <ImageView
                         android:id="@+id/imgLocation"
@@ -96,16 +97,14 @@
 
                 </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/tvCategory"
+                <Spinner
+                    android:id="@+id/spinnerLanguage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp"
+                    android:padding="@dimen/_5sdp"
                     android:background="@drawable/round_shape_edittext"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:hint="@string/language"
-                    android:padding="@dimen/_10sdp" />
+                    android:prompt="@string/select_language"/>
 
                 <TextView
                     android:id="@+id/tvSearch"

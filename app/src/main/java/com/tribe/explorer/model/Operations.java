@@ -90,6 +90,18 @@ public class Operations {
         return params;
     }
 
+    public static String getUpdatePasswordParams(String user_id, String newPass, String oldPass,
+                                                 String lang) {
+        String params = Config.CHANGE_PASSWORD_URL + "?user_id=" + user_id
+                +"&newPassword=" + newPass
+                +"&oldpassword=" + oldPass
+                +"&lang="+lang;
+
+        Log.e(TAG, "update_password prams-- "+params);
+
+        return params;
+    }
+
     public static String getUpdateProfileParams(String user_id, String firstName, String lastName,
                                                 String email, String role, String gender,
                                                 String dob, String lang) {

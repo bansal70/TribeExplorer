@@ -5,6 +5,7 @@ package com.tribe.explorer.model;
  */
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,13 +19,15 @@ import android.location.Geocoder;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Environment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -34,16 +37,15 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
-import com.tribe.explorer.BuildConfig;
 import com.tribe.explorer.R;
 import com.tribe.explorer.model.beans.Language;
-import com.tribe.explorer.view.LoginActivity;
+import com.tribe.explorer.model.custom.ImagePicker;
+import com.tribe.explorer.view.SplashActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -58,6 +60,7 @@ public class Utils {
     public static List<Language> langList;
     public static Uri uriLogo, uriCover;
     public static ArrayList<Uri> uriGallery = new ArrayList<>();
+    public static boolean isEdited = false;
 
     @SuppressWarnings("ConstantConditions")
     public static void dialogError(Context context) {
@@ -100,6 +103,18 @@ public class Utils {
         return dialog;
     }
 
+    public static void goToFragment(Context mContext, Fragment fragment, int container, boolean addToBackStack) {
+        FragmentTransaction transaction = ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction();
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        if (addToBackStack){
+            transaction.add(container, fragment);
+            transaction.addToBackStack(null);
+        }else{
+            transaction.replace(container, fragment);
+        }
+        transaction.commit();
+    }
+
     public static boolean emailValidator(String email) {
         Pattern pattern;
         Matcher matcher;
@@ -109,13 +124,33 @@ public class Utils {
         return matcher.matches();
     }
 
+    public static void datePicker(Context mContext, final TextView textView) {
+        final Calendar c = Calendar.getInstance();
+        int mYear = c.get(Calendar.YEAR); // current year
+        int mMonth = c.get(Calendar.MONTH); // current month
+        int mDay = c.get(Calendar.DAY_OF_MONTH); // current day
+        // date picker dialog
+        DatePickerDialog.OnDateSetListener onDateSetListener = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year,
+                                  int monthOfYear, int dayOfMonth) {
+                // set day of month , month and year value in the edit text
+                textView.setText(dayOfMonth + "/"
+                        + (monthOfYear + 1) + "/" + year);
+
+            }};
+
+        DatePickerDialog dpDialog = new DatePickerDialog(mContext, onDateSetListener, mYear, mMonth, mDay);
+        DatePicker datePicker = dpDialog.getDatePicker();
+        datePicker.setMaxDate(c.getTimeInMillis());
+        dpDialog.show();
+    }
+
     public static void setImage(Context context, String imageURL, ImageView view) {
         Glide.with(context)
                 .load(imageURL)
-                .fitCenter().centerCrop()
-                .dontAnimate()
                 .placeholder(R.mipmap.placeholder)
-                .error(R.mipmap.placeholder)
                 .into(view);
     }
 
@@ -128,32 +163,33 @@ public class Utils {
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                         try {
-                            String root = Environment.getExternalStorageDirectory().toString();
+                            /*String root = Environment.getExternalStorageDirectory().toString();
                             File myDir = new File(root + File.separator + mContext.getString(R.string.app_name));
                             boolean isSuccess = myDir.mkdirs();
                             File file = new File(myDir, imageName);
                             FileOutputStream out = new FileOutputStream(file);
                             resource.compress(Bitmap.CompressFormat.JPEG, 90, out);
                             out.flush();
-                            out.close();
+                            out.close();*/
                             switch (image) {
                                 case "logo":
-                                    uriLogo = FileProvider.getUriForFile(mContext,
-                                            BuildConfig.APPLICATION_ID + ".provider", file);
-                                    imageView.setImageBitmap(resource);
+                                    uriLogo = ImagePicker.getImageUri(mContext, resource);
+                                    /*uriLogo = FileProvider.getUriForFile(mContext,
+                                            BuildConfig.APPLICATION_ID + ".provider", file);*/
+                                    imageView.setImageURI(uriLogo);
                                     break;
                                 case "cover":
-                                    uriCover = FileProvider.getUriForFile(mContext,
-                                            BuildConfig.APPLICATION_ID + ".provider", file);
-                                    imageView.setImageBitmap(resource);
+                                    uriCover = ImagePicker.getImageUri(mContext, resource);
+                                    /*uriCover = FileProvider.getUriForFile(mContext,
+                                            BuildConfig.APPLICATION_ID + ".provider", file);*/
+                                    imageView.setImageURI(uriCover);
                                     break;
                                 case "gallery":
-                                    uriGallery.add(FileProvider.getUriForFile(mContext,
-                                            BuildConfig.APPLICATION_ID + ".provider", file));
+                                    uriGallery.add(ImagePicker.getImageUri(mContext, resource));
+                                   /* uriGallery.add(FileProvider.getUriForFile(mContext,
+                                            BuildConfig.APPLICATION_ID + ".provider", file));*/
                                     break;
                             }
-
-                            Log.e(TAG, "uri:" + uriLogo);
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -161,6 +197,14 @@ public class Utils {
                     }
 
                 });
+    }
+
+    public static String splitUrl(Context context, String url) {
+        String[] split = url.split("/");
+        String name = split[split.length-1];
+        Log.e(TAG, "split url: "+name);
+
+        return name;
     }
 
     public static String getCompleteAddressString(Context context, double LATITUDE, double LONGITUDE) {
@@ -229,6 +273,12 @@ public class Utils {
         }.execute();
     }
 
+    public static void openBrowser(Context context, String url) {
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(url));
+        context.startActivity(i);
+    }
+
     public static void changeRatingBarColor(Context mContext, RatingBar ratingBar, int filledColor, int halfFilledColor, int emptyStarColor) {
         LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
         stars.getDrawable(2).setColorFilter(ContextCompat.getColor(mContext,
@@ -263,7 +313,7 @@ public class Utils {
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
                 TEPreferences.clearPref(context);
-                context.startActivity(new Intent(context, LoginActivity.class));
+                context.startActivity(new Intent(context, SplashActivity.class));
                 context.finish();
                 Toast.makeText(context, R.string.logged_out, Toast.LENGTH_SHORT).show();
             }

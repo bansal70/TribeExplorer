@@ -21,6 +21,7 @@ import com.tribe.explorer.view.LoginActivity;
 
 public class MeFragment extends Fragment implements View.OnClickListener{
 
+    View view;
     TextView tvUser, tvAccount, tvAddListing, tvMyListing, tvBlog, tvAbout, tvLogout;
     ImageView imgUser;
     String user_id;
@@ -35,8 +36,10 @@ public class MeFragment extends Fragment implements View.OnClickListener{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_me, container, false);
-        initViews(view);
+        if (view == null) {
+            view = inflater.inflate(R.layout.fragment_me, container, false);
+            initViews(view);
+        }
         return view;
     }
 

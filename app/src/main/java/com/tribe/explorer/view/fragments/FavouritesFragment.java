@@ -30,6 +30,7 @@ import java.util.List;
 
 public class FavouritesFragment extends Fragment{
 
+    View view;
     RecyclerView recyclerListing;
     private FavoriteAdapter listingAdapter;
     private Dialog dialog;
@@ -57,8 +58,10 @@ public class FavouritesFragment extends Fragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_favourites, container, false);
-        initViews(view);
+        if (view == null) {
+            view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_favourites, container, false);
+            initViews(view);
+        }
 
         return view;
     }

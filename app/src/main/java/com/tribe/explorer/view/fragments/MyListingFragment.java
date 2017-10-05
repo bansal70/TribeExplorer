@@ -31,6 +31,7 @@ import java.util.List;
 
 public class MyListingFragment extends Fragment implements View.OnClickListener{
 
+    View view;
     RecyclerView recyclerListing;
     private MyListingAdapter listingAdapter;
     private Dialog dialog;
@@ -49,14 +50,15 @@ public class MyListingFragment extends Fragment implements View.OnClickListener{
         dialog.show();
         ModelManager.getInstance().getListingManager()
                 .listingTask(Operations.getMyListingParams(user_id, lang));
-
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_my_listing, container, false);
-        initViews(view);
+        if (view == null) {
+            view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_my_listing, container, false);
+            initViews(view);
+        }
 
         return view;
     }
@@ -84,6 +86,15 @@ public class MyListingFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onStart() {
         super.onStart();
+        if (Utils.isEdited) {
+            dialog.show();
+            listData.clear();
+            listingAdapter.notifyDataSetChanged();
+            ModelManager.getInstance().getListingManager()
+                    .listingTask(Operations.getMyListingParams(user_id, lang));
+            Utils.isEdited = false;
+        }
+
 
         EventBus.getDefault().register(this);
     }

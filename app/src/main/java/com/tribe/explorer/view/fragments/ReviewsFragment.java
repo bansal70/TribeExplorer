@@ -32,6 +32,7 @@ import java.util.List;
 
 public class ReviewsFragment extends Fragment implements View.OnClickListener{
 
+    View view;
     String listing_id, lang;
     RecyclerView recyclerReviews;
     ReviewAdapter reviewAdapter;
@@ -56,8 +57,10 @@ public class ReviewsFragment extends Fragment implements View.OnClickListener{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_reviews, container, false);
-        initViews(view);
+        if (view == null) {
+            view = inflater.inflate(R.layout.fragment_reviews, container, false);
+            initViews(view);
+        }
 
         return view;
     }

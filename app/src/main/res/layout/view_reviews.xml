@@ -45,6 +45,7 @@
         android:id="@+id/imgReview"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_120sdp"
+        android:scaleType="fitXY"
         android:contentDescription="@string/reviews" />
 
     <TextView

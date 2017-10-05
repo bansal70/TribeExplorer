@@ -198,12 +198,20 @@
                 android:textSize="@dimen/_15ssp"
                 android:textColor="#000"/>
 
-            <EditText
+            <TextView
                 android:id="@+id/editBirthDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/birth_date_optional"
-                android:inputType="date"/>
+                android:focusableInTouchMode="false"
+                android:longClickable="false"
+                android:textSize="@dimen/_14ssp"
+                android:padding="@dimen/_5sdp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_1sdp"
+                android:background="#666666"/>
 
             <ImageView
                 android:id="@+id/imgCaptcha"

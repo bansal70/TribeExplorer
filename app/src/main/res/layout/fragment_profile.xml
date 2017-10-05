@@ -34,7 +34,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="78dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:layout_marginTop="20dp">
@@ -42,14 +42,13 @@
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/imgProfilePic"
                     android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:src="@mipmap/ic_user"/>
+                    android:layout_height="@dimen/_80sdp"/>
 
                 <ImageView
                     android:id="@+id/imgEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@mipmap/ic_icon_edit_profile"
+                    android:src="@mipmap/ic_icon_edit_profile"
                     android:layout_alignBottom="@+id/imgProfilePic"
                     android:layout_alignRight="@+id/imgProfilePic"
                     android:layout_alignEnd="@+id/imgProfilePic"
@@ -162,12 +161,20 @@
                     android:textColor="#000"
                     android:textSize="@dimen/_15ssp" />
 
-                <EditText
+                <TextView
                     android:id="@+id/editBirthDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/birth_date_optional"
-                    android:inputType="date" />
+                    android:focusableInTouchMode="false"
+                    android:longClickable="false"
+                    android:textSize="@dimen/_14ssp"
+                    android:padding="@dimen/_5sdp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:background="#666666"/>
 
                 <TextView
                     android:id="@+id/tvEditProfile"
@@ -175,6 +182,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:background="#2B52A7"
+                    android:foreground="@drawable/ripple"
                     android:padding="@dimen/_5sdp"
                     android:text="@string/edit"
                     android:textAlignment="center"
@@ -187,6 +195,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:background="#2B52A7"
+                    android:foreground="@drawable/ripple"
                     android:padding="@dimen/_5sdp"
                     android:text="@string/change_password"
                     android:textAlignment="center"

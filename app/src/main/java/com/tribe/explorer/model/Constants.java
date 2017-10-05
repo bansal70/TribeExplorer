@@ -73,4 +73,10 @@ public class Constants {
 
     public static final int DELETE_LISTING_SUCCESS = 1040;
     public static final int DELETE_LISTING_ERROR = 1041;
+
+    public static final int CHANGE_PASSWORD_SUCCESS = 1042;
+    public static final int CHANGE_PASSWORD_FAILED = 1043;
+
+    public static final int HOME_SUCCESS = 1044;
+    public static final int HOME_FAILED = 1045;
 }

@@ -23,9 +23,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +41,7 @@ import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
 import com.tribe.explorer.R;
 import com.tribe.explorer.controller.HomeManager;
+import com.tribe.explorer.controller.LanguageManager;
 import com.tribe.explorer.controller.ModelManager;
 import com.tribe.explorer.model.Constants;
 import com.tribe.explorer.model.Event;
@@ -45,6 +49,7 @@ import com.tribe.explorer.model.Operations;
 import com.tribe.explorer.model.TEPreferences;
 import com.tribe.explorer.model.Utils;
 import com.tribe.explorer.model.beans.CategoriesData;
+import com.tribe.explorer.model.beans.LanguageData;
 import com.tribe.explorer.view.adapters.HomeAdapter;
 
 import org.greenrobot.eventbus.EventBus;
@@ -56,9 +61,10 @@ import java.util.List;
 import static android.app.Activity.RESULT_OK;
 import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 
-public class HomeFragment extends Fragment implements View.OnClickListener,
+public class HomeFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
+    View view;
     RecyclerView recyclerCategories;
     HomeAdapter homeAdapter;
     private List<CategoriesData.Data> categoriesList;
@@ -77,6 +83,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener,
     RecyclerView.OnScrollListener onScrollListener;
     int page = 1;
     boolean isSearch = false;
+    Spinner spinnerLanguages;
+    ArrayList<String> langList;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,7 +93,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener,
         user_id = TEPreferences.readString(getActivity(), "user_id");
         lang = TEPreferences.readString(getActivity(), "lang");
 
-        manager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+        manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                     .addApi(LocationServices.API)
@@ -99,17 +107,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_home, container, false);
-        initViews(view);
+        if (view == null) {
+            view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_home, container, false);
+            initViews(view);
+        }
 
         return view;
     }
 
     private void initViews(View v) {
+        langList = new ArrayList<>();
         dialog = Utils.showDialog(getActivity());
         categoriesList = new ArrayList<>();
         dialog.show();
-        ModelManager.getInstance().getHomeManager().categoriesTask(Operations.getCategoriesParams(lang, 1));
+        ModelManager.getInstance().getHomeManager().categoriesTask(Operations
+                .getCategoriesParams(lang, page));
 
         searchLayout = v.findViewById(R.id.searchLayout);
         imgLocation = v.findViewById(R.id.imgLocation);
@@ -117,6 +129,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener,
         tvLocation = v.findViewById(R.id.tvLocation);
         tvSearch = v.findViewById(R.id.tvSearch);
         editQuery = v.findViewById(R.id.editQuery);
+        spinnerLanguages = v.findViewById(R.id.spinnerLanguage);
         recyclerCategories = v.findViewById(R.id.recyclerCategories);
         recyclerCategories.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -129,6 +142,26 @@ public class HomeFragment extends Fragment implements View.OnClickListener,
         tvSearch.setOnClickListener(this);
         imgSearch.setOnClickListener(this);
         loadMore();
+
+        langList.add(getContext().getString(R.string.select_language));
+        for (LanguageData.Data data : LanguageManager.languagesList) {
+            String language = data.language;
+            langList.add(language);
+        }
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(),
+                R.layout.spinner_item, langList);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerLanguages.setAdapter(arrayAdapter);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 
     @Override
@@ -143,7 +176,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener,
                 break;
 
             case R.id.tvSearch:
-                selectFragment(new HomeListingFragment());
+                selectFragment(new SearchFragment());
                 break;
 
             case R.id.imgSearch:
@@ -289,28 +322,32 @@ public class HomeFragment extends Fragment implements View.OnClickListener,
 
     @Subscribe(sticky = true)
     public void onEvent(Event event) {
-        dialog.dismiss();
         EventBus.getDefault().removeAllStickyEvents();
         switch (event.getKey()) {
-            case Constants.CATEGORIES_SUCCESS:
+            case Constants.HOME_SUCCESS:
+                dialog.dismiss();
                 categoriesList.addAll(HomeManager.categoriesList);
                 homeAdapter.notifyDataSetChanged();
                 break;
 
-            case Constants.CATEGORIES_ERROR:
+            case Constants.HOME_FAILED:
+                dialog.dismiss();
                 recyclerCategories.removeOnScrollListener(onScrollListener);
                 break;
 
             case Constants.LOCATION_SUCCESS:
+                dialog.dismiss();
                 lat = String.valueOf(TEPreferences.readDouble(getActivity(), "latitude"));
                 lng = String.valueOf(TEPreferences.readDouble(getActivity(), "longitude"));
                 tvLocation.setText(TEPreferences.readString(getActivity(), "location"));
                 break;
 
             case Constants.LOCATION_EMPTY:
+                dialog.dismiss();
                 break;
 
             case Constants.NO_RESPONSE:
+                dialog.dismiss();
                 Toast.makeText(getActivity(), R.string.something_went_wrong, Toast.LENGTH_SHORT).show();
                 break;
         }

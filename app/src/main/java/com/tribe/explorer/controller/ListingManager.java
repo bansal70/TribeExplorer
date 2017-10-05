@@ -20,10 +20,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ListingManager {
-    private static final String TAG = ListingManager.class.getSimpleName();
-    public static List<ListingData.Data> dataList = new ArrayList<>();
+    public static List<ListingData.Data> dataList;
 
     public void listingTask(String params) {
+        dataList = new ArrayList<>();
         APIService apiService = APIClient.getClient().create(APIService.class);
         Call<ListingData> call = apiService.listings(params);
         call.enqueue(new Callback<ListingData>() {

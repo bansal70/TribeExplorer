@@ -45,7 +45,7 @@
     <string name="no_response">Something went wrong! Please try again.</string>
     <string name="fill_required_fields">Please fill all the required fields.</string>
     <string name="password_unmatch">Password didn\'t match</string>
-    <string name="gender_male_female">Please enter gender as male or female</string>
+    <string name="gender_male_female">Please enter gender as male or female or other</string>
     <string name="wrong_captcha">Wrong captcha entered!</string>
     <string name="pick_image_intent_text">Select Image</string>
     <string name="failed_to_register">Failed to register your account. Please try again.</string>
@@ -66,6 +66,8 @@
     <string name="blog">Blog</string>
     <string name="log_out">Log Out</string>
     <string name="change_password">Change Password</string>
+    <string name="enter_new_password">Enter new password</string>
+    <string name="enter_old_password">Enter old password</string>
     <string name="edit">Edit</string>
     <string name="done">Done</string>
     <string name="business_name">Business Name</string>
@@ -177,7 +179,7 @@
     <string name="toggle_filters">Toggle Filters</string>
     <string name="sort_by">Sort by</string>
     <string name="filter_results">Filter results</string>
-    <string name="login_to_create_account">Please login to create your account</string>
+    <string name="login_to_create_account">Please login to check your account</string>
     <string name="login_to_add_business">Please login to add your business</string>
     <string name="login_to_check_listings">Please login to check your businesses.</string>
     <string name="comment">Comment</string>
@@ -193,10 +195,10 @@
     <string name="listing_added">Your listing has been added successfully</string>
     <string name="no_file_selected">No file selected (Optional)</string>
     <string name="toggle">Toggle Search</string>
-    <string name="newest_first">newest First</string>
-    <string name="oldest_first">oldest First</string>
+    <string name="newest_first">newest first</string>
+    <string name="oldest_first">oldest first</string>
     <string name="random">random</string>
-    <string name="most_popular">most popular</string>
+    <string name="most_popular">most viewed</string>
     <string name="failed_to_add_photo">Failed to add photo. Please try again.</string>
     <string name="facebook">Facebook</string>
     <string name="twitter">Twitter</string>
@@ -208,4 +210,11 @@
     <string name="sure_to_delete_listing">Are you sure you want to delete your listing?</string>
     <string name="listing_deleted">Your listing has been deleted successfully</string>
     <string name="listing_updated">Your listing has been updated successfully</string>
+    <string name="language_already_added">Language already added</string>
+    <string name="no_social_profile">No social profiles.</string>
+    <string name="photo_uploaded">Photo uploaded successfully</string>
+    <string name="password_updated">Password has been updated successfully.</string>
+    <string name="incorrect_password">Please enter the correct password</string>
+    <string name="email_exists">Email-id already exists.</string>
+    <string name="login_to_add_photos">Please login to add photos to the listing</string>
 </resources>

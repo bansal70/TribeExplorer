@@ -81,7 +81,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             FragmentManager fragmentManager = ((MainActivity)context).getSupportFragmentManager();
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction.replace(R.id.frame_layout, fragment);
-            transaction.addToBackStack("A");
+            transaction.addToBackStack("true");
             transaction.commit();
         }
     }

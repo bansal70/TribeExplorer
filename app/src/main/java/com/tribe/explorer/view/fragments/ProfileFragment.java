@@ -47,14 +47,17 @@ import static android.os.Build.VERSION_CODES.M;
 
 public class ProfileFragment extends Fragment implements View.OnClickListener{
 
+    View view;
     CircleImageView imgProfilePic;
     ImageView imgBack;
     TextView tvEditProfile, tvUpdatePassword;
-    EditText editFirstName, editLastName, editEmail,
-            editBirthDate, editGender;
+    EditText editFirstName, editLastName, editEmail, editGender;
+    EditText editOldPassword, editNewPassword, editConfirmPassword;
+    TextView tvConfirmPassword, tvCancelPassword;
+    TextView editBirthDate;
     RadioGroup rgOwner;
     RadioButton rbYes, rbNo;
-    private Dialog dialog, dialogEdit;
+    private Dialog dialog, dialogEdit, dialogPassword;
     TextView tvConfirm, tvCancel;
     String user_id, lang, role, filePath="";
     boolean isEdit = false;
@@ -75,8 +78,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        initViews(view);
+        if (view == null) {
+            view = inflater.inflate(R.layout.fragment_profile, container, false);
+            initViews(view);
+        }
 
         return view;
     }
@@ -101,11 +106,12 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         imgProfilePic.setOnClickListener(this);
         tvEditProfile.setOnClickListener(this);
         tvUpdatePassword.setOnClickListener(this);
-        imgProfilePic.setOnClickListener(this);
+        editBirthDate.setOnClickListener(this);
 
         editFields(false);
         initDialog();
         selectOwner();
+        initPasswordDialog();
     }
 
     public void initDialog() {
@@ -115,6 +121,19 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
 
         tvCancel.setOnClickListener(this);
         tvConfirm.setOnClickListener(this);
+    }
+
+    public void initPasswordDialog() {
+        dialogPassword = Utils.createDialog(getActivity(), R.layout.dialog_change_password);
+        editOldPassword = dialogPassword.findViewById(R.id.editOldPassword);
+        editNewPassword = dialogPassword.findViewById(R.id.editNewPassword);
+        editConfirmPassword = dialogPassword.findViewById(R.id.editConfirmPassword);
+
+        tvConfirmPassword = dialogPassword.findViewById(R.id.tvConfirmPassword);
+        tvCancelPassword = dialogPassword.findViewById(R.id.tvCancelPassword);
+
+        tvConfirmPassword.setOnClickListener(this);
+        tvCancelPassword.setOnClickListener(this);
     }
 
     public void setProfileData() {
@@ -134,8 +153,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         TEPreferences.putString(getActivity(), "image", data.userUrl);
         Glide.with(getActivity())
                 .load(data.userUrl)
-                .transform(new CircleTransform(getActivity()))
                 .placeholder(R.mipmap.ic_user)
+                .transform(new CircleTransform(getContext()))
                 .into(imgProfilePic);
     }
 
@@ -160,8 +179,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
 
         if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || role.isEmpty()) {
             Toast.makeText(getActivity(), R.string.fill_required_fields, Toast.LENGTH_SHORT).show();
-        } else if (!gender.isEmpty() &&
-                !(gender.equalsIgnoreCase("male") || gender.equalsIgnoreCase("female"))) {
+        } else if (!gender.isEmpty() && !(gender.equalsIgnoreCase("male")
+                || gender.equalsIgnoreCase("female") || gender.equalsIgnoreCase("other"))) {
             Toast.makeText(getActivity(), R.string.gender_male_female, Toast.LENGTH_SHORT).show();
         } else {
             ModelManager.getInstance().getProfileManager().editProfileTask(Operations
@@ -176,6 +195,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         switch (view.getId()) {
             case R.id.imgBack:
                 backScreen();
+                break;
+
+            case R.id.editBirthDate:
+                Utils.datePicker(getContext(), editBirthDate);
                 break;
 
             case R.id.tvEditProfile:
@@ -198,6 +221,35 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
             case R.id.imgProfilePic:
                 dispatchTakePictureIntent();
                 break;
+
+            case R.id.tvUpdatePassword:
+                dialogPassword.show();
+                break;
+
+            case R.id.tvConfirmPassword:
+                changePassword();
+                break;
+
+            case R.id.tvCancelPassword:
+                dialogPassword.dismiss();
+                break;
+        }
+    }
+
+    public void changePassword() {
+        String oldPass = editOldPassword.getText().toString().trim();
+        String newPass = editNewPassword.getText().toString().trim();
+        String confirmPass = editConfirmPassword.getText().toString().trim();
+        if (oldPass.isEmpty() || newPass.isEmpty() || confirmPass.isEmpty())
+            Toast.makeText(getActivity(), R.string.fill_required_fields, Toast.LENGTH_SHORT).show();
+        else if (!newPass.equals(confirmPass))
+            Toast.makeText(getActivity(), R.string.password_unmatch, Toast.LENGTH_SHORT).show();
+        else if (newPass.length() < 6)
+            Toast.makeText(getActivity(), R.string.atleast_6_digits_password, Toast.LENGTH_SHORT).show();
+        else {
+            dialog.show();
+            ModelManager.getInstance().getChangePasswordManager().changePassword(
+                    Operations.getUpdatePasswordParams(user_id, newPass, oldPass, lang));
         }
     }
 
@@ -240,6 +292,18 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
                 dialog.dismiss();
                 Toast.makeText(getActivity(), R.string.failed_profile_update, Toast.LENGTH_SHORT).show();
                 break;
+
+            case Constants.CHANGE_PASSWORD_SUCCESS:
+                dialogPassword.dismiss();
+                dialog.dismiss();
+                Toast.makeText(getActivity(), R.string.password_updated, Toast.LENGTH_SHORT).show();
+                break;
+
+            case Constants.CHANGE_PASSWORD_FAILED:
+                dialog.dismiss();
+                Toast.makeText(getActivity(), R.string.incorrect_password, Toast.LENGTH_SHORT).show();
+                break;
+
 
             case Constants.NO_RESPONSE:
                 dialog.dismiss();
@@ -306,8 +370,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
             Uri tempUri = ImagePicker.getImageUri(getActivity(), photo);
             File finalFile = new File(ImagePicker.getRealPathFromURI(getActivity(), tempUri));
             filePath = finalFile.getAbsolutePath();
+            Glide.with(getContext())
+                    .load(filePath)
+                    .transform(new CircleTransform(getContext()))
+                    .placeholder(R.mipmap.ic_user)
+                    .into(imgProfilePic);
+            TEPreferences.putString(getActivity(), "image", filePath);
 
-            imgProfilePic.setImageBitmap(photo);
+            //imgProfilePic.setImageBitmap(photo);
         }
     }
 

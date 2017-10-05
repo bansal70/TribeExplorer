@@ -27,6 +27,8 @@ public class ModelManager {
     private AddListingManager addListingManager;
     private AddPhotoManager addPhotoManager;
     private DeleteListingManager deleteListingManager;
+    private ChangePasswordManager changePasswordManager;
+    private CategoriesManager categoriesManager;
 
     public static ModelManager getInstance() {
         if (modelManager == null)
@@ -56,6 +58,8 @@ public class ModelManager {
         addListingManager = new AddListingManager();
         addPhotoManager = new AddPhotoManager();
         deleteListingManager = new DeleteListingManager();
+        changePasswordManager = new ChangePasswordManager();
+        categoriesManager = new CategoriesManager();
     }
 
     public SimpleLoginManager getLoginManager() {
@@ -136,5 +140,13 @@ public class ModelManager {
 
     public DeleteListingManager getDeleteListingManager() {
         return deleteListingManager;
+    }
+
+    public ChangePasswordManager getChangePasswordManager() {
+        return changePasswordManager;
+    }
+
+    public CategoriesManager getCategoriesManager() {
+        return categoriesManager;
     }
 }

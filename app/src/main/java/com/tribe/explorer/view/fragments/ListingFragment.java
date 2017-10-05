@@ -34,6 +34,7 @@ import static android.R.attr.defaultValue;
 
 public class ListingFragment extends Fragment implements View.OnClickListener{
 
+    View view;
     RecyclerView recyclerListing;
     private ListingAdapter listingAdapter;
     private Dialog dialog;
@@ -63,8 +64,10 @@ public class ListingFragment extends Fragment implements View.OnClickListener{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_listings, container, false);
-        initViews(view);
+        if (view == null) {
+            view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_listings, container, false);
+            initViews(view);
+        }
 
         return view;
     }

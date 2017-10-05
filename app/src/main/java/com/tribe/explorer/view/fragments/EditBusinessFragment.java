@@ -69,6 +69,7 @@ public class EditBusinessFragment extends Fragment implements View.OnClickListen
         AdapterView.OnItemSelectedListener {
     private final String TAG = EditBusinessFragment.class.getSimpleName();
 
+    View view;
     EditText editEmail, editBusinessName, editContact, editCategory, editBusinessLabel,
             editWeb, editPhone, editVideoURL, editDescription,
             editFacebookUrl, editTwitterUrl, editInstagramUrl;
@@ -86,7 +87,6 @@ public class EditBusinessFragment extends Fragment implements View.OnClickListen
     static final int REQUEST_IMAGE_COVER = 2;
     static final int REQUEST_IMAGE_LOGO = 3;
     private ArrayList<Uri> uriList;
-    Uri uriCover, uriLogo;
 
     Dialog dialog, dialogCategories, dialogLanguage;
     TextView tvCancel, tvConfirm, tvLangCancel, tvLangAdd;
@@ -120,14 +120,19 @@ public class EditBusinessFragment extends Fragment implements View.OnClickListen
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_listing, container, false);
-        initViews(view);
+        if (view == null) {
+            view = inflater.inflate(R.layout.fragment_add_listing, container, false);
+            initViews(view);
+        }
 
         return view;
     }
 
     public void initViews(View view) {
         listingData = ListingManager.dataList;
+        Utils.uriGallery = new ArrayList<>();
+        Utils.uriCover = null;
+        Utils.uriLogo = null;
         ListingData.Data data = listingData.get(position);
         Operations.jsonLanguages = new JSONArray();
         categories = new ArrayList<>();
@@ -275,6 +280,7 @@ public class EditBusinessFragment extends Fragment implements View.OnClickListen
             catIdList.add(id);
         }
         editCategory.setText(listingData.get(position).category.toString().replace("[", "").replace("]", ""));
+
         editBusinessLabel.setText(listingData.get(position).label.toString().replace("[", "").replace("]", ""));
         editWeb.setText(listingData.get(position).website);
         editPhone.setText(listingData.get(position).phone);
@@ -291,15 +297,16 @@ public class EditBusinessFragment extends Fragment implements View.OnClickListen
             rlCompany.setVisibility(View.VISIBLE);
         if (!listingData.get(position).coverImage.isEmpty())
             rlCover.setVisibility(View.VISIBLE);
-        String[] split = listingData.get(position).companyAvatar.split("/");
-        String name = split[split.length-1];
 
-        Utils.downloadImage(getActivity(), listingData.get(position).companyAvatar, name, imgLogo, "logo");
-        Utils.downloadImage(getActivity(), listingData.get(position).coverImage, name, imgCover, "cover");
+        String logo = Utils.splitUrl(getActivity(), listingData.get(position).companyAvatar);
+        String cover = Utils.splitUrl(getActivity(), listingData.get(position).coverImage);
+
+        Utils.downloadImage(getActivity(), listingData.get(position).companyAvatar, logo, imgLogo, "logo");
+        Utils.downloadImage(getActivity(), listingData.get(position).coverImage, cover, imgCover, "cover");
        // Utils.setImage(getActivity(), listingData.get(position).companyAvatar, imgLogo);
         //Utils.setImage(getActivity(), listingData.get(position).coverImage, imgCover);
 
-        try {
+        /*try {
             URL urlCover = new URL(listingData.get(position).coverImage);
             uriCover = Uri.parse(urlCover.toURI().toString());
             URL urlLogo = new URL(listingData.get(position).companyAvatar);
@@ -307,12 +314,14 @@ public class EditBusinessFragment extends Fragment implements View.OnClickListen
          //   imgCover.setImageURI(uriCover);
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        } */
 
-        for (String images : listingData.get(position).galleryImages) {
+
+        for (String image : listingData.get(position).galleryImages) {
             try {
-                Utils.downloadImage(getActivity(), images, name, null, "gallery");
-                URL url = new URL(images);
+                String gallery = Utils.splitUrl(getActivity(), image);
+                Utils.downloadImage(getActivity(), image, gallery, null, "gallery");
+                URL url = new URL(image);
                 Uri uri = Uri.parse(url.toURI().toString());
                 uriList.add(uri);
                 galleryAdapter.notifyDataSetChanged();
@@ -324,8 +333,7 @@ public class EditBusinessFragment extends Fragment implements View.OnClickListen
         for (int i=0; i < listingData.get(position).language.size(); i++) {
             String owner = listingData.get(position).language.get(i).name;
             String lang = listingData.get(position).language.get(i).language;
-
-            Language language = new Language(owner, lang, owner);
+            Language language = new Language(lang, lang, owner);
             list.add(language);
         }
         languageAdapter.notifyDataSetChanged();
@@ -359,7 +367,7 @@ public class EditBusinessFragment extends Fragment implements View.OnClickListen
                 break;
 
             case R.id.imgDelete:
-                uriCover = null;
+                Utils.uriCover = null;
                 imgCover.setImageBitmap(null);
                 rlCover.setVisibility(View.GONE);
                 break;
@@ -371,7 +379,7 @@ public class EditBusinessFragment extends Fragment implements View.OnClickListen
                 break;
 
             case R.id.imgLogoDelete:
-                uriLogo = null;
+                Utils.uriLogo = null;
                 imgLogo.setImageBitmap(null);
                 rlCompany.setVisibility(View.GONE);
                 break;
@@ -516,6 +524,7 @@ public class EditBusinessFragment extends Fragment implements View.OnClickListen
                 break;
 
             case Constants.ADD_LISTING_SUCCESS:
+                Utils.isEdited = true;
                 backScreen();
                 Toast.makeText(getActivity(), R.string.listing_updated, Toast.LENGTH_SHORT).show();
                 break;
@@ -536,7 +545,7 @@ public class EditBusinessFragment extends Fragment implements View.OnClickListen
         }
         for (Language language : list) {
             if (id.equals(language.getId())) {
-                Toast.makeText(getActivity(), "Language already added", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.language_already_added, Toast.LENGTH_SHORT).show();
                 return;
             }
         }
@@ -625,16 +634,17 @@ public class EditBusinessFragment extends Fragment implements View.OnClickListen
             recyclerGallery.setVisibility(View.VISIBLE);
             Bitmap photo = ImagePicker.getImageFromResult(getActivity(), resultCode, data);
             Uri uriGallery = ImagePicker.getImageUri(getActivity(), photo);
+            Utils.uriGallery.add(uriGallery);
             uriList.add(uriGallery);
             galleryAdapter.notifyDataSetChanged();
         } else if (requestCode == REQUEST_IMAGE_COVER && resultCode == RESULT_OK) {
             Bitmap photo = ImagePicker.getImageFromResult(getActivity(), resultCode, data);
-            uriCover = ImagePicker.getImageUri(getActivity(), photo);
+            Utils.uriCover = ImagePicker.getImageUri(getActivity(), photo);
             rlCover.setVisibility(View.VISIBLE);
             imgCover.setImageBitmap(photo);
         } else if (requestCode == REQUEST_IMAGE_LOGO && resultCode == RESULT_OK) {
             Bitmap photo = ImagePicker.getImageFromResult(getActivity(), resultCode, data);
-            uriLogo = ImagePicker.getImageUri(getActivity(), photo);
+            Utils.uriLogo = ImagePicker.getImageUri(getActivity(), photo);
             rlCompany.setVisibility(View.VISIBLE);
             imgLogo.setImageBitmap(photo);
         }

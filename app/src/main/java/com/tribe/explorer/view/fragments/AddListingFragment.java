@@ -25,13 +25,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tribe.explorer.R;
-import com.tribe.explorer.controller.HomeManager;
+import com.tribe.explorer.controller.CategoriesManager;
 import com.tribe.explorer.controller.LanguageManager;
 import com.tribe.explorer.controller.ModelManager;
 import com.tribe.explorer.model.Config;
@@ -65,6 +66,7 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
         AdapterView.OnItemSelectedListener {
     private final String TAG = AddListingFragment.class.getSimpleName();
 
+    View view;
     EditText editEmail, editBusinessName, editContact, editCategory, editBusinessLabel,
             editWeb, editPhone, editVideoURL, editDescription,
             editFacebookUrl, editTwitterUrl, editInstagramUrl;
@@ -88,7 +90,6 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
     TextView tvCancel, tvConfirm, tvLangCancel, tvLangAdd;
     EditText editOwner;
     String str_language = "", id = "", timezone = "", region = "", email = "", user_id, lang;
-    private List<CategoriesData.Data> categoriesList;
     private List<String> languagesList, timezoneList, regionsList, categories;
     List<LanguageData.Data> dataList;
     private List<Language> list;
@@ -96,6 +97,10 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
     private ArrayAdapter<String> listAdapter, regionAdapter, timezoneAdapter;
     ImageView imgBack;
     private ArrayList<Integer> catIdList;
+    int page = 1;
+    CategoriesAdapter categoriesAdapter;
+    private List<CategoriesData.Data> listCategories;
+    ProgressBar progressBar;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -108,8 +113,10 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_listing, container, false);
-        initViews(view);
+        if (view == null) {
+            view = inflater.inflate(R.layout.fragment_add_listing, container, false);
+            initViews(view);
+        }
 
         return view;
     }
@@ -120,13 +127,13 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
         languagesList = new ArrayList<>();
         regionsList = new ArrayList<>();
         catIdList = new ArrayList<>();
+        listCategories = new ArrayList<>();
         regionsList.add(getString(R.string.select_region));
         timezoneList = new ArrayList<>();
         timezoneList.add(getString(R.string.select_timezone));
         dataList = new ArrayList<>();
         list = new ArrayList<>();
         uriList = new ArrayList<>();
-        categoriesList = new ArrayList<>();
         dialog = Utils.showDialog(getActivity());
         dialog.show();
         ModelManager.getInstance().getLanguageManager().languageTask(getActivity(), Config.LANGUAGE_URL);
@@ -195,8 +202,9 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
         spinnerRegion.setOnItemSelectedListener(this);
         spinnerTimezone.setOnItemSelectedListener(this);
         tvDone.setOnClickListener(this);
+        ModelManager.getInstance().getCategoriesManager().categoriesTask(Operations
+                .getCategoriesParams(lang, page++));
 
-        categoriesList.addAll(HomeManager.categoriesList);
         initDialog();
         initLanguageDialog();
         setRegions();
@@ -217,11 +225,12 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
         dialogCategories = Utils.createDialog(getActivity(), R.layout.dialog_spinner_items);
         tvCancel = dialogCategories.findViewById(R.id.tvCancel);
         tvConfirm = dialogCategories.findViewById(R.id.tvConfirm);
+        progressBar = dialogCategories.findViewById(R.id.progressBar);
         RecyclerView recyclerCategories = dialogCategories.findViewById(R.id.recyclerCategories);
         recyclerCategories.setHasFixedSize(true);
         recyclerCategories.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        CategoriesAdapter categoriesAdapter = new CategoriesAdapter(getActivity(), categoriesList);
+        categoriesAdapter = new CategoriesAdapter(getActivity(), listCategories);
         recyclerCategories.setAdapter(categoriesAdapter);
 
         tvCancel.setOnClickListener(this);
@@ -388,7 +397,7 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
         }
         for (Language language : list) {
             if (id.equals(language.getId())) {
-                Toast.makeText(getActivity(), "Language already added", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.language_already_added, Toast.LENGTH_SHORT).show();
                 return;
             }
         }
@@ -402,7 +411,7 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
         dialogCategories.dismiss();
         categories = new ArrayList<>();
         catIdList = new ArrayList<>();
-        for (CategoriesData.Data data : categoriesList) {
+        for (CategoriesData.Data data : listCategories) {
             if (data.isSelected()) {
                 categories.add(data.name);
                 catIdList.add(data.termId);
@@ -444,6 +453,17 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
         dialog.dismiss();
         EventBus.getDefault().removeAllStickyEvents();
         switch (event.getKey()) {
+            case Constants.CATEGORIES_SUCCESS:
+                listCategories.addAll(CategoriesManager.listCategories);
+                categoriesAdapter.notifyDataSetChanged();
+                ModelManager.getInstance().getCategoriesManager().categoriesTask(Operations
+                        .getCategoriesParams(lang, page++));
+                break;
+
+            case Constants.CATEGORIES_ERROR:
+                progressBar.setVisibility(View.GONE);
+                break;
+
             case Constants.DETAILS_SUCCESS:
                 dataList.addAll(LanguageManager.languagesList);
                 for (LanguageData.Data data: dataList) {
@@ -583,7 +603,7 @@ public class AddListingFragment extends Fragment implements View.OnClickListener
     public void onDestroyView() {
         super.onDestroyView();
 
-        for (CategoriesData.Data data : categoriesList) {
+        for (CategoriesData.Data data : listCategories) {
             data.setSelected(false);
         }
     }

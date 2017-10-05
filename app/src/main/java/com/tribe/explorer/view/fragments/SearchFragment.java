@@ -30,6 +30,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,7 +52,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.tribe.explorer.R;
-import com.tribe.explorer.controller.HomeManager;
+import com.tribe.explorer.controller.CategoriesManager;
 import com.tribe.explorer.controller.LabelsManager;
 import com.tribe.explorer.controller.ListingManager;
 import com.tribe.explorer.controller.ModelManager;
@@ -76,7 +77,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
-import static com.tribe.explorer.controller.HomeManager.categoriesList;
 
 public class SearchFragment extends Fragment implements View.OnClickListener,
         AdapterView.OnItemSelectedListener, OnSeekbarChangeListener,
@@ -84,6 +84,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnInfoWindowClickListener{
 
     private final String TAG = SearchFragment.class.getSimpleName();
+    View view;
 
     private static final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 100;
     private static final int PERMISSION_REQUEST_CODE = 10001;
@@ -117,10 +118,21 @@ public class SearchFragment extends Fragment implements View.OnClickListener,
     private List<String> locName;
     private HashMap<Marker, Integer> mHashMap;
     private ArrayList<Integer> catIdList;
+    String query = "";
+    int page = 1;
+    CategoriesAdapter categoriesAdapter;
+    private List<CategoriesData.Data> listCategories;
+    ProgressBar progressBar;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            query = bundle.getString("query");
+            lat = bundle.getString("lat");
+            lng = bundle.getString("lng");
+        }
         manager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
@@ -140,19 +152,24 @@ public class SearchFragment extends Fragment implements View.OnClickListener,
         dialog.show();
         ModelManager.getInstance().getLabelsManager()
                 .labelsTask(getActivity(), Config.LABEL_LIST_URL+lang);
+        ModelManager.getInstance().getCategoriesManager().categoriesTask(Operations
+                .getCategoriesParams(lang, page++));
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_search, container, false);
-        initViews(view);
+        if (view == null) {
+            view = inflater.inflate(R.layout.fragment_search, container, false);
+            initViews(view);
+        }
 
         return view;
     }
 
     public void initViews(View view) {
         listData = new ArrayList<>();
+        listCategories = new ArrayList<>();
         labelsDataList = new ArrayList<>();
         labelsDataList.add(getString(R.string.filter_results));
         sortList = new ArrayList<>();
@@ -214,10 +231,11 @@ public class SearchFragment extends Fragment implements View.OnClickListener,
         sortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerSort.setAdapter(sortAdapter);
 
-        if (!ListingManager.dataList.isEmpty())
+        if (ListingManager.dataList != null && !ListingManager.dataList.isEmpty())
             listData.addAll(ListingManager.dataList);
 
         initDialog();
+        searchListings();
     }
 
     @Override
@@ -254,12 +272,13 @@ public class SearchFragment extends Fragment implements View.OnClickListener,
         dialogCategories = Utils.createDialog(getActivity(), R.layout.dialog_spinner_items);
         tvCancel = dialogCategories.findViewById(R.id.tvCancel);
         tvConfirm = dialogCategories.findViewById(R.id.tvConfirm);
+        progressBar = dialogCategories.findViewById(R.id.progressBar);
         RecyclerView recyclerCategories = dialogCategories.findViewById(R.id.recyclerCategories);
         recyclerCategories.setHasFixedSize(true);
         recyclerCategories.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        CategoriesAdapter categoriesAdapter = new CategoriesAdapter(getActivity(),
-                categoriesList);
+        categoriesAdapter = new CategoriesAdapter(getActivity(),
+                listCategories);
         recyclerCategories.setAdapter(categoriesAdapter);
 
         tvCancel.setOnClickListener(this);
@@ -270,7 +289,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener,
         dialogCategories.dismiss();
         catIdList = new ArrayList<>();
         ArrayList<String> categories = new ArrayList<>();
-        for (CategoriesData.Data data : HomeManager.categoriesList) {
+        for (CategoriesData.Data data : listCategories) {
             if (data.isSelected()) {
                 categories.add(data.name);
                 catIdList.add(data.termId);
@@ -316,6 +335,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener,
                 break;
 
             case R.id.tvSearch:
+                query = editQuery.getText().toString().trim();
                 searchListings();
                 break;
 
@@ -348,8 +368,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener,
     public void searchListings() {
         if (mGoogleMap != null)
             mGoogleMap.clear();
-        String query = editQuery.getText().toString().trim();
-
+        editQuery.setText(query);
         dialog.show();
         String category = catIdList.toString().replace("[", "").replace("]", "");
         ModelManager.getInstance().getListingManager().listingTask(Operations
@@ -414,10 +433,21 @@ public class SearchFragment extends Fragment implements View.OnClickListener,
 
     @Subscribe(sticky = true)
     public void onEvent(Event event) {
-        dialog.dismiss();
         EventBus.getDefault().removeAllStickyEvents();
         switch (event.getKey()) {
+            case Constants.CATEGORIES_SUCCESS:
+                listCategories.addAll(CategoriesManager.listCategories);
+                categoriesAdapter.notifyDataSetChanged();
+                ModelManager.getInstance().getCategoriesManager().categoriesTask(Operations
+                        .getCategoriesParams(lang, page++));
+                break;
+
+            case Constants.CATEGORIES_ERROR:
+                progressBar.setVisibility(View.GONE);
+                break;
+
             case Constants.LISTING_SUCCESS:
+                dialog.dismiss();
                 listData.addAll(ListingManager.dataList);
                 listingAdapter.notifyDataSetChanged();
                 latList = new ArrayList<>();
@@ -438,6 +468,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener,
                 break;
 
             case Constants.LOCATION_SUCCESS:
+                dialog.dismiss();
                 lat = String.valueOf(TEPreferences.readDouble(getActivity(), "latitude"));
                 lng = String.valueOf(TEPreferences.readDouble(getActivity(), "longitude"));
                 tvLocation.setText(TEPreferences.readString(getActivity(), "location"));
@@ -451,10 +482,12 @@ public class SearchFragment extends Fragment implements View.OnClickListener,
                 break;
 
             case Constants.LISTING_EMPTY:
+                dialog.dismiss();
                 Toast.makeText(getActivity(), R.string.no_listing, Toast.LENGTH_SHORT).show();
                 break;
 
             case Constants.NO_RESPONSE:
+                dialog.dismiss();
                 Toast.makeText(getActivity(), R.string.no_response, Toast.LENGTH_SHORT).show();
                 break;
         }
@@ -500,7 +533,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener,
     public void onDestroyView() {
         super.onDestroyView();
 
-        for (CategoriesData.Data data : HomeManager.categoriesList) {
+        for (CategoriesData.Data data : listCategories) {
             data.setSelected(false);
         }
     }

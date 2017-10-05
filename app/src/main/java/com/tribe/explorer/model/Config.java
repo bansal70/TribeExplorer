@@ -27,6 +27,7 @@ public class Config {
     public static final String ABOUT_URL = "how_it_works.php?lang=";
     static final String FORGOT_PASSWORD_URL = "forget.php";
     static final String PROFILE_URL = "ownerProfile.php";
+    static final String CHANGE_PASSWORD_URL = "updatePassword.php";
     static final String UPDATE_PROFILE_URL = "editProfile.php";
     static final String SEARCH_URL = "getSearch.php";
     public static final String LABEL_LIST_URL = "label_list.php?lang=";

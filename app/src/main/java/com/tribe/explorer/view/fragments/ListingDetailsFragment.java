@@ -27,16 +27,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.tribe.explorer.R;
+import com.tribe.explorer.controller.LanguageManager;
 import com.tribe.explorer.controller.ListingDetailsManager;
 import com.tribe.explorer.controller.ModelManager;
 import com.tribe.explorer.model.Constants;
@@ -46,6 +49,7 @@ import com.tribe.explorer.model.TEPreferences;
 import com.tribe.explorer.model.Utils;
 import com.tribe.explorer.model.beans.ListingDetailsData;
 import com.tribe.explorer.model.custom.Captcha;
+import com.tribe.explorer.model.custom.CircleTransform;
 import com.tribe.explorer.model.custom.ImagePicker;
 import com.tribe.explorer.model.custom.MySupportMapFragment;
 import com.tribe.explorer.model.custom.TextCaptcha;
@@ -60,6 +64,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 import static android.R.attr.defaultValue;
 import static android.app.Activity.RESULT_OK;
 import static android.os.Build.VERSION_CODES.M;
@@ -68,16 +74,17 @@ public class ListingDetailsFragment extends Fragment implements OnMapReadyCallba
         SurfaceHolder.Callback, MediaPlayer.OnPreparedListener, View.OnClickListener,
         MySupportMapFragment.OnTouchListener {
 
+    View view;
     private Dialog dialog;
     private List<ListingDetailsData.Data> listData;
     private ListingDetailsData.Data data;
     ImageView imgBack, imgFeatured, imgClaimed, imgThumbnail, imgPlay, imgFavourite;
-    TextView tvTitle, tvLocation, tvCategory, tvTotalReviews, tvTotalFav, tvClaim,
-            tvAddPhotos, tvDescription, tvContactAdmin, tvNoPhotos, btReview;
+    TextView tvTitle, tvLocation, tvCategory, tvTotalReviews, tvTotalFav, tvClaim, tvAddPhotos,
+            tvDescription, tvContactAdmin, tvNoPhotos, btReview, tvSocialProfile, tvSpeak;
     Dialog dialogAdmin;
     EditText editCaptcha;
     Captcha captcha;
-    ImageView imgAdmin, imgCaptcha;
+    ImageView imgAdmin, imgCaptcha, imgFb, imgTw, imgIg;
     private String phone = "", videoUrl;
     TextView tvEmail, tvPhone, tvContact, tvReload;
     RatingBar rbSpeed, rbQuality, rbPrice;
@@ -99,6 +106,7 @@ public class ListingDetailsFragment extends Fragment implements OnMapReadyCallba
     String filePath = "";
     private static final int PERMISSION_REQUEST_CODE = 1001;
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    private LinearLayout layoutFlag;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -119,8 +127,10 @@ public class ListingDetailsFragment extends Fragment implements OnMapReadyCallba
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_listing_details, container, false);
-        initViews(view);
+        if (view == null) {
+            view = inflater.inflate(R.layout.fragment_listing_details, container, false);
+            initViews(view);
+        }
 
         return view;
     }
@@ -136,10 +146,15 @@ public class ListingDetailsFragment extends Fragment implements OnMapReadyCallba
         tvDescription = view.findViewById(R.id.tvDescription);
         tvContactAdmin = view.findViewById(R.id.tvContactAdmin);
         tvNoPhotos = view.findViewById(R.id.tvNoPhotos);
+        tvSocialProfile = view.findViewById(R.id.tvSocialProfile);
+        tvSpeak = view.findViewById(R.id.tvSpeak);
         imgClaimed = view.findViewById(R.id.imgClaimed);
         imgThumbnail = view.findViewById(R.id.imgThumbnail);
         imgPlay = view.findViewById(R.id.imgPlay);
         imgFavourite  = view.findViewById(R.id.imgFavourite);
+        imgFb  = view.findViewById(R.id.imgFb);
+        imgTw  = view.findViewById(R.id.imgTw);
+        imgIg  = view.findViewById(R.id.imgIg);
 
         tvMonday = view.findViewById(R.id.tvMonday);
         tvTuesday = view.findViewById(R.id.tvTuesday);
@@ -159,6 +174,7 @@ public class ListingDetailsFragment extends Fragment implements OnMapReadyCallba
         btReview = view.findViewById(R.id.btReview);
         //videoView = view.findViewById(R.id.videoView);
         imgDirections = view.findViewById(R.id.imgDirections);
+        layoutFlag = view.findViewById(R.id.layoutFlag);
 
         mapFragment = (MySupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
@@ -193,11 +209,14 @@ public class ListingDetailsFragment extends Fragment implements OnMapReadyCallba
         tvContactAdmin.setOnClickListener(this);
         imgPlay.setOnClickListener(this);
         tvAddPhotos.setOnClickListener(this);
+        imgFb.setOnClickListener(this);
+        imgTw.setOnClickListener(this);
+        imgIg.setOnClickListener(this);
 
         initDialogAdmin();
         setImageCaptcha();
-        if (!listData.isEmpty())
-            setData();
+       /* if (!listData.isEmpty())
+            setData();*/
     }
 
     public void initDialogAdmin() {
@@ -296,7 +315,24 @@ public class ListingDetailsFragment extends Fragment implements OnMapReadyCallba
                 break;
 
             case R.id.tvAddPhotos:
+                if (user_id.isEmpty()) {
+                    Toast.makeText(getActivity(), R.string.login_to_add_photos,
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 dispatchTakePictureIntent();
+                break;
+
+            case R.id.imgFb:
+                Utils.openBrowser(getActivity(), data.facebookUrl);
+                break;
+
+            case R.id.imgTw:
+                Utils.openBrowser(getActivity(), data.twitterUrl);
+                break;
+
+            case R.id.imgIg:
+                Utils.openBrowser(getActivity(), data.instagramUrl);
                 break;
         }
     }
@@ -306,7 +342,7 @@ public class ListingDetailsFragment extends Fragment implements OnMapReadyCallba
 
         videoUrl = data.vedio;
         Utils.setThumbnail(imgThumbnail, videoUrl, imgPlay);
-        Utils.setImage(getActivity(), data.companyAvatar, imgFeatured);
+        Utils.setImage(getActivity(), data.featured, imgFeatured);
         tvTitle.setText(data.title);
         tvLocation.setText(data.loc);
         tvCategory.setText(data.category.toString().replace("[", "").replace("]",""));
@@ -315,6 +351,15 @@ public class ListingDetailsFragment extends Fragment implements OnMapReadyCallba
         tvEmail.setText(data.contactEmail);
         tvPhone.setText(data.phone);
         phone = data.phone;
+
+        if (!data.facebookUrl.isEmpty())
+            imgFb.setVisibility(View.VISIBLE);
+        if (!data.twitterUrl.isEmpty())
+            imgTw.setVisibility(View.VISIBLE);
+        if (!data.instagramUrl.isEmpty())
+            imgIg.setVisibility(View.VISIBLE);
+        if (data.facebookUrl.isEmpty() && data.twitterUrl.isEmpty() && data.instagramUrl.isEmpty())
+            tvSocialProfile.setVisibility(View.VISIBLE);
 
         if (data.fav.equals("no"))
             imgFavourite.setImageResource(R.mipmap.ic_unfavourite);
@@ -344,6 +389,30 @@ public class ListingDetailsFragment extends Fragment implements OnMapReadyCallba
             if (!data.rating.get(0).price.isEmpty()) {
                 float price = Float.parseFloat(data.rating.get(0).price);
                 rbPrice.setRating(price);
+            }
+        }
+
+        List<ListingDetailsData.Language> list = data.language;
+        if (list.size() == 0) {
+            layoutFlag.setVisibility(View.GONE);
+            tvSpeak.setVisibility(View.VISIBLE);
+        }
+
+        for (int i=0; i < list.size(); i++) {
+            for (int j = 0; j< LanguageManager.languagesList.size(); j++) {
+                if (list.get(i).language.equals(LanguageManager.languagesList.get(j).language)) {
+                    Log.e("Flag", ""+LanguageManager.languagesList.get(j).url);
+                    RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(100,100);
+                    CircleImageView imageView = new CircleImageView(getActivity());
+                    imageView.setPadding(5,0,0,5);
+                    imageView.setLayoutParams(params);
+                    Glide.with(getActivity())
+                            .load(LanguageManager.languagesList.get(j).url)
+                            .transform(new CircleTransform(getActivity()))
+                            .into(imageView);
+                    layoutFlag.addView(imageView, i);
+                    break;
+                }
             }
         }
 
@@ -507,8 +576,6 @@ public class ListingDetailsFragment extends Fragment implements OnMapReadyCallba
         EventBus.getDefault().removeAllStickyEvents();
         switch (event.getKey()) {
             case Constants.LISTING_DETAILS_SUCCESS:
-                if (galleryImages != null)
-                    galleryImages.clear();
                 listData.addAll(ListingDetailsManager.detailsList);
                 setData();
                 //  listingAdapter.notifyDataSetChanged();
@@ -529,10 +596,16 @@ public class ListingDetailsFragment extends Fragment implements OnMapReadyCallba
                 break;
 
             case Constants.ADD_PHOTO_SUCCESS:
-                Toast.makeText(getActivity(), "Photo uploaded successfully", Toast.LENGTH_SHORT).show();
-                dialog.show();
+                galleryImages.add(filePath);
+                photoListAdapter.notifyDataSetChanged();
+                /*if (galleryImages != null) {
+                    galleryImages.clear();
+                    photoListAdapter.notifyDataSetChanged();
+                }*/
+                Toast.makeText(getActivity(), R.string.photo_uploaded, Toast.LENGTH_SHORT).show();
+                /*dialog.show();
                 ModelManager.getInstance().getListingDetailsManager()
-                        .listingTask(Operations.getListingDetailsParams(cat_id, lang, user_id));
+                        .listingTask(Operations.getListingDetailsParams(cat_id, lang, user_id));*/
                 break;
 
             case Constants.ADD_PHOTO_FAILED:

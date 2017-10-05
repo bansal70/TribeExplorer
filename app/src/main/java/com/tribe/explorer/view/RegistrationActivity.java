@@ -38,14 +38,15 @@ import java.io.File;
 
 import static android.os.Build.VERSION_CODES.M;
 
-public class RegistrationActivity extends BaseActivity implements View.OnClickListener{
+public class RegistrationActivity extends BaseActivity implements View.OnClickListener {
 
     Dialog dialog;
     ImageView imgCaptcha, imgProfilePic, imgBack;
     boolean isCaptcha;
     TextView tvReload, tvSubmit;
     EditText editFirstName, editLastName, editEmail, editPassword, editConfirmPassword,
-            editBirthDate, editGender, editCaptcha;
+            editGender, editCaptcha;
+    TextView editBirthDate;
     RadioGroup rgOwner;
     Captcha captcha;
     String deviceToken= "", lang, role= "", filePath= "";
@@ -71,7 +72,7 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
         editEmail = (EditText) findViewById(R.id.editEmail);
         editPassword = (EditText) findViewById(R.id.editPassword);
         editConfirmPassword = (EditText) findViewById(R.id.editConfirmPassword);
-        editBirthDate = (EditText) findViewById(R.id.editBirthDate);
+        editBirthDate = (TextView) findViewById(R.id.editBirthDate);
         editGender = (EditText) findViewById(R.id.editGender);
         editCaptcha = (EditText) findViewById(R.id.editCaptcha);
         rgOwner = (RadioGroup) findViewById(R.id.rgOwner);
@@ -86,6 +87,7 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
         tvSubmit.setOnClickListener(this);
         imgBack.setOnClickListener(this);
         imgProfilePic.setOnClickListener(this);
+        editBirthDate.setOnClickListener(this);
 
         setImageCaptcha();
         selectOwner();
@@ -129,6 +131,10 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
             case R.id.imgBack:
                 finish();
                 break;
+
+            case R.id.editBirthDate:
+                Utils.datePicker(this, editBirthDate);
+                break;
         }
     }
 
@@ -151,8 +157,8 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
             Toast.makeText(this, R.string.password_length, Toast.LENGTH_SHORT).show();
         } else if (!password.equals(confirmPassword)) {
             Toast.makeText(this, R.string.password_unmatch, Toast.LENGTH_SHORT).show();
-        } else if (!gender.isEmpty() &&
-                !(gender.equalsIgnoreCase("male") || gender.equalsIgnoreCase("female"))) {
+        } else if (!gender.isEmpty() && !(gender.equalsIgnoreCase("male")
+                || gender.equalsIgnoreCase("female") || gender.equalsIgnoreCase("other"))) {
             Toast.makeText(this, R.string.gender_male_female, Toast.LENGTH_SHORT).show();
         } else if (!isCaptcha) {
             setImageCaptcha();
@@ -191,7 +197,7 @@ public class RegistrationActivity extends BaseActivity implements View.OnClickLi
                 break;
 
             case Constants.REGISTRATION_ERROR:
-                Toast.makeText(this, R.string.failed_to_register, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.email_exists, Toast.LENGTH_SHORT).show();
                 break;
 
             case Constants.NO_RESPONSE:

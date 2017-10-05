@@ -36,7 +36,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
         initViews();
     }
 
-    public void initViews() {
+    private void initViews() {
         lang = TEPreferences.readString(this, "lang");
         dialog = Utils.showDialog(this);
         editEmail = (EditText) findViewById(R.id.editEmail);

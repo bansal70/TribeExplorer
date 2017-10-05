@@ -5,13 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.tribe.explorer.R;
-import com.tribe.explorer.model.Constants;
-import com.tribe.explorer.model.Event;
 import com.tribe.explorer.model.TEPreferences;
 import com.tribe.explorer.model.Utils;
 import com.tribe.explorer.model.custom.BottomNavigationViewHelper;
@@ -20,9 +16,6 @@ import com.tribe.explorer.view.fragments.FavouritesFragment;
 import com.tribe.explorer.view.fragments.HomeFragment;
 import com.tribe.explorer.view.fragments.MeFragment;
 import com.tribe.explorer.view.fragments.SearchFragment;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 public class MainActivity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
@@ -40,85 +33,61 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
 
     public void initViews() {
         user_id = TEPreferences.readString(this, "user_id");
-        String lang = TEPreferences.readString(this, "lang");
-        dialog = Utils.showDialog(this);
-        dialog.show();
-       // ModelManager.getInstance().getHomeManager().categoriesTask(Operations.getCategoriesParams(lang, 1));
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.frame_layout);
+        if (!(fragment instanceof HomeFragment))
+            Utils.goToFragment(this, new HomeFragment(), R.id.frame_layout, false);
+       /* FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_layout, new HomeFragment());
-        transaction.commit();
+        transaction.commit();*/
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        Fragment selectedFragment = null;
+        //Fragment selectedFragment = null;
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.frame_layout);
         switch (item.getItemId()) {
             case R.id.menu_home:
-                selectedFragment = new HomeFragment();
+                if (!(fragment instanceof HomeFragment))
+                    Utils.goToFragment(this, new HomeFragment(), R.id.frame_layout, false);
+                //selectedFragment = new HomeFragment();
                 break;
 
             case R.id.menu_favourites:
-                selectedFragment = new FavouritesFragment();
+                // selectedFragment = new FavouritesFragment();
+                if (!(fragment instanceof FavouritesFragment))
+                    Utils.goToFragment(this, new FavouritesFragment(), R.id.frame_layout, false);
                 break;
 
             case R.id.menu_search:
-                selectedFragment = new SearchFragment();
+                // selectedFragment = new SearchFragment();
+                if (!(fragment instanceof SearchFragment))
+                    Utils.goToFragment(this, new SearchFragment(), R.id.frame_layout, false);
                 break;
 
             case R.id.menu_coupon:
-                selectedFragment = new CouponFragment();
+                // selectedFragment = new CouponFragment();
+                if (!(fragment instanceof CouponFragment))
+                    Utils.goToFragment(this, new CouponFragment(), R.id.frame_layout, false);
                 break;
 
             case R.id.menu_me:
-                selectedFragment = new MeFragment();
+                // selectedFragment = new MeFragment();
+                if (!(fragment instanceof MeFragment))
+                    Utils.goToFragment(this, new MeFragment(), R.id.frame_layout, false);
                 break;
         }
-        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+        /*if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             getSupportFragmentManager().popBackStack();
         }
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_layout, selectedFragment);
-        transaction.commit();
+        transaction.commit();*/
         return true;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Subscribe(sticky = true)
-    public void onEvent(Event event) {
-        EventBus.getDefault().removeAllStickyEvents();
-        dialog.dismiss();
-        switch (event.getKey()) {
-            case Constants.CATEGORIES_SUCCESS:
-                /*FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.frame_layout, new HomeFragment());
-                transaction.commit();*/
-                break;
-
-            case Constants.CATEGORIES_ERROR:
-                break;
-
-            case Constants.NO_RESPONSE:
-                Toast.makeText(this, R.string.no_response, Toast.LENGTH_SHORT).show();
-                break;
-        }
     }
 
     @Override

@@ -6,8 +6,11 @@ package com.tribe.explorer.controller;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Log;
 
+import com.tribe.explorer.R;
 import com.tribe.explorer.model.Constants;
 import com.tribe.explorer.model.Event;
 import com.tribe.explorer.model.custom.ImagePicker;
@@ -18,6 +21,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 import okhttp3.MediaType;
@@ -39,6 +46,8 @@ public class AddListingManager {
         RequestBody requestLogo, requestCover;
         MultipartBody.Part bodyLogo = null, bodyCover = null;
         MultipartBody.Part[] bodyGalleries = new MultipartBody.Part[0];
+        Log.e(TAG, "uri:" + uriLogo + "\nuri cover: "+uriCover + "\nuri gallery: "
+                +uriGallery);
 
         if (uriCover != null) {
             coverFile = new File(ImagePicker.getRealPathFromURI(context, uriCover));
@@ -96,5 +105,42 @@ public class AddListingManager {
                 EventBus.getDefault().postSticky(new Event(Constants.NO_RESPONSE, ""));
             }
         });
+    }
+
+    public static String getFilePathFromURI(Context context, Uri contentUri) {
+        //copy file and send new file path
+        String fileName = getFileName(contentUri);
+        if (!TextUtils.isEmpty(fileName)) {
+            String root = Environment.getExternalStorageDirectory().toString();
+            File copyFile = new File(root + File.separator + context.getString(R.string.app_name) +
+                     File.separator + fileName);
+            copy(context, contentUri, copyFile);
+            return copyFile.getAbsolutePath();
+        }
+        return null;
+    }
+
+    private static String getFileName(Uri uri) {
+        if (uri == null) return null;
+        String fileName = null;
+        String path = uri.getPath();
+        int cut = path.lastIndexOf('/');
+        if (cut != -1) {
+            fileName = path.substring(cut + 1);
+        }
+        return fileName;
+    }
+
+    public static void copy(Context context, Uri srcUri, File dstFile) {
+        try {
+            InputStream inputStream = context.getContentResolver().openInputStream(srcUri);
+            if (inputStream == null) return;
+            OutputStream outputStream = new FileOutputStream(dstFile);
+
+            inputStream.close();
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

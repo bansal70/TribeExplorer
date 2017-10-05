@@ -33,9 +33,9 @@ public class HomeManager {
                     String status = categoriesData.status;
                     if (status.equalsIgnoreCase("success")) {
                         categoriesList = categoriesData.data;
-                        EventBus.getDefault().postSticky(new Event(Constants.CATEGORIES_SUCCESS, ""));
+                        EventBus.getDefault().postSticky(new Event(Constants.HOME_SUCCESS, ""));
                     } else {
-                        EventBus.getDefault().postSticky(new Event(Constants.CATEGORIES_ERROR, ""));
+                        EventBus.getDefault().postSticky(new Event(Constants.HOME_FAILED, ""));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

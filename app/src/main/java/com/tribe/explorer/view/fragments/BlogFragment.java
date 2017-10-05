@@ -24,6 +24,7 @@ import com.tribe.explorer.model.Utils;
 
 public class BlogFragment extends Fragment {
 
+    View view;
     WebView webBlog;
     Dialog dialog;
 
@@ -35,8 +36,11 @@ public class BlogFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_blog, container, false);
-        initViews(view);
+        if (view == null) {
+            view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_blog, container, false);
+            initViews(view);
+        }
+
         return view;
     }
 

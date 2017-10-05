@@ -31,6 +31,12 @@ public class ListingDetailsData {
         public String email;
         @SerializedName("contact_email")
         public String contactEmail;
+        @SerializedName("facebook_url")
+        public String facebookUrl;
+        @SerializedName("twitter_url")
+        public String twitterUrl;
+        @SerializedName("instagram_url")
+        public String instagramUrl;
         @SerializedName("website")
         public String website;
         @SerializedName("vedio")
@@ -81,9 +87,18 @@ public class ListingDetailsData {
         @SerializedName("longitude")
         public String longitude;
         @SerializedName("language")
-        public List<Object> language = null;
+        public List<Language> language = null;
         @SerializedName("claimed")
         public String claimed;
+    }
+
+    public class Language {
+        @SerializedName("id")
+        @Expose
+        public String name;
+        @SerializedName("language")
+        @Expose
+        public String language;
     }
 
     public class JobHours {
