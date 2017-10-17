@@ -59,7 +59,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         Glide.with(context)
                 .load(reviewsData.commentAuthorUrl)
                 .transform(new CircleTransform(context))
-                .placeholder(R.mipmap.ic_user)
+                .placeholder(R.mipmap.user_icon)
                 .into(holder.imgUser);
     }
 

@@ -1,19 +1,18 @@
 <resources>
     <string name="app_name">Tribe Explorer</string>
-    <string name="title_activity_splash">SplashActivity</string>
     <string name="tribe">Tribe</string>
-    <string name="explorer">explorer</string>
+    <string name="explorer" translatable="false">explorer</string>
     <string name="select_language">Select Language</string>
     <string name="spinner_title">English</string>
     <string name="welcome_text">Hey, Welcome back!</string>
     <string name="faster_login">For faster login, use your social account.</string>
-    <string name="facebook_app_id">2052103524815627</string>
-    <string name="fb_login_protocol_scheme">fb2052103524815627</string>
-    <string name="CONSUMER_KEY">zzTxGTg5d6GUnPQ2HibAivqRc</string>
-    <string name="CONSUMER_SECRET">Q7YVummY6f36As3Pw1CeiKNYg6cMkd0EXCuh0BARkYbwoU9CO8</string>
+    <string name="facebook_app_id" translatable="false">2052103524815627</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb2052103524815627</string>
+    <string name="CONSUMER_KEY" translatable="false">zzTxGTg5d6GUnPQ2HibAivqRc</string>
+    <string name="CONSUMER_SECRET" translatable="false">Q7YVummY6f36As3Pw1CeiKNYg6cMkd0EXCuh0BARkYbwoU9CO8</string>
     <string name="login_with_facebook">Login with Facebook</string>
     <string name="login_with_twitter">Login with Twitter</string>
-    <string name="or">OR</string>
+    <string name="or">Or</string>
     <string name="username_email">Username/email</string>
     <string name="remember_me">Remember me</string>
     <string name="password">Password</string>
@@ -25,7 +24,7 @@
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="email">Email</string>
-    <string name="email.com">xyz@gmail.com</string>
+    <string name="email.com" translatable="false">xyz@gmail.com</string>
     <string name="atleast_6_digits_password">Atleast 6-Digits Password</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="business_owner">Are you a business owner?</string>
@@ -94,12 +93,12 @@
     <string name="no_image">No Image</string>
     <string name="gallery_image_optional">Gallery Image (Optional)</string>
     <string name="hours_of_operation_optional">Hours of Operation</string>
-    <string name="plus">+</string>
+    <string name="plus" translatable="false">+</string>
     <string name="minus">-</string>
     <string name="add_title_of_language_section">Add title of language section</string>
-    <string name="pm">-- pm</string>
+    <string name="pm" translatable="false">-- pm</string>
     <string name="close">Close:</string>
-    <string name="am">-- am</string>
+    <string name="am" translatable="false">-- am</string>
     <string name="open">Open:</string>
     <string name="days">Days</string>
     <string name="monday">Monday</string>
@@ -142,14 +141,14 @@
     <string name="add_photos">Add Photos</string>
     <string name="photo_gallery">Photo Gallery</string>
     <string name="social_profiles">Social Profiles</string>
-    <string name="google_maps_key">AIzaSyDDYmhfyC7KnZgJDlQldnDkSt317EAU9_s</string>
+    <string name="google_maps_key" translatable="false">AIzaSyDDYmhfyC7KnZgJDlQldnDkSt317EAU9_s</string>
     <string name="opening_hours">Opening Hours</string>
     <string name="no_photos">There are no photos for this listing.</string>
     <string name="to">to</string>
     <string name="looking_for">What are you looking for?</string>
     <string name="radius">Radius:</string>
-    <string name="list">LIST</string>
-    <string name="map">MAP</string>
+    <string name="list">List</string>
+    <string name="map">Map</string>
     <string name="retry">Retry</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="confirm_edit_profile">Are you sure you want to edit your profile ?</string>
@@ -170,8 +169,8 @@
     <string name="error_processing_request">Error processing your request</string>
     <string name="hour_format">Hours should be in 12-hour format</string>
     <string name="minutes_range">Minutes should be in range of 0–59</string>
-    <string name="AM">AM</string>
-    <string name="PM">PM</string>
+    <string name="AM" translatable="false">AM</string>
+    <string name="PM" translatable="false">PM</string>
     <string name="login_to_check_fav">Please login to check your favorite listings</string>
     <string name="login_to_fav">Please login to favorite any listing.</string>
     <string name="please_grant_permissions">Please grant all the permissions.</string>
@@ -203,9 +202,9 @@
     <string name="facebook">Facebook</string>
     <string name="twitter">Twitter</string>
     <string name="instagram">Instagram</string>
-    <string name="instagram_hint">https://www.instagram.com/username</string>
+    <string name="instagram_hint" translatable="false">https://www.instagram.com/username</string>
     <string name="twitter_url">https://twitter.com/username</string>
-    <string name="facebook_hint">https://www.facebook.com/username</string>
+    <string name="facebook_hint" translatable="false">https://www.facebook.com/username</string>
     <string name="logout_from_app">Would you like to go out of the app?</string>
     <string name="sure_to_delete_listing">Are you sure you want to delete your listing?</string>
     <string name="listing_deleted">Your listing has been deleted successfully</string>

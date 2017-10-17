@@ -10,10 +10,11 @@
         android:orientation="horizontal"
         android:padding="@dimen/_10sdp">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <ImageView
             android:id="@+id/imgUser"
             android:layout_width="@dimen/_60sdp"
             android:layout_height="@dimen/_60sdp"
+            android:contentDescription="@null"
             android:src="@mipmap/user_icon"/>
 
         <LinearLayout

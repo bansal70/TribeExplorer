@@ -26,13 +26,14 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <de.hdodenhof.circleimageview.CircleImageView
+                <ImageView
                     android:id="@+id/imgUser"
                     android:layout_width="@dimen/_80sdp"
                     android:layout_height="@dimen/_80sdp"
                     android:layout_margin="@dimen/_5sdp"
                     android:padding="@dimen/_5sdp"
-                    android:src="@mipmap/ic_user" />
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/user_icon" />
 
                 <TextView
                     android:id="@+id/tvUser"

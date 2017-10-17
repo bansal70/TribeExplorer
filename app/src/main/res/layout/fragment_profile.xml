@@ -39,10 +39,12 @@
                 android:gravity="center"
                 android:layout_marginTop="20dp">
 
-                <de.hdodenhof.circleimageview.CircleImageView
+                <ImageView
                     android:id="@+id/imgProfilePic"
-                    android:layout_width="80dp"
-                    android:layout_height="@dimen/_80sdp"/>
+                    android:layout_width="@dimen/_80sdp"
+                    android:layout_height="@dimen/_80sdp"
+                    android:scaleType="centerCrop"
+                    android:contentDescription="@string/edit_profile"/>
 
                 <ImageView
                     android:id="@+id/imgEdit"

@@ -508,7 +508,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener,
             builder.include(latLng);
             String name = locName.get(i);
             Marker marker = googleMap.addMarker(new MarkerOptions().position(latLng).title(name));
-           // marker.showInfoWindow();
+            // marker.showInfoWindow();
             mHashMap.put(marker, i);
             counter++;
         }

@@ -1,5 +1,6 @@
 package com.tribe.explorer.view;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,19 +16,21 @@ import com.tribe.explorer.R;
 import com.tribe.explorer.controller.ModelManager;
 import com.tribe.explorer.model.Config;
 import com.tribe.explorer.model.TEPreferences;
+import com.tribe.explorer.model.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SplashActivity extends BaseActivity implements AdapterView.OnItemSelectedListener{
+public class SplashActivity extends BaseActivity implements AdapterView.OnItemSelectedListener {
 
-    ProgressBar progressBar;
+    ProgressBar progressBar, progressBar2;
     List<String> languageList;
     Spinner spinner;
     Handler handler;
     Runnable runnable;
     LinearLayout langLayout;
     String user_id;
+    Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +41,12 @@ public class SplashActivity extends BaseActivity implements AdapterView.OnItemSe
     }
 
     public void initViews() {
+        dialog = Utils.showDialog(this);
         user_id = TEPreferences.readString(this, "user_id");
         FirebaseInstanceId.getInstance().getToken();
         languageList = new ArrayList<>();
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar2 = (ProgressBar) findViewById(R.id.progressBar2);
         langLayout = (LinearLayout) findViewById(R.id.langLayout);
         spinner = (Spinner) findViewById(R.id.spinner);
 
@@ -52,7 +57,6 @@ public class SplashActivity extends BaseActivity implements AdapterView.OnItemSe
         languageList.add("French");
         languageList.add("Tagalog");
         languageList.add("Hindustani");
-        languageList.add("Arabic");
         languageList.add("Korean");
         languageList.add("Russian");
         languageList.add("Portuguese");
@@ -62,11 +66,56 @@ public class SplashActivity extends BaseActivity implements AdapterView.OnItemSe
                 R.layout.spinner_item, languageList);
 
         listAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        ModelManager.getInstance().getLanguageManager().languageTask(this, Config.LANGUAGE_URL);
 
         spinner.setAdapter(listAdapter);
         spinner.setOnItemSelectedListener(this);
         handleSleep();
+
+    }
+
+    public void setLanguages(int position) {
+        switch (position) {
+            case 1:
+                Utils.setLanguage(this, "en");
+                TEPreferences.putString(this, "lang", "en");
+                break;
+            case 2:
+                Utils.setLanguage(this, "es");
+                TEPreferences.putString(this, "lang", "es");
+                break;
+            case 3:
+                Utils.setLanguage(this, "zh");
+                TEPreferences.putString(this, "lang", "zh");
+                break;
+            case 4:
+                Utils.setLanguage(this, "fr");
+                TEPreferences.putString(this, "lang", "fr");
+                break;
+            case 5:
+                Utils.setLanguage(this, "tl");
+                TEPreferences.putString(this, "lang", "tl");
+                break;
+            case 6:
+                Utils.setLanguage(this, "hi");
+                TEPreferences.putString(this, "lang", "hi");
+                break;
+            case 7:
+                Utils.setLanguage(this, "ko");
+                TEPreferences.putString(this, "lang", "ko");
+                break;
+            case 8:
+                Utils.setLanguage(this, "ru");
+                TEPreferences.putString(this, "lang", "ru");
+                break;
+            case 9:
+                Utils.setLanguage(this, "pt");
+                TEPreferences.putString(this, "lang", "pt");
+                break;
+            case 10:
+                Utils.setLanguage(this, "it");
+                TEPreferences.putString(this, "lang", "it");
+                break;
+        }
     }
 
     public void handleSleep() {
@@ -89,14 +138,23 @@ public class SplashActivity extends BaseActivity implements AdapterView.OnItemSe
         if (position == 0)
             return;
 
-        TEPreferences.putString(this, "lang", "en");
+        setLanguages(position);
 
-        if (user_id.isEmpty())
-            startActivity(new Intent(this, LoginActivity.class));
-        else
-            startActivity(new Intent(this, MainActivity.class));
+        progressBar2.setVisibility(View.VISIBLE);
 
-        finish();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ModelManager.getInstance().getLanguageManager()
+                        .languageTask(SplashActivity.this, Config.LANGUAGE_URL);
+                if (user_id.isEmpty())
+                    startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                else
+                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                finish();
+            }
+        }, 2000);
+
     }
 
     @Override

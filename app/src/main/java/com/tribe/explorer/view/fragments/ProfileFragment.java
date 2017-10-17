@@ -40,15 +40,13 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 import static android.app.Activity.RESULT_OK;
 import static android.os.Build.VERSION_CODES.M;
 
 public class ProfileFragment extends Fragment implements View.OnClickListener{
 
     View view;
-    CircleImageView imgProfilePic;
+    ImageView imgProfilePic;
     ImageView imgBack;
     TextView tvEditProfile, tvUpdatePassword;
     EditText editFirstName, editLastName, editEmail, editGender;
@@ -153,8 +151,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         TEPreferences.putString(getActivity(), "image", data.userUrl);
         Glide.with(getActivity())
                 .load(data.userUrl)
-                .placeholder(R.mipmap.ic_user)
                 .transform(new CircleTransform(getContext()))
+                .placeholder(R.mipmap.user_icon)
                 .into(imgProfilePic);
     }
 

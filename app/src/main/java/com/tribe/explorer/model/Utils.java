@@ -4,12 +4,14 @@ package com.tribe.explorer.model;
  * Created by rishav on 9/12/2017.
  */
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
@@ -19,6 +21,7 @@ import android.location.Geocoder;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -274,9 +277,15 @@ public class Utils {
     }
 
     public static void openBrowser(Context context, String url) {
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setData(Uri.parse(url));
-        context.startActivity(i);
+        Uri webPage = Uri.parse(url);
+        if (!url.startsWith("http://") || !url.startsWith("https://")) {
+            webPage = Uri.parse("http://" + url);
+        }
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(webPage);
+        if (intent.resolveActivity(context.getPackageManager()) != null) {
+            context.startActivity(intent);
+        }
     }
 
     public static void changeRatingBarColor(Context mContext, RatingBar ratingBar, int filledColor, int halfFilledColor, int emptyStarColor) {
@@ -327,5 +336,35 @@ public class Utils {
 
         AlertDialog alertDialog = alertBuilder.create();
         alertDialog.show();
+    }
+
+    @SuppressWarnings("deprecation")
+    public Locale getSystemLocaleLegacy(Configuration config){
+        return config.locale;
+    }
+
+    @TargetApi(Build.VERSION_CODES.N)
+    public Locale getSystemLocale(Configuration config){
+        return config.getLocales().get(0);
+    }
+
+    @SuppressWarnings("deprecation")
+    private static void setSystemLocaleLegacy(Configuration config, Locale locale){
+        config.locale = locale;
+    }
+
+    @TargetApi(Build.VERSION_CODES.N)
+    private static void setSystemLocale(Configuration config, Locale locale){
+        config.setLocale(locale);
+    }
+
+    public static void setLanguage(Context context, String languageCode){
+        Locale myLocale = new Locale(languageCode);//Set Selected Locale
+        // saveLocale(lang);//Save the selected locale
+        Locale.setDefault(myLocale);//set new locale as default
+        Configuration config = new Configuration();//get Configuration
+        config.locale = myLocale;//set config locale as selected locale
+        context.getResources().updateConfiguration(config,
+                context.getResources().getDisplayMetrics());
     }
 }
